@@ -55,10 +55,10 @@ int main(void)
         touch_write(0xD0);                  //Touch Command XPos read
         for (x = 0; x < 10; x++);           //Busy wait
         xpos = touch_read();                //xpos value read ( 0......4095 )
-        printf("xpox= %5d ", xpos);
+        printf("xpos= %5d ", xpos);
         touch_write(0x90);                  //Touch Command YPos read
         for (x = 0; x < 10; x++);           //Busy wait
         ypos = touch_read();                //ypos value read ( 0.....4095 )
-        printf("ypox= %5d\n", ypos);
+        printf("ypos= %5d\n", ypos);
     }
 }

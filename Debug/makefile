@@ -122,21 +122,21 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-Testprogramme2.out \
+MC-Praktikum-Oszilloskop.out \
 
 EXE_OUTPUTS__QUOTED += \
-"Testprogramme2.out" \
+"MC-Praktikum-Oszilloskop.out" \
 
 
 # All Target
 all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
-	@$(MAKE) --no-print-directory -Onone "Testprogramme2.out"
+	@$(MAKE) --no-print-directory -Onone "MC-Praktikum-Oszilloskop.out"
 
 # Tool invocations
-Testprogramme2.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+MC-Praktikum-Oszilloskop.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: Arm Linker'
-	"C:/ti/ccs1220/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --define=ccs="ccs" --define=PART_TM4C1294NCPDT -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"Testprogramme2.map" --heap_size=2048 --stack_size=2048 -i"C:/ti/ccs1220/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/lib" -i"C:/ti/ccs1220/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="Testprogramme2_linkInfo.xml" --rom_model -o "Testprogramme2.out" $(ORDERED_OBJS)
+	"C:/ti/ccs1220/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --define=ccs="ccs" --define=PART_TM4C1294NCPDT -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"MC-Praktikum-Oszilloskop.map" --heap_size=2048 --stack_size=2048 -i"C:/ti/ccs1220/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/lib" -i"C:/ti/ccs1220/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="MC-Praktikum-Oszilloskop_linkInfo.xml" --rom_model -o "MC-Praktikum-Oszilloskop.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
