@@ -1,7 +1,7 @@
 // Example and Testprogram  Touch Function
 // See Installation Manual
 // K.R. Riemschneider v.04  2023
-// Git test
+// Git test 2
 
 #include <stdio.h>
 #include <stdint.h>
