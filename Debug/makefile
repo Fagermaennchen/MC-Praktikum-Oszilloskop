@@ -10,8 +10,11 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
-"./main.obj" \
 "./tm4c1294ncpdt_startup_ccs.obj" \
+"./Test/TestADC/TestADCPocContinous.obj" \
+"./Test/TestADC/TestADCPocInterrupt.obj" \
+"./Test/TestADC/TestADCPocSingle.obj" \
+"./src/main0.obj" \
 "../tm4c1294ncpdt.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
@@ -25,7 +28,11 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include Test/TestADC/subdir_vars.mk
+-include src/subdir_vars.mk
 -include subdir_rules.mk
+-include Test/TestADC/subdir_rules.mk
+-include src/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -143,8 +150,8 @@ MC-Praktikum-Oszilloskop.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.obj" "tm4c1294ncpdt_startup_ccs.obj" 
-	-$(RM) "main.d" "tm4c1294ncpdt_startup_ccs.d" 
+	-$(RM) "tm4c1294ncpdt_startup_ccs.obj" "Test\TestADC\TestADCPocContinous.obj" "Test\TestADC\TestADCPocInterrupt.obj" "Test\TestADC\TestADCPocSingle.obj" "src\main0.obj" 
+	-$(RM) "tm4c1294ncpdt_startup_ccs.d" "Test\TestADC\TestADCPocContinous.d" "Test\TestADC\TestADCPocInterrupt.d" "Test\TestADC\TestADCPocSingle.d" "src\main0.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

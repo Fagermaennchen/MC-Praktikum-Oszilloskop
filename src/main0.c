@@ -43,7 +43,7 @@ unsigned int touch_read()
     return value;
 }
 
-int main(void)
+int main1351(void)
 {
     int x, xpos, ypos;
     SYSCTL_RCGCGPIO_R = 0x0008; //Enable clock Port D
