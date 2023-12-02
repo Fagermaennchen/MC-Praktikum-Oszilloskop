@@ -9,6 +9,12 @@
 
 
 
+void setupAll(void);
+    // Setups all underlying Modules
+
+    // Enable Interrupts
+    IntMasterEnable();
+}
 int main(void)
 {
     // Main Method from where the code is run

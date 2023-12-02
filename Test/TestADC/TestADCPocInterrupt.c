@@ -80,7 +80,6 @@ void testTimer_routine(void){
 void main(void)
 {
     int wt = 0; // Variable for very short wait times
-
     // Set Clock with PLL to run from external crystal with 120MHz
     SysCtlClockFreqSet((SYSCTL_OSC_MAIN  |
                         SYSCTL_USE_PLL   |
