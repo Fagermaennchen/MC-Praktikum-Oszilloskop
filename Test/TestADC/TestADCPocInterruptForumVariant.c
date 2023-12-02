@@ -1,0 +1,88 @@
+
+// Testcode aus Forum https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1101495/tm4c123gh6pm-need-help-with-adc-timer-interrupt
+#include <stdint.h>
+#include <stdbool.h>
+#include "inc/hw_memmap.h"
+#include "inc/hw_types.h"
+#include "driverlib/debug.h"
+#include "driverlib/sysctl.h"
+#include "driverlib/adc.h"
+#include "driverlib/interrupt.h"
+#include "inc/tm4c1294ncpdt.h"
+#include "driverlib/gpio.h"
+#include "driverlib/timer.h"
+
+
+// GPIO initialization
+void GPIO_Init(void){
+      //
+    // Enable Peripheral Clocks
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
+
+    //
+    // Enable pin PE3 for ADC AIN0
+    //
+    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_3);
+}
+
+//interrupt handler
+void readADCvalue_routine22(void)
+{
+        int dataCh1,dataCh2;
+        ADCIntClear(ADC0_BASE, 3); // clear the interrupt
+        ADCSequenceDataGet(ADC0_BASE, 3, &dataCh1); // collect sample data from PE3
+        ADCSequenceDataGet(ADC0_BASE, 3, &dataCh2); // collect sample data from PE3
+        printf("Value CH1: %d CH: %d",dataCh1,dataCh2);
+}
+
+//ADC0 initializaiton
+void ADC0_Init(void)
+{
+
+    // Set Clock with PLL to run from external crystal with 120MHz
+    SysCtlClockFreqSet((SYSCTL_OSC_MAIN  |
+                        SYSCTL_USE_PLL   |
+                        SYSCTL_XTAL_25MHZ |
+                        SYSCTL_CFG_VCO_480),120000000);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0); //activate the clock of ADC0
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0); //activate the clock of Timer0
+    SysCtlDelay(2); //insert a few cycles after enabling the peripheral to allow the clock to be fully activated.
+
+
+    TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC); // configure Timer0 as periodic
+    TimerLoadSet(TIMER0_BASE, TIMER_A, 120000000); // 1 Second Interval
+    //IntPrioritySet(INT_TIMER0A, 0x00);     // configure Timer0A interrupt priority as 0
+
+    ADCSequenceDisable(ADC0_BASE, 3); //disable ADC0 before the configuration is complete
+    ADCSequenceConfigure(ADC0_BASE, 3, ADC_TRIGGER_TIMER, 0); // will use ADC0, SS3, processor-trigger, priority 0
+
+    //ADC0 SS3 Step 0, sample from ADC SS3 channel 0, completion of this step will set RIS, last sample of the sequence
+    ADCSequenceStepConfigure(ADC0_BASE,3,0,ADC_CTL_CH0|ADC_CTL_IE|ADC_CTL_END);
+
+    IntPrioritySet(INT_ADC0SS3, 0x00);       // configure ADC0 SS3 interrupt priority as 0
+    ADCIntRegister(ADC0_BASE,0,readADCvalue_routine22);
+    IntEnable(INT_ADC0SS3);                 // enable interrupt on ADC0 SS3
+    ADCIntEnable(ADC0_BASE, 3);      // arm interrupt of ADC0 SS3
+
+    TimerControlTrigger(TIMER0_BASE, TIMER_A, true); // specifies trigger timer
+    ADCSequenceEnable(ADC0_BASE, 3); //enable ADC0
+    /* All configuration are completed, enable Timer 0A which will trigger
+    the ADC sampling process. */
+    TimerEnable(TIMER0_BASE, TIMER_A);
+
+
+}
+
+
+int main2353(void)
+{
+        ADC0_Init();    // initialize ADC0 and Timer0
+        GPIO_Init();                // initialize gpio
+        IntMasterEnable();  // globally enable interrupt
+
+        while(1)
+        {
+
+        }
+}

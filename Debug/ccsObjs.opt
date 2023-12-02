@@ -1,6 +1,7 @@
 "./tm4c1294ncpdt_startup_ccs.obj"
 "./Test/TestADC/TestADCPocContinous.obj"
 "./Test/TestADC/TestADCPocInterrupt.obj"
+"./Test/TestADC/TestADCPocInterruptForumVariant.obj"
 "./Test/TestADC/TestADCPocSingle.obj"
 "./src/main0.obj"
 "../tm4c1294ncpdt.cmd"

@@ -12,34 +12,67 @@
 #include <stdbool.h>
 #include "stdio.h"
 #include "inc/tm4c1294ncpdt.h"
-#include "driverlib/adc.h"
 #include "driverlib/adc.c"
+#include "driverlib/timer.h"
 #include "driverlib/interrupt.h"
+#include "driverlib/sysctl.h"
 #define MAXARRAY 20 // Block length of sampling
+#define TIMER0_GPTMCTL_R (*((volatile unsigned long *) 0x40030000)
 
 int cnter = 0;
-int result;
+int resultCH1;
+int resultCH2;
+int resultsCH1[100];
+int resultsCH2[100];
 
 void readADCvalue_routine(void); //Routine to read adc value from FIFO
 
 void readADCvalue_routine(void){
-    result = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO
-    printf("Result: %d ",result);
-    printf("Counter: %d \n",cnter);
+    ADCIntClear(ADC0_BASE, 0); // clear the interrupt
+    resultCH1 = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO for Channel 1
+    resultCH2 = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO for Channel 2
+    //printf("Result CH1: %d CH2: %d",resultCH1,resultCH2);
+    //printf("Counter: %d \n",cnter);
+    resultsCH1[cnter] = resultCH1;
+    resultsCH2[cnter] = resultCH2;
     cnter++;
+    if(99 == cnter){
+        int index;
+        printf("Array:");
+        for(index = 0;index<100;index++){
+            printf("CH1: %d, CH2 %d \n",resultsCH1[index],resultsCH2[index]);
+        }
+    }
+}
+
+void testTimer_routine(void); //Routine to read adc value from FIFO
+
+void testTimer_routine(void){
+    printf("Hello, is there anybody hearing?\n");
+    TimerIntClear(TIMER0_BASE,TIMER_A);
 }
 
 void main(void)
 {
-    int i, j, k, wt = 0; // Loop counter variables, aux. variable for waiting
-    int result1[MAXARRAY], result2[MAXARRAY]; // ADC results 2 channels
+    int wt = 0; // Variable for very short wait times
 
-
+    // Set Clock with PLL to run from external crystal with 120MHz
+    SysCtlClockFreqSet((SYSCTL_OSC_MAIN  |
+                        SYSCTL_USE_PLL   |
+                        SYSCTL_XTAL_25MHZ |
+                        SYSCTL_CFG_VCO_480),120000000);
     // Port and ADC Clock Gating Control
     // Clock switch on AIN of ADC0 ... Pin is PE0
     SYSCTL_RCGCGPIO_R |= 0x00000018; // Clock Port E + D enable
     SYSCTL_RCGCADC_R |= 0x1;
     wt++; // Clock ADC0 enable set
+
+    // Configure the Timer 0 to Trigger the ADC
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);  // Enable the Timer0 peripheral
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER0)) {} // Wait for the Timer0 module to be ready
+    TimerConfigure(TIMER0_BASE, (TIMER_CFG_A_PERIODIC )); // Timer 0 in periodic mode
+    TimerLoadSet(TIMER0_BASE,TIMER_A,1200);  // 1 Second Intervall
+    TimerControlTrigger(TIMER0_BASE,TIMER_A,true); // Activate Timer ADC control Trigger
 
     // Start the ADC Clocking
     SYSCTL_PLLFREQ0_R |= SYSCTL_PLLFREQ0_PLLPWR; // power on the PLL
@@ -47,19 +80,15 @@ void main(void)
     ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 24);  // Use the external OSC at 20MHz
     wt++;
 
-
+    // Configure ADC for Ports PE2+PE3
     GPIO_PORTE_AHB_AFSEL_R |= 0x14; //PE2+PE3 alternative function select
     GPIO_PORTE_AHB_AMSEL_R |= 0x14; //PE2+PE3 analog function selecttitle
     GPIO_PORTE_AHB_DEN_R &= ~0x14; // PE2+PE3 digital pin function DISABLE
     GPIO_PORTE_AHB_DIR_R &= ~0x14; // Allow input PE2+PE3 (AIN0+AIN1)
 
-    // for timing debug only
-    GPIO_PORTD_AHB_DEN_R = 0x14; // PD3 und PD2 digital enable
-    GPIO_PORTD_AHB_DIR_R = 0x03; // PD3 und PD2 output direction enable
-
     // ADC init
     ADC0_ACTSS_R &= 0xF0; // all sequencers off
-    ADC0_SSMUX0_R |= 0x00000001; // Sequencer 3 channel AIN1 (PE3) and AIN0 (PE2)
+    ADC0_SSMUX0_R |= 0x00000001; // Sequencer 0 channel AIN1 (PE3) and AIN0 (PE2)
     ADC0_SSCTL0_R |= 0x00000020; // Sequencer END1 set sequence Length= 2
     ADC0_CTL_R = 0x10; // 3,3 V external V_ref
     //ADC0_SAC_R=0x0; // No averaging of samples in HW
@@ -69,7 +98,10 @@ void main(void)
     //ADC0_SAC_R=0x4; // Averaging over 16 samples in HW
     //ADC0_SAC_R=0x5; // Averaging over 32 samples in HW
     //ADC0_SAC_R=0x6; // Averaging over 64 samples in HW
-    ADC0_EMUX_R |= 0x000F; // continuoulsy sample enable (selftrigger seq. 0)
+    //ADC0_EMUX_R |= 0x000F; // Always Running ADC
+   // ADC0_EMUX_R |= 0x0005; // Timer Triggered ADC
+    ADCSequenceConfigure(ADC0_BASE, 0, ADC_TRIGGER_TIMER, 0); // will use ADC0, SS3, processor-trigger, priority 0
+
 
     // Register and enable ADC Interrupt
     ADCIntRegister(ADC0_BASE,0,readADCvalue_routine);
@@ -78,15 +110,18 @@ void main(void)
     ADCSequenceStepConfigure(ADC0_BASE, 0, 0, ADC_CTL_CH1 | ADC_CTL_IE |
                              ADC_CTL_END);
     IntMasterEnable();
+    // Enable ADC interrupts
+    ADCIntEnableEx(ADC0_BASE, ADC_INT_SS0);
 
     // Start Sample Sequencer 0
     ADC0_ACTSS_R &= 0xF0; // all sequencers off
     printf("Measurement block starts now\n");
-    //ADC0_ACTSS_R |= 0x01; // sequencer 0 on
     ADCSequenceEnable(ADC0_BASE, 0);
+    // Start Timer 0
+    TimerEnable(TIMER0_BASE,TIMER_A);
+    printf("Hallo");
     while (1)
     {
-
     }
 }
 

@@ -13,7 +13,7 @@
 #include "inc/tm4c1294ncpdt.h"
 #define MAXARRAY 20 // Block length of sampling
 
-void main3456(void)
+void main234(void)
 {
     int i, j, k, wt = 0; // Loop counter variables, aux. variable for waiting
     int result1[MAXARRAY], result2[MAXARRAY]; // ADC results 2 channels
