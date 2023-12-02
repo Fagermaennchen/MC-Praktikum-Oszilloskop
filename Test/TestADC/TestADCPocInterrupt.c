@@ -22,10 +22,14 @@
 int cnter = 0;
 int resultCH1;
 int resultCH2;
-int resultsCH1[100];
-int resultsCH2[100];
+const int arrayLen = 800;
+int resultsCH1[arrayLen];
+int resultsCH2[arrayLen];
 
+// Headers
 void readADCvalue_routine(void); //Routine to read adc value from FIFO
+int convertADCtoVolt(int adcVal); // Converts ADC Value into Voltage [mV]
+void testTimer_routine(void); //Routine to read adc value from FIFO
 
 void readADCvalue_routine(void){
     ADCIntClear(ADC0_BASE, 0); // clear the interrupt
@@ -33,19 +37,40 @@ void readADCvalue_routine(void){
     resultCH2 = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO for Channel 2
     //printf("Result CH1: %d CH2: %d",resultCH1,resultCH2);
     //printf("Counter: %d \n",cnter);
-    resultsCH1[cnter] = resultCH1;
-    resultsCH2[cnter] = resultCH2;
+    resultsCH1[cnter] = convertADCtoVolt(resultCH1);
+    resultsCH2[cnter] = convertADCtoVolt(resultCH2);
     cnter++;
-    if(99 == cnter){
+    if(arrayLen - 1 == cnter){
         int index;
         printf("Array:");
-        for(index = 0;index<100;index++){
+        // Calculate min and max values for conversion
+        int minCH1 = 6000;
+        int minCH2 = 6000;
+        int maxCH1 = 0;
+        int maxCH2 = 0;
+        for(index = 0;index<arrayLen;index++){
+            // Calculate min and max values for conversion
+            if(index>50){           // Remove faulty values
+                if(resultsCH1[index] < minCH1 ) { minCH1 = resultsCH1[index];}
+                if(resultsCH1[index] > maxCH1 ) { maxCH1 = resultsCH1[index];}
+                if(resultsCH2[index] < minCH2 ) { minCH2 = resultsCH2[index];}
+                if(resultsCH2[index] > maxCH2 ) { maxCH2 = resultsCH2[index];}
+            }
+            // Print result
             printf("CH1: %d, CH2 %d \n",resultsCH1[index],resultsCH2[index]);
+            printf("Min CH1: %d, Min CH %d, Max CH1: %d, Max CH2: %d",minCH1,minCH2,maxCH1,maxCH2);
         }
+
     }
 }
 
-void testTimer_routine(void); //Routine to read adc value from FIFO
+
+int convertADCtoVolt(int adcVal){
+    // Conversion Values determined by Measurement with Hameg HM 412-5 Oszilloskope
+   int voltage = adcVal*1000000 / (2*1323125);  // Convert Byte Value into Voltage X,XXX [V]
+   return voltage;
+}
+
 
 void testTimer_routine(void){
     printf("Hello, is there anybody hearing?\n");
