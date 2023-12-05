@@ -16,7 +16,6 @@ ORDERED_OBJS += \
 "./Test/TestADC/TestADCPocInterruptForumVariant.obj" \
 "./Test/TestADC/TestADCPocSingle.obj" \
 "./src/ADC/ADCModul.obj" \
-"./src/globalVariables.obj" \
 "./src/main0.obj" \
 "../tm4c1294ncpdt.cmd" \
 $(GEN_CMDS__FLAG) \
@@ -155,8 +154,8 @@ MC-Praktikum-Oszilloskop.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "tm4c1294ncpdt_startup_ccs.obj" "Test\TestADC\TestADCPocContinous.obj" "Test\TestADC\TestADCPocInterrupt.obj" "Test\TestADC\TestADCPocInterruptForumVariant.obj" "Test\TestADC\TestADCPocSingle.obj" "src\ADC\ADCModul.obj" "src\globalVariables.obj" "src\main0.obj" 
-	-$(RM) "tm4c1294ncpdt_startup_ccs.d" "Test\TestADC\TestADCPocContinous.d" "Test\TestADC\TestADCPocInterrupt.d" "Test\TestADC\TestADCPocInterruptForumVariant.d" "Test\TestADC\TestADCPocSingle.d" "src\ADC\ADCModul.d" "src\globalVariables.d" "src\main0.d" 
+	-$(RM) "tm4c1294ncpdt_startup_ccs.obj" "Test\TestADC\TestADCPocContinous.obj" "Test\TestADC\TestADCPocInterrupt.obj" "Test\TestADC\TestADCPocInterruptForumVariant.obj" "Test\TestADC\TestADCPocSingle.obj" "src\ADC\ADCModul.obj" "src\main0.obj" 
+	-$(RM) "tm4c1294ncpdt_startup_ccs.d" "Test\TestADC\TestADCPocContinous.d" "Test\TestADC\TestADCPocInterrupt.d" "Test\TestADC\TestADCPocInterruptForumVariant.d" "Test\TestADC\TestADCPocSingle.d" "src\ADC\ADCModul.d" "src\main0.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

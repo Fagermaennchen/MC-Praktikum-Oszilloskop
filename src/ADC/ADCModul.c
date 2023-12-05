@@ -3,32 +3,42 @@
  *
  *  Created on: 02.12.2023
  *      Author: sfage
- */#include <src/ADC/ADCModul.h>
+ */
+#include <src/ADC/ADCModul.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "stdio.h"
+#include "src/globalVariables.h"
 #include "inc/tm4c1294ncpdt.h"
 #include "driverlib/adc.c"
 #include "driverlib/timer.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
 #include "ADCModul.h"
-#include "src/globalVariables.c"
 
-int loadValue = 1200;
+
+int loadValue = 120000000;
 
 void readADCvalue_routine(void){ // Service Routine to get the ADC Values
     ADCIntClear(ADC0_BASE, 0); // clear the interrupt
+    // Get Results
     int resultCH1, resultCH2;
     resultCH1 = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO for Channel 1
     resultCH2 = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO for Channel 2
-    resultsCH1[arrayPosition] = convertADCtoVolt(resultCH1);
-    resultsCH2[arrayPosition] = convertADCtoVolt(resultCH2);
-    arrayPosition++;
-    // Resest Array Position if at end
-    if (arrayPosition == arrayLen){
-        arrayPosition = 0;
+    // Triggering at Channel 1: Check for
+    if( resultCH1 > -10 || resultCH1 < 10){      // Value near Zero reached
+
     }
+    resultsCH1[arrayPosition] =  convertADCtoVolt(resultCH1);
+    resultsCH2[arrayPosition] =  convertADCtoVolt(resultCH2);
+    // Array full: Start Again
+    if (arrayPosition == arrayLen){
+        arrayPosition = 0;          // Reset Array Position
+        triggerZeroReached = False;        // Reset Trigger Status
+    }
+    // Print result
+    printf("CH1: %d, CH2 %d \n",resultsCH1[arrayPosition],resultsCH2[arrayPosition]);
+    arrayPosition++;
 }
 
 int convertADCtoVolt(int adcVal){ // Conversion Values determined by Measurement with Hameg HM 412-5 Oszilloskope
@@ -53,7 +63,7 @@ void setupADC(void){    // Setup the timer triggered ADC
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);  // Enable the Timer0 peripheral
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER0)) {} // Wait for the Timer0 module to be ready
     TimerConfigure(TIMER0_BASE, (TIMER_CFG_A_PERIODIC )); // Timer 0 in periodic mode
-    TimerLoadSet(TIMER0_BASE,TIMER_A,1200);  // 1 Second Intervall
+    TimerLoadSet(TIMER0_BASE,TIMER_A,loadValue);  // 1 Second Intervall
     TimerControlTrigger(TIMER0_BASE,TIMER_A,true); // Activate Timer ADC control Trigger
 
     // Start the ADC Clocking
@@ -96,8 +106,8 @@ void startADC(){    // Starts the timer triggered ADC
     TimerEnable(TIMER0_BASE,TIMER_A);
 
 }
-void changeTimeBase(int newTimeBase){   // Chandes the Timebase (input: newTimeBase [us])
-
+void changeTimeBase(int newTimeBase){   // Changes the Timebase (input: newTimeBase [us])
+    loadValue = newTimeBase*120000;     // Convert us to Sysclock Steps (for 120MHz)
 }
 
 

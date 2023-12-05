@@ -17,7 +17,7 @@
 // Resistive voltage divider before AINx
 // ADC input impedance here less relevant if very slow input changes => data sheet 1862ff.
 
-int main0(void)
+int main0324(void)
 {
     unsigned int ADCoutput, wt;
 
