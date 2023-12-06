@@ -17,7 +17,7 @@
 #include "ADCModul.h"
 
 
-int loadValue = 120000000;
+int loadValue = 1200;
 
 void readADCvalue_routine(void){ // Service Routine to get the ADC Values
     ADCIntClear(ADC0_BASE, 0); // clear the interrupt
@@ -25,20 +25,39 @@ void readADCvalue_routine(void){ // Service Routine to get the ADC Values
     int resultCH1, resultCH2;
     resultCH1 = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO for Channel 1
     resultCH2 = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO for Channel 2
-    // Triggering at Channel 1: Check for
-    if( resultCH1 > -10 || resultCH1 < 10){      // Value near Zero reached
+    // Triggering at Channel 1: Check for Zero Value crossed on positive slope
+    if( prevValueCH1 < triggerZeroValue && resultCH1 > triggerZeroValue){      // Zero Value has been crossed on positive slope
+        triggerZeroReached = true;
+    }
+    // Triggering at Channel 2: Check if Trigger is crosses
+    if( triggerZeroReached && ((prevValueCH1 < triggerValue && resultCH1 > triggerValue) || // Trigger crossed on positive slope
+        (prevValueCH1 > triggerValue && resultCH1 < triggerValue)))   // Trigger crossed on negative slope
+    {
+        triggered = true;
+    }
+    // Print result for debug purpose
+   // printf("CH1: %d, Prev CH1: %d, Zero: %d, Trigger: %d , ZeroReached: %d \n",resultCH1,prevValueCH1,triggerZeroValue,triggerValue,triggerZeroReached);
+    // Save Data to Array if Triggered
+    if(triggered){
+        resultsCH1[arrayPosition] =  resultCH1;
+        resultsCH2[arrayPosition] =  resultCH2;
+        // Array full: Start Again
+        if (arrayPosition == arrayLen){
+            arrayPosition = 0;          // Reset Array Position
+            triggerZeroReached = false;  // Reset Trigger Status
+            triggered = false;
+            prevValueCH1 = 9999;           // Default Value Trigger Zero
+            printf("Restart Triggering");
+        }
+        // Print result for debug purpose
+        printf("CH1: %d, CH2 %d \n",resultsCH1[arrayPosition],resultsCH2[arrayPosition]);
+        arrayPosition++;
+    }
+    // Save Current Value for next Trigger Check
+    else{
+        prevValueCH1 = resultCH1;
+    }
 
-    }
-    resultsCH1[arrayPosition] =  convertADCtoVolt(resultCH1);
-    resultsCH2[arrayPosition] =  convertADCtoVolt(resultCH2);
-    // Array full: Start Again
-    if (arrayPosition == arrayLen){
-        arrayPosition = 0;          // Reset Array Position
-        triggerZeroReached = False;        // Reset Trigger Status
-    }
-    // Print result
-    printf("CH1: %d, CH2 %d \n",resultsCH1[arrayPosition],resultsCH2[arrayPosition]);
-    arrayPosition++;
 }
 
 int convertADCtoVolt(int adcVal){ // Conversion Values determined by Measurement with Hameg HM 412-5 Oszilloskope
