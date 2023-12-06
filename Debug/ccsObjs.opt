@@ -3,6 +3,7 @@
 "./Test/TestADC/TestADCPocInterrupt.obj"
 "./Test/TestADC/TestADCPocInterruptForumVariant.obj"
 "./Test/TestADC/TestADCPocSingle.obj"
+"./Test/TestCursor/TestFontPoc.obj"
 "./src/ADC/ADCModul.obj"
 "./src/main0.obj"
 "../tm4c1294ncpdt.cmd"

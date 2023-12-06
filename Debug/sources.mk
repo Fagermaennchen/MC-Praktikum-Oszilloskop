@@ -113,6 +113,7 @@ PDE_DEPS__QUOTED :=
 SUBDIRS := \
 . \
 Test/TestADC \
+Test/TestCursor \
 src/ADC \
 src \
 

@@ -1,5 +1,5 @@
 // This Module holds the Global Variables
-/*#include <stdbool.h>
+#include <stdbool.h>
 // Value Array
 int arrayPosition = 0;      // Current Position in the Arrays
 const int arrayLen = 10;   // Fixed lenght of Arrays
@@ -12,4 +12,4 @@ int triggerValue = 2500;             // Value, at which to start saving the data
 int prevValueCH1 = 9999;            // Last Value, to check if Trigger has been reached
 bool triggered = false;              // Remeber if triggered
 
-*/
+
