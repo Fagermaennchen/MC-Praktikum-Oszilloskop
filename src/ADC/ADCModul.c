@@ -4,7 +4,7 @@
  *  Created on: 02.12.2023
  *      Author: sfage
  */
-#include <src/ADC/ADCModul.h>
+/*#include <src/ADC/ADCModul.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "stdio.h"
@@ -129,4 +129,4 @@ void changeTimeBase(int newTimeBase){   // Changes the Timebase (input: newTimeB
     loadValue = newTimeBase*120000;     // Convert us to Sysclock Steps (for 120MHz)
 }
 
-
+*/
