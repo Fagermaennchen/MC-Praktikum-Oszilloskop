@@ -5,50 +5,10 @@
 // Based partially of tests and sources from Ole Roenna 2020
 // V0.1-V0.4 K.R. Riemschneider .. 1-4 Oct 2020
 
-// Size of Display define
-#define LARGE_DISPLAY
-#define MAX_X 800
-#define MAX_Y 480
+#include "header.h"
 
-// Global Variables
-int Buchstabenhöhe = 40;
-int XaxisBegin = 200;           //Beginn bei 201. Pixel
-int XaxisEnd = MAX_X - 1;
-int YaxisBegin = 80;            //2 Zeilen oben für Schieberegler und Bezeichnungen (Beginn bei 81. Pixel)
-int YaxisEnd = MAX_Y - 121;     //3 Zeilen unten zum Anzeigen der Werte (Ende 1 Pixel vorher)
-int YaxisMiddle = 219;          //((YaxisEnd-YaxisBegin)/2)-YaxisBegin
 
-#include <stdint.h>
-#include <stdbool.h> // type bool for giop.h
-#include "inc/hw_types.h"
-#include "inc/tm4c1294ncpdt.h"
-#include <stdio.h>   // Debug only
-#include <driverlib/sysctl.h>
-#include <driverlib/gpio.h>     // GPIO_PIN_X
-#include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
-
-// constants for display initialization
-#define RST 0x10
-#define INITIAL_STATE (0x1F)
-#define SOFTWARE_RESET (0x01)
-#define SET_PLL_MN (0xE2)
-#define START_PLL (0xE0)
-#define LOCK_PLL (0xE0)  // same as START_PLL
-#define SET_LSHIFT (0xE6)
-#define SET_LCD_MODE (0xB0)
-#define SET_HORI_PERIOD (0xB4)
-#define SET_VERT_PERIOD (0xB6)
-#define SET_ADRESS_MODE (0x36)
-#define SET_PIXEL_DATA_FORMAT (0xF0)
-#define SET_DISPLAY_ON (0x29)
-#define SET_DISPLAY_OFF (0x29) // not tested ??
-uint32_t sysClock; // Variable for system clock
-/* some predefined basic colors to use with names */
-enum colors{BLACK=0x00000000,WHITE=0x00FFFFFF,GREY=0x00AAAAAA,RED=0x00FF0000,GREEN=0x0000FF00,BLUE=0x000000FF,YELLOW=0x00FFFF00};
-/* same values as array for indexed colors */
-int colorarray[]={0x00000000,0x00FFFFFF,0x00AAAAAA,0x00FF0000,0x0000FF00,0x000000FF,0x00FFFF00};
-
-int i,j,x,y;
+void drawFont(const uint8_t character[], int x, int y, int color,int backdrop);
 
 
 /********************************************************************************
@@ -79,7 +39,9 @@ inline void window_set(min_x, min_y, max_x, max_y)
     write_data(max_y >> 8);        // Set stop column address      (high byte)
     write_data(max_y);             // as above                     (low byte)
 }
-/********************************************************************************/
+/*********************************************************************************
+                        Display configuration
+*********************************************************************************/
 void init_ports_display(void)
 {
     // Set Port M Pins 0-7: used as Output of LCD Data
@@ -90,80 +52,6 @@ void init_ports_display(void)
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);  // Clock Port Q
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOL));
     GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3| GPIO_PIN_4);
-}
-/********************************************************************************/
-void configure_display_controller_small (void) // 480 x 272 pixel
-{
-    GPIO_PORTL_DATA_R = INITIAL_STATE;      // Initial state of display control signals
-    GPIO_PORTL_DATA_R &= ~RST;              // Display hardware reset prepare, manual p. 79
-    SysCtlDelay(10000);                     // wait >1 ms
-    GPIO_PORTL_DATA_R |= RST;               // Display hardware reset trigger
-    SysCtlDelay(10000);                     // wait >1 ms
-
-    write_command(SOFTWARE_RESET);          // Display Software reset, manual p. 24
-    SysCtlDelay(100000);                    // wait >5 ms
-
-    write_command(SET_PLL_MN);              // Set PLL Freq of display controller to 100MHz
-    write_data(0x1D);                       // see manual p. 74
-    write_data(0x02);                       //
-    write_data(0x04);                       //
-
-    write_command(START_PLL);               // Start PLL, see manual p. 73
-    write_data(0x01);                       //
-    SysCtlDelay(10000);                     // wait >1 ms
-
-    write_command(LOCK_PLL);               // Lock PLL, see manual p. 73/74
-    write_data(0x03);                       //
-    SysCtlDelay(10000);                     // wait >1 ms
-
-    write_command(SOFTWARE_RESET);          // Software reset, manual p. 24
-    SysCtlDelay(100000);                    // wait > 10 ms
-
-    write_command(SET_LSHIFT);              // Pixel clock frequency
-    write_data(0x01);                       // set pixel Clock 9MHz, see manual p. 76
-    write_data(0x70);                       //
-    write_data(0xA3);                       //
-
-    write_command(SET_LCD_MODE);            // Set LCD Panel mode, see manual p. 76
-    write_data(0x20);                       // TFT panel 24bit
-    write_data(0x00);                       // TFT mode
-    write_data(0x01);                       // Set horizontal size = 480-1 (high byte)
-    write_data(0xDF);                       // Set horizontal size = 480-1 (low byte)
-    write_data(0x01);                       // Set vertical size = 272-1  (high byte)
-    write_data(0x0F);                       // Set vertical size = 272-1 (low byte)
-    write_data(0x00);                       // Even line RGB sequence / Odd line RGB sequence RGB
-
-    write_command(SET_HORI_PERIOD);         // Set horizontal periods, manual  p. 47
-    write_data(0x02);                       // Horizontal total period (display + non-displayed) in pixels (high byte)
-    write_data(0x13);                       // as above (low byte) = total 531 pixels
-    write_data(0x00);                       // Non-displayed period between the start of the horizontal sync (LLINE) signal
-                                            // and the first display data  (high byte)
-    write_data(0x2B);                       // as above (low byte) = total sync pulse start position  is 43 pixels
-    write_data(0x0A);                       // Set the horizontal sync width = 10 pixels
-    write_data(0x00);                       // Set horizontal sync pulse start (high byte)
-    write_data(0x08);                       // as above (low byte) = total sync pulse start position is 8 pixels
-    write_data(0x00);                       //
-
-    write_command(SET_VERT_PERIOD);         // Set vertical periods, manual  p. 49
-    write_data(0x01);                       // Vertical total period (display + non-displayed) in lines (high byte)
-    write_data(0x20);                       // as above (low byte) = total 288 lines
-    write_data(0x00);                       //
-    write_data(0x0C);                       // The non-displayed period in lines between the start of the frame and the first
-                                            // display data in line = 12 pixels.
-    write_data(0x0A);                       // Set the horizontal sync width = 10 pixels
-    write_data(0x00);                       // Set vertical sync pulse start position (high byte)
-    write_data(0x04);                       // as above (low byte) = total sync pulse start position is 4 lines
-
-    write_command(SET_ADRESS_MODE);         // Pixel address counting = flip display , manual p. 36
-    write_data(0x03);                       // necessary to match with touch screen addressing
-
-//  write_command(0x0A);                    // Power control mode not tested in detail
-//  write_data(0x1C);
-
-    write_command(SET_PIXEL_DATA_FORMAT);    // set pixel data format 8bit manual p. 78
-    write_data(0x00);
-
-    write_command(SET_DISPLAY_ON);           // Set display on  manual p. 78
 }
 /********************************************************************************/
 void configure_display_controller_large (void) // 800 x 480 pixel ???
@@ -250,7 +138,7 @@ void initDisplay(void){
    color=BLACK;
    window_set(0,0,MAX_X-1,MAX_Y-1); // set single position see B.4  // to do faster ?
    write_command(0x2C); //write pixel command
-    for (x=0;x<=(MAX_X)-1;x++)
+   for (x=0;x<=(MAX_X)-1;x++)
         for (y=0;y<=(MAX_Y)-1;y++)
         {
             write_data((color>>16)&0xff); // red
@@ -260,87 +148,186 @@ void initDisplay(void){
     printf("Background ready \n"); // for debug only
 
 }
+/*********************************************************************************
+                        Touch configuration
+*********************************************************************************/
+void touch_write(unsigned char value)
+{
+    unsigned char i = 0x08; // 8 bit command
+    unsigned char x, DI;
+    GPIO_PORTD_AHB_DATA_R &= 0xFB; //CS=0
+    while (i > 0) {
+        DI = (value >> 7);
+        if (DI == 0) {GPIO_PORTD_AHB_DATA_R &= 0xfe;} //out bit=0
+        else {GPIO_PORTD_AHB_DATA_R |= 0x01;} //out bit=1
+        value <<= 1; //next value
+        GPIO_PORTD_AHB_DATA_R |= 0x08; //Clk=1
+        for (x = 0; x < 10; x++);
+        GPIO_PORTD_AHB_DATA_R &= 0xf7; //Clk=0
+        for (x = 0; x < 10; x++);
+        i--;
+    }
+}
 /********************************************************************************/
-
+unsigned int touch_read()
+{
+    unsigned char i = 12; // 12 Bit ADC
+    unsigned int x, value = 0x00;
+    while (i > 0)
+    {
+        value <<= 1;
+        GPIO_PORTD_AHB_DATA_R |= 0x08; //Clk=1
+        for (x = 0; x < 10; x++);
+        GPIO_PORTD_AHB_DATA_R &= 0xf7; //Clk=0
+        for (x = 0; x < 10; x++);
+        value |= ((GPIO_PORTD_AHB_DATA_R >> 1) & 0x01); // read value
+        i--;
+    }
+    GPIO_PORTD_AHB_DATA_R |= 0x04; //CS=1
+    return value;
+}
+/********************************************************************************
+                        Drawing functions
+*********************************************************************************/
+void drawRectangle(x0,y0,x1,y1,color){
+    window_set(x0,y0,x1,y1); // set rectangle position see B.4
+    write_command(0x2C); //write pixel command
+    for (x=x0;x<=x1;x++)
+        for (y=y0;y<=y1;y++)
+        {
+            write_data((color>>16)&0xff); // red
+            write_data((color>>8)&0xff); // green
+            write_data((color)&0xff); // blue
+        }
+}
 /********************************************************************************/
-void drawSquares(void){
+void drawLine(x0,y0,x1,y1,color)
+{
+    int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+    int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+    int err = dx + dy, e2;
 
+    while(1){
+        window_set(x0,y0,x0,y0);
+        write_command(0x2C); //write pixel command
+        write_data((color>>16)&0xff); // red
+        write_data((color>>8)&0xff); // green
+        write_data((color)&0xff); // blue
+        if(x0 == x1 && y0 == y1) break;
+        e2 = 2 * err;
+        if(e2 > dy){
+            err += dy;
+            x0 += sx;
+        }
+        if(e2 < dx){
+            err += dx;
+            y0 += sy;
+        }
+    }
 
-    enum colors color;   // see global definition
-    printf("Write rectangles\n"); // for debug only
-    for (x=0;x<=(MAX_X)-1-20;x=x+40)
-        for (y=0;y<=(MAX_Y)-1-20;y=y+40)
-         {
-            color=colorarray[(j)%7]; j++; // change color
-            window_set(x,y,x+20,y+20); // set rectangle position see B.4
-            write_command(0x2C); //write pixel command
-            for(i=0;i<(40*40);i++) // set pixels
-            {
-                write_data((color>>16)&0xff); // red
-                write_data((color>>8)&0xff); // green
-                write_data((color)&0xff); // blue
-            }
-         }
 }
 /********************************************************************************/
 void drawAxes(void){
-    int x,y,z,x_end,y_end,a,b, ya;
-    enum colors color;
-    color = WHITE;
-    //Write X-Axis
-    window_set(XaxisBegin,YaxisMiddle,XaxisEnd,YaxisMiddle+1);  //Mitte des Display in X-Richtung (X-Anfang, Y-Anfang, X-Ende, Y-Ende)
-    write_command(0x2C); //write pixel command
-    for (x=0;x<=(MAX_X)-1;x++)  //von 0 bis MAX_X weil Achse über gesamte Breite lang
-        for (y=0;y<=1;y++)      //Von 0 bis 1 weil Achse nur 2+ Pixel breit
-        {
-            write_data((color>>16)&0xff); // red
-            write_data((color>>8)&0xff); // green
-            write_data((color)&0xff); // blue
-        }
-    //Write x-Axis Arrow
+    //enum colors color;
+    //color = WHITE;
+    //Write X-Axis  (double lined)
+    drawLine(XaxisXbegin, XaxisYmiddle, XaxisXend, XaxisYmiddle, WHITE);                       // Uppder line of double line
+    drawLine(XaxisXbegin, XaxisYmiddle + 1, XaxisXend, XaxisYmiddle + 1, WHITE);               // Lower line
+    //Write X-Axis Arrow (double lined)
+    drawLine(XaxisXbegin + 2, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);      // Right right arrow line
+    drawLine(XaxisXbegin + 2, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);      // Left right arrow line
+    drawLine(XaxisXbegin - 1, YaxisYbegin + 1, XaxisXbegin - arrowWidth - 1, YaxisYbegin + arrowLength + 1, WHITE);      // Right left arrow line
+    drawLine(XaxisXbegin - 1, YaxisYbegin + 2, XaxisXbegin - arrowWidth - 1, YaxisYbegin + arrowLength + 2, WHITE);      // Left left arrow line
 
-    //Write Y-Axis
-    window_set(XaxisBegin,YaxisBegin,XaxisBegin+1,YaxisEnd);  //(X-Anfang, Y-Anfang, X-Ende, Y-Ende)
-    write_command(0x2C); //write pixel command
-    for (x=0;x<=1;x++)              //Sweep Breite der Y-Achse
-        for (y=0;y<=(MAX_Y)-1;y++)  //Sweep Länge der Y-Achse
-        {
-            write_data((color>>16)&0xff); // red
-            write_data((color>>8)&0xff); // green
-            write_data((color)&0xff); // blue
-        }
-    //Write X-Axis Arrow
-    for(y=0; y<=1; y++){    //Dicke des Pfeils = 2
-        for(x=0,x_end=12;x<=x_end;){         //Sweep X
-            for(ya=13+y; ya>=1; ya--){       //Sweep Y
-                window_set(187+x, 80+ya, 187+x, 80+ya);
-                write_command(0x2C); //write pixel command
-                write_data((color>>16)&0xff); // red
-                write_data((color>>8)&0xff); // green
-                write_data((color)&0xff); // blue
-                x++;
-            }
-        }
-    }
-    for(y=0; y<=1; y++){    //Dicke des Pfeils = 2
-        for(x=0,x_end=12;x<=x_end;){         //Sweep X
-            for(ya=1+y; ya<=14; ya++){       //Sweep Y
-                window_set(202+x, 80+ya, 202+x, 80+ya);
-                write_command(0x2C); //write pixel command
-                write_data((color>>16)&0xff); // red
-                write_data((color>>8)&0xff); // green
-                write_data((color)&0xff); // blue
-                x++;
-            }
-        }
-    }
+    //Write Y-Axis (double lined)
+    drawLine(XaxisXbegin, YaxisYbegin, XaxisXbegin, YaxisYend, WHITE);
+    drawLine(XaxisXbegin + 1,YaxisYbegin,XaxisXbegin + 1,YaxisYend, WHITE);
+    //Write Y-Axis Arrow (double lined)
+    drawLine(XaxisXend - 1, XaxisYmiddle - 1, XaxisXend - arrowLength - 1, XaxisYmiddle - arrowWidth - 1, WHITE);
+    drawLine(XaxisXend - 2, XaxisYmiddle - 1, XaxisXend - arrowLength - 2, XaxisYmiddle - arrowWidth - 1, WHITE);
+    drawLine(XaxisXend - 1, XaxisYmiddle + 2, XaxisXend - arrowLength - 1, XaxisYmiddle + arrowWidth + 2, WHITE);
+    drawLine(XaxisXend - 2, XaxisYmiddle + 2, XaxisXend - arrowLength - 2, XaxisYmiddle + arrowWidth + 2, WHITE);
+
+
+
+
 
 
 
     printf("Axes ready\n");
 }
 /********************************************************************************/
+void initTriggerAxis(void){
+    drawRectangle(57,80,61,359,GREY);       //draw Trigger Axis
+    drawRectangle(29,210,89,230,GREY);
+}
+/********************************************************************************/
+void readTouchValues(void){
 
+    //read Touch values
+    touch_write(0xD0);                  //Touch Command XPos read
+    for (x = 0; x < 10; x++);           //Busy wait
+    xpos = touch_read();                //xpos value read ( 0......4095 )
+    printf("xpos= %5d ", xpos);
+    touch_write(0x90);                  //Touch Command YPos read
+    for (x = 0; x < 10; x++);           //Busy wait
+    ypos = touch_read();                //ypos value read ( 0.....4095 )
+    printf("ypos= %5d\n", ypos);
+}
+/********************************************************************************/
+void refreshTimebaseButton(void){
+    if(((xpos>=205)&&(xpos<=3379)) && ((ypos>=3072)&&(ypos<=3755))){
+        //Upper side Button
+        printf("Printing new Button\n");
+        drawLine(100,100,400,400,WHITE);
+        //drawRectangle(100,100,200,400,BLACK);
+        //Lower side Button
+    }
+}
+/********************************************************************************/
+void initTimebaseAxis(void){
+    drawRectangle(160,398,759,402,GREY);
+    drawRectangle(450,370,470,430,GREY);
+}
+/********************************************************************************/
+void drawFont(const uint8_t character[], int x, int y, int color,int backdrop){
+    window_set(x,y,x+fontWidth,x+fontHeight); // Set Window
+    write_command(0x2C); //write pixel command
+    int i;
+    int k;
+    // Draw each Pixel
+    for(i=0;i<fontArrayLen;i++)     // Each Entry in Byte Array
+        for(k=0;k<8;k++){
+        //     Draw Color if 1
+            if(character[i] & 0x80 >> k){
+                write_data((color>>16)&0xff); // red
+                write_data((color>>8)&0xff); // green
+                write_data((color)&0xff); // blue
+            }
+            // Else Draw Backdrop
+            else{
+                write_data((backdrop>>16)&0xff); // red
+                write_data((backdrop>>8)&0xff); // green
+                write_data((backdrop)&0xff); // blue
+            }
+        }
+}
+/********************************************************************************/
+void drawText(void){
+    //draw first Font line
+    drawFont(font_C, xStartCHX, yStartCHfirstLine, WHITE, BLACK);
+    drawFont(font_H, xStartCHX+fontWidth+fontSpace, yStartCHfirstLine, WHITE, BLACK);
+    drawFont(font_1, xStartCHX+2*fontWidth+2*fontSpace, yStartCHfirstLine, WHITE, BLACK);
+    drawFont(font_colon, xStartCHX+3*fontWidth+3*fontSpace, yStartCHfirstLine, WHITE, BLACK);
+    //draw second Font line
+    drawFont(font_C, xStartCHX, yStartCHsecondLine, WHITE, BLACK);
+    drawFont(font_H, xStartCHX+fontWidth+fontSpace, yStartCHsecondLine, WHITE, BLACK);
+    drawFont(font_2, xStartCHX+2*fontWidth+2*fontSpace, yStartCHsecondLine, WHITE, BLACK);
+    drawFont(font_colon, xStartCHX+3*fontWidth+3*fontSpace, yStartCHsecondLine, WHITE, BLACK);
+
+    drawFont(font_C, 450, 439,WHITE,BLACK);
+    }
+/********************************************************************************/
 
 
 
@@ -353,11 +340,24 @@ void main(void)
    init_ports_display(); // Init Port L for Display Control and Port M for Display Data
    initDisplay();
    drawAxes();
-    // Start endless loop
-   j = 0;
+   drawText();
+   initTriggerAxis();
+   initTimebaseAxis();
 
+   //Initialize Touch
+   SYSCTL_RCGCGPIO_R = 0x0008; //Enable clock Port D
+   while ((SYSCTL_PRGPIO_R & 0x08) == 0);  //GPIO Clock ready?
+   GPIO_PORTD_AHB_DEN_R = 0x1F;            //PortD digital enable
+   GPIO_PORTD_AHB_DIR_R = 0x0D;            //PortD Input/Output
+   GPIO_PORTD_AHB_DATA_R &= 0xF7;          //Clk=0
+
+   // Start endless loop
     while(1)
     {
+        readTouchValues();
+        refreshTimebaseButton();
+
 
     }
 }
+
