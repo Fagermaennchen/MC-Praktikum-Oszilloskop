@@ -850,7 +850,7 @@ void drawFont(const uint8_t character[],int x, int y,int color,int backdrop){
         }
 }
 void drawComma(int x, int y,int color,int backdrop){
-    window_set(x,y,x+8,x+fontHeight); // Set Window
+    window_set(x,y,x+7,x+fontHeight); // Set Window
     write_command(0x2C); //write pixel command
     int i;
     int k;
@@ -875,16 +875,16 @@ void drawComma(int x, int y,int color,int backdrop){
 int* numbtofont(int number){
     // Mpas a font array to a one digit number
     switch(number) {
-        case 0: return font_1; break;
+        case 0: return font_0; break;
         case 1: return font_1; break;
-        case 2: return font_1; break;
-        case 3: return font_1; break;
-        case 4: return font_1; break;
-        case 5: return font_1; break;
-        case 6: return font_1; break;
-        case 7: return font_1; break;
-        case 8: return font_1; break;
-        case 9: return font_1; break;
+        case 2: return font_2; break;
+        case 3: return font_3; break;
+        case 4: return font_4; break;
+        case 5: return font_5; break;
+        case 6: return font_6; break;
+        case 7: return font_7; break;
+        case 8: return font_8; break;
+        case 9: return font_9; break;
         default: printf("a ist irgendwas\n"); break;
     }
 
@@ -892,15 +892,24 @@ int* numbtofont(int number){
 }
 
 void drawMilliVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroundColor){
-    // Draws a 4 digit voltage in mV (X,XXX mV) at postitions x and y
+    // Draws a 4 digit voltage in mV (XXX,1 mV) at postitions x and y
     int digit[4];
-    digit[0] = (voltage_mv/1000)%10;  // Calculate digit 0
-    digit[1] = (voltage_mv/100)%10;   // Calculate digit 2
-    digit[2] = (voltage_mv/10)%10;   // Calculate digit 2
-    digit[3] = (voltage_mv)%10;   // Calculate digit 3
-    // Draw first digit
-    drawFont(numbtofont(digit[0]),x,y,foregroundColor,backgroundColor);
+    digit[0] = (int)(voltage_mv/1000);  // Calculate digit 0
+    digit[1] = (int)((voltage_mv-digit[0]*1000)/100);   // Calculate digit 2
+    digit[2] = (int)((voltage_mv-digit[0]*1000-digit[1]*100)/10);   // Calculate digit 2
+    digit[3] = (int)(voltage_mv-digit[0]*1000-digit[1]*100-digit[2]*10)%10;   // Calculate digit 3
+    // Draw first 3 digits digit
+    int i;
+    for(i=0;i<3;i++){
+        drawFont(numbtofont(digit[i]),x+i*(fontWidth),y,foregroundColor,backgroundColor);
+    }
     // Draw Comma
+    drawComma(x+fontWidth+2*(fontWidth)+0.3*(fontWidth),y,foregroundColor,backgroundColor);
+    // Draw last  digits
+    drawFont(numbtofont(digit[i]),x+4*fontWidth+0.3*(fontWidth),y,foregroundColor,backgroundColor);
+    // Draw mV
+    drawFont(font_m,x+4*(fontWidth)+0.3*(fontWidth),y,foregroundColor,backgroundColor);
+    drawFont(font_V,x+5*(fontWidth)+0.3*(fontWidth),y,foregroundColor,backgroundColor);
 }
 
 
@@ -945,10 +954,10 @@ void main(void)
     drawFont(font_colon,100+3*fontWidth+3*fontSpace,100,WHITE,BLACK);
     // Test All Numbers
     int numbers[] = {font_0,font_1,font_2,font_3,font_4,font_5,font_6,font_7,font_8,font_9,font_m,font_V};
-    //for(i=1;i<13;i++){
-    //    drawFont(numbers[i-1],100+(3+i)*fontWidth+(3+i)*fontSpace,100,WHITE,BLACK);
-    //}
-    drawComma(250,250,WHITE,BLACK);
+    for(i=1;i<13;i++){
+        drawFont(numbers[i-1],100+(3+i)*fontWidth+(3+i)*fontSpace,100,WHITE,BLACK);
+    }
+    drawMilliVolt(1234,250,250,WHITE,BLACK);
 
 
     // Start endless loop
