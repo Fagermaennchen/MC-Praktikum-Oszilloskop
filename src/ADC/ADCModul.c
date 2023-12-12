@@ -67,11 +67,6 @@ int convertADCtoVolt(int adcVal){ // Conversion Values determined by Measurement
 
 void setupADC(void){    // Setup the timer triggered ADC
     int wt = 0; // Variable for very short wait times
-    // Set Clock with PLL to run from external crystal with 120MHz
-    SysCtlClockFreqSet((SYSCTL_OSC_MAIN  |
-                        SYSCTL_USE_PLL   |
-                        SYSCTL_XTAL_25MHZ |
-                        SYSCTL_CFG_VCO_480),120000000);
     // Port and ADC Clock Gating Control
     // Clock switch on AIN of ADC0 ... Pin is PE0
     SYSCTL_RCGCGPIO_R |= 0x00000018; // Clock Port E + D enable

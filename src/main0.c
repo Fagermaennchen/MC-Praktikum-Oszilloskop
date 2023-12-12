@@ -9,10 +9,17 @@
 #include "driverlib/adc.h"
 #include <src/ADC/ADCModul.h>
 #include "driverlib/interrupt.h"
-
+#include "driverlib/sysctl.h"
+#include <stdbool.h>
 
 
 void setupAll(void){
+    // Setup clock
+    // Set Clock with PLL to run from external crystal with 120MHz
+    SysCtlClockFreqSet((SYSCTL_OSC_MAIN  |
+                        SYSCTL_USE_PLL   |
+                        SYSCTL_XTAL_25MHZ |
+                        SYSCTL_CFG_VCO_480),120000000);
     // Setups all underlying Modules
     setupADC();
     // Enable Interrupts
