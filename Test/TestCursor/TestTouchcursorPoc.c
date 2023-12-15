@@ -326,8 +326,8 @@ int main(void)
         for (x = 0; x < 10; x++);           //Busy wait
         ypos = pixelPosY(touch_read());                //ypos value read ( 0.....4095 )
    //     printf("ypox= %5d\n", ypos);
-        if(xpos != 800 and ){
-            fillRect(xpos,ypos,10,10);
+        if(xpos != 800 && ypos != 400){
+            fillRect(xpos,ypos,1,1);
         }
     }
 }
