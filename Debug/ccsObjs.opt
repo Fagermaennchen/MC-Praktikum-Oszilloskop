@@ -5,7 +5,7 @@
 "./Test/TestADC/TestADCPocSingle.obj"
 "./Test/TestCursor/TestTouchcursorPoc.obj"
 "./src/ADC/ADCModul.obj"
-"./src/main0.obj"
+"./src/main.obj"
 "../tm4c1294ncpdt.cmd"
 -llibc.a
 -l"C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/ccs/Debug/driverlib.lib"

@@ -17,7 +17,7 @@ ORDERED_OBJS += \
 "./Test/TestADC/TestADCPocSingle.obj" \
 "./Test/TestCursor/TestTouchcursorPoc.obj" \
 "./src/ADC/ADCModul.obj" \
-"./src/main0.obj" \
+"./src/main.obj" \
 "../tm4c1294ncpdt.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
@@ -157,8 +157,8 @@ MC-Praktikum-Oszilloskop.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "tm4c1294ncpdt_startup_ccs.obj" "Test\TestADC\TestADCPocContinous.obj" "Test\TestADC\TestADCPocInterrupt.obj" "Test\TestADC\TestADCPocInterruptForumVariant.obj" "Test\TestADC\TestADCPocSingle.obj" "Test\TestCursor\TestTouchcursorPoc.obj" "src\ADC\ADCModul.obj" "src\main0.obj" 
-	-$(RM) "tm4c1294ncpdt_startup_ccs.d" "Test\TestADC\TestADCPocContinous.d" "Test\TestADC\TestADCPocInterrupt.d" "Test\TestADC\TestADCPocInterruptForumVariant.d" "Test\TestADC\TestADCPocSingle.d" "Test\TestCursor\TestTouchcursorPoc.d" "src\ADC\ADCModul.d" "src\main0.d" 
+	-$(RM) "tm4c1294ncpdt_startup_ccs.obj" "Test\TestADC\TestADCPocContinous.obj" "Test\TestADC\TestADCPocInterrupt.obj" "Test\TestADC\TestADCPocInterruptForumVariant.obj" "Test\TestADC\TestADCPocSingle.obj" "Test\TestCursor\TestTouchcursorPoc.obj" "src\ADC\ADCModul.obj" "src\main.obj" 
+	-$(RM) "tm4c1294ncpdt_startup_ccs.d" "Test\TestADC\TestADCPocContinous.d" "Test\TestADC\TestADCPocInterrupt.d" "Test\TestADC\TestADCPocInterruptForumVariant.d" "Test\TestADC\TestADCPocSingle.d" "Test\TestCursor\TestTouchcursorPoc.d" "src\ADC\ADCModul.d" "src\main.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
