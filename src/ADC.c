@@ -4,17 +4,17 @@
  *  Created on: 02.12.2023
  *      Author: sfage
  */
-#include <src/ADC/ADCModul.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "stdio.h"
-#include "src/globalVariables.h"
 #include "inc/tm4c1294ncpdt.h"
 #include "driverlib/adc.c"
 #include "driverlib/timer.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
-#include "ADCModul.h"
+#include "headers/ADC.h"
+#include "src/headers/globalVariables.h"
+
 
 
 int loadValue = 1200;

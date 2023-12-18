@@ -1,8 +1,18 @@
 
-#include "Display.h"
+
+#include <stdint.h>
+#include <stdbool.h> // type bool for giop.h
+#include "inc/hw_types.h"
+#include "inc/tm4c1294ncpdt.h"
+#include <stdio.h>   // Debug only
+#include <driverlib/sysctl.h>
+#include <driverlib/gpio.h>     // GPIO_PIN_X
+#include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
+#include "headers/globalVariables.h"
+#include "headers/font.h"
+#include "headers/Display.h"
 
 
-void drawFont(const uint8_t character[], int x, int y, int color,int backdrop);
 
 
 /********************************************************************************
@@ -132,6 +142,7 @@ void initDisplay(void){
    color=BLACK;
    window_set(0,0,MAX_X-1,MAX_Y-1); // set single position see B.4  // to do faster ?
    write_command(0x2C); //write pixel command
+   int x,y;
    for (x=0;x<=(MAX_X)-1;x++)
         for (y=0;y<=(MAX_Y)-1;y++)
         {
@@ -186,6 +197,7 @@ unsigned int touch_read()
 void drawRectangle(x0,y0,x1,y1,color){
     window_set(x0,y0,x1,y1); // set rectangle position see B.4
     write_command(0x2C); //write pixel command
+    int x,y;
     for (x=x0;x<=x1;x++)
         for (y=y0;y<=y1;y++)
         {
@@ -194,7 +206,7 @@ void drawRectangle(x0,y0,x1,y1,color){
             write_data((color)&0xff); // blue
         }
 }
-/********************************************************************************/
+
 void drawLine(x0,y0,x1,y1,color)
 {
     int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
@@ -220,46 +232,13 @@ void drawLine(x0,y0,x1,y1,color)
     }
 
 }
-/********************************************************************************/
-void drawAxes(void){
-    //enum colors color;
-    //color = WHITE;
-    //Write X-Axis  (double lined)
-    drawLine(XaxisXbegin, XaxisYmiddle, XaxisXend, XaxisYmiddle, WHITE);                       // Uppder line of double line
-    drawLine(XaxisXbegin, XaxisYmiddle + 1, XaxisXend, XaxisYmiddle + 1, WHITE);               // Lower line
-    //Write X-Axis Arrow (double lined)
-    drawLine(XaxisXbegin + 2, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);      // Right right arrow line
-    drawLine(XaxisXbegin + 2, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);      // Left right arrow line
-    drawLine(XaxisXbegin - 1, YaxisYbegin + 1, XaxisXbegin - arrowWidth - 1, YaxisYbegin + arrowLength + 1, WHITE);      // Right left arrow line
-    drawLine(XaxisXbegin - 1, YaxisYbegin + 2, XaxisXbegin - arrowWidth - 1, YaxisYbegin + arrowLength + 2, WHITE);      // Left left arrow line
-
-    //Write Y-Axis (double lined)
-    drawLine(XaxisXbegin, YaxisYbegin, XaxisXbegin, YaxisYend, WHITE);
-    drawLine(XaxisXbegin + 1,YaxisYbegin,XaxisXbegin + 1,YaxisYend, WHITE);
-    //Write Y-Axis Arrow (double lined)
-    drawLine(XaxisXend - 1, XaxisYmiddle - 1, XaxisXend - arrowLength - 1, XaxisYmiddle - arrowWidth - 1, WHITE);
-    drawLine(XaxisXend - 2, XaxisYmiddle - 1, XaxisXend - arrowLength - 2, XaxisYmiddle - arrowWidth - 1, WHITE);
-    drawLine(XaxisXend - 1, XaxisYmiddle + 2, XaxisXend - arrowLength - 1, XaxisYmiddle + arrowWidth + 2, WHITE);
-    drawLine(XaxisXend - 2, XaxisYmiddle + 2, XaxisXend - arrowLength - 2, XaxisYmiddle + arrowWidth + 2, WHITE);
 
 
-
-
-
-
-
-    printf("Axes ready\n");
-}
-/********************************************************************************/
-void initTriggerAxis(void){
-    drawRectangle(57,80,61,359,GREY);       //draw Trigger Axis
-    drawRectangle(29,210,89,230,GREY);
-}
-/********************************************************************************/
 void readTouchValues(void){
 
     //read Touch values
     touch_write(0xD0);                  //Touch Command XPos read
+    int x;
     for (x = 0; x < 100; x++);           //Busy wait
     xpos = touch_read();                //xpos value read ( 0......4095 )
     //printf("xpos= %5d ", xpos);
@@ -268,90 +247,5 @@ void readTouchValues(void){
     ypos = touch_read();                //ypos value read ( 0.....4095 )
     //printf("ypos= %5d\n", ypos);
 }
-/********************************************************************************/
-void refreshTimebaseButton(void){
-    if(((xpos>=205)&&(xpos<=3379)) && ((ypos>=3072)&&(ypos<=3755))){
-        //Upper side Button
-        //printf("Printing new Button\n");
-        //drawLine(100,100,400,400,WHITE);
-        drawRectangle((xpos*0.195),(ypos*0.117),(xpos*0.195+10),(ypos*0.117+10),GREEN);
-        //Lower side Button
-    }
-}
-/********************************************************************************/
-void initTimebaseAxis(void){
-    drawRectangle(160,398,759,402,GREY);
-    drawRectangle(450,370,470,430,GREY);
-}
-/********************************************************************************/
-void drawFont(const uint8_t character[], int x, int y, int color,int backdrop){
-    window_set(x,y,x+fontWidth,x+fontHeight); // Set Window
-    write_command(0x2C); //write pixel command
-    int i;
-    int k;
-    // Draw each Pixel
-    for(i=0;i<fontArrayLen;i++)     // Each Entry in Byte Array
-        for(k=0;k<8;k++){
-        //     Draw Color if 1
-            if(character[i] & 0x80 >> k){
-                write_data((color>>16)&0xff); // red
-                write_data((color>>8)&0xff); // green
-                write_data((color)&0xff); // blue
-            }
-            // Else Draw Backdrop
-            else{
-                write_data((backdrop>>16)&0xff); // red
-                write_data((backdrop>>8)&0xff); // green
-                write_data((backdrop)&0xff); // blue
-            }
-        }
-}
-/********************************************************************************/
-void drawText(void){
-    //draw first Font line
-    drawFont(font_C, xStartCHX, yStartCHfirstLine, WHITE, BLACK);
-    drawFont(font_H, xStartCHX+fontWidth+fontSpace, yStartCHfirstLine, WHITE, BLACK);
-    drawFont(font_1, xStartCHX+2*fontWidth+2*fontSpace, yStartCHfirstLine, WHITE, BLACK);
-    drawFont(font_colon, xStartCHX+3*fontWidth+3*fontSpace, yStartCHfirstLine, WHITE, BLACK);
-    //draw second Font line
-    drawFont(font_C, xStartCHX, yStartCHsecondLine, WHITE, BLACK);
-    drawFont(font_H, xStartCHX+fontWidth+fontSpace, yStartCHsecondLine, WHITE, BLACK);
-    drawFont(font_2, xStartCHX+2*fontWidth+2*fontSpace, yStartCHsecondLine, WHITE, BLACK);
-    drawFont(font_colon, xStartCHX+3*fontWidth+3*fontSpace, yStartCHsecondLine, WHITE, BLACK);
 
-    drawFont(font_C, 450, 439,WHITE,BLACK);
-    }
-/********************************************************************************/
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////// Main-Function /////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void main(void)
-{
-   sysClock = SysCtlClockFreqSet(   SYSCTL_OSC_INT | SYSCTL_USE_PLL |SYSCTL_CFG_VCO_480,120000000); // Set system frequency to 120 MHz
-   init_ports_display(); // Init Port L for Display Control and Port M for Display Data
-   initDisplay();
-   drawAxes();
-   drawText();
-   initTriggerAxis();
-   initTimebaseAxis();
-
-   //Initialize Touch
-   SYSCTL_RCGCGPIO_R = 0x0008; //Enable clock Port D
-   while ((SYSCTL_PRGPIO_R & 0x08) == 0);  //GPIO Clock ready?
-   GPIO_PORTD_AHB_DEN_R = 0x1F;            //PortD digital enable
-   GPIO_PORTD_AHB_DIR_R = 0x0D;            //PortD Input/Output
-   GPIO_PORTD_AHB_DATA_R &= 0xF7;          //Clk=0
-
-   // Start endless loop
-    while(1)
-    {
-        readTouchValues();
-        refreshTimebaseButton();
-
-
-    }
-}
 
