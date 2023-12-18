@@ -10,7 +10,8 @@
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
 #include "headers/globalVariables.h"
 #include "headers/font.h"
-#include "headers/Display.h"
+#include "headers/display.h"
+
 
 
 

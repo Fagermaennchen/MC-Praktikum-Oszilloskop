@@ -1,10 +1,4 @@
 #include <stdint.h>
-//Font variables
-#define len7Seg  15
-#define width7Seg  2
-#define xStartCHX  200
-#define yStartCHfirstLine 0
-#define yStartCHsecondLine 40
 
 // Font NotoMono
 #define fontHeight 19   // Font Height in pixels
@@ -16,6 +10,8 @@
 extern uint8_t font_C[fontArrayLen];
 extern uint8_t font_H[fontArrayLen];
 extern uint8_t font_m[fontArrayLen];
+extern uint8_t font_t[fontArrayLen];
+extern uint8_t font_s[fontArrayLen];
 extern uint8_t font_V[fontArrayLen];
 extern uint8_t font_0[fontArrayLen];
 extern uint8_t font_1[fontArrayLen];
@@ -29,11 +25,14 @@ extern uint8_t font_8[fontArrayLen];
 extern uint8_t font_9[fontArrayLen];
 extern uint8_t font_colon[fontArrayLen];
 extern uint8_t font_comma[fontArrayLen];
+extern uint8_t font_delta[fontArrayLen];
+extern uint8_t font_minus[fontArrayLen];
 
 // Functions to display font on the display
 void drawFont(const uint8_t character[],int x, int y,int color,int backdrop); // Draws a comma
 void drawComma(int x, int y,int color,int backdrop); // Draws a comma
 int* numbtofont(int number);    // Maps a font array to a one digit number
 void drawMilliVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroundColor);    // Draws a 4 digit voltage in mV (XXX,1 mV) at postitions x and y
+void drawMilliSeconds(int time_ms,int x, int y,int foregroundColor,int backgroundColor);    // Draws a 4 digit time in ms (XXX,1 mV) at postitions x and y
 void drawText(void); // Draws the Channal 1 Line
 
