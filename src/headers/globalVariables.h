@@ -19,16 +19,18 @@
 
 // Value Array
 extern int arrayPosition;      // Current Position in the Arrays
-#define arrayLen 10   // Fixed lenght of Arrays
+#define arrayLen 678   // Fixed lenght of Arrays
 int resultsCH1[arrayLen];   // Array for Channel 1
 int resultsCH2[arrayLen];   // Array for Channel 2
 // Triggering at CH1
-#define triggerZeroValue 2000  // Value, at which the Sine function is Zero and the derivative is positive
+#define triggerZeroValue 2000     // Value, at which the Sine function is Zero and the derivative is positive
 extern int triggerZeroReached;    // Remeber, if zero has been reached
-extern int triggerValue;             // Value, at which to start saving the data
-extern int prevValueCH1;            // Last Value, to check if Trigger has been reached
-extern int triggered;              // Remeber if triggered
-
+extern int triggerValue;          // Value, at which to start saving the data
+extern int prevValueCH1;          // Last Value, to check if Trigger has been reached
+extern int triggered;             // Remeber if triggered
+// Conversion of units
+extern int timeLenXAxis;       // TotalLength of X Axis in
+#define loadValue (timeLenXAxis*120000/arrayLen)    // Conversion of X Axis time into timer load value
 
 // constants for display initialization
 #define RST 0x10

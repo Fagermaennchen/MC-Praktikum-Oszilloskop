@@ -8,7 +8,7 @@
 // Two Channel ADC selftriggered, continuously running, FIFO empty, full and overfull
 // Try different behavior by uncommenting a single ADC0_SAC_R value, line 41ff.
 // For experimental test set PE0 to GND and PE1 to Vdd
-/*#include <stdint.h>
+#include <stdint.h>
 #include <stdbool.h>
 #include "stdio.h"
 #include "inc/tm4c1294ncpdt.h"
@@ -148,7 +148,7 @@ void main(void)
     {
     }
 }
-*/
+
 
 
 

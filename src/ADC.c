@@ -15,10 +15,6 @@
 #include "headers/ADC.h"
 #include "src/headers/globalVariables.h"
 
-
-
-int loadValue = 1200;
-
 void readADCvalue_routine(void){ // Service Routine to get the ADC Values
     ADCIntClear(ADC0_BASE, 0); // clear the interrupt
     // Get Results
@@ -77,6 +73,7 @@ void setupADC(void){    // Setup the timer triggered ADC
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);  // Enable the Timer0 peripheral
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER0)) {} // Wait for the Timer0 module to be ready
     TimerConfigure(TIMER0_BASE, (TIMER_CFG_A_PERIODIC )); // Timer 0 in periodic mode
+    printf("load vlaue %d",loadValue);
     TimerLoadSet(TIMER0_BASE,TIMER_A,loadValue);  // 1 Second Intervall
     TimerControlTrigger(TIMER0_BASE,TIMER_A,true); // Activate Timer ADC control Trigger
 
@@ -119,7 +116,4 @@ void startADC(){    // Starts the timer triggered ADC
     // Start Timer 0
     TimerEnable(TIMER0_BASE,TIMER_A);
 
-}
-void changeTimeBase(int newTimeBase){   // Changes the Timebase (input: newTimeBase [us])
-    loadValue = newTimeBase*120000;     // Convert us to Sysclock Steps (for 120MHz)
 }

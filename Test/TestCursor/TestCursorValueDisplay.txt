@@ -5,17 +5,18 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include "inc/tm4c1294ncpdt.h"
 #include "driverlib/adc.h"
-#include "headers/ADC.h"
-#include "headers/curve.h"
-#include "headers/display.h"
+#include "src/headers/ADC.h"
+#include "src/headers/curve.h"
+#include "src/headers/display.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
 #include <stdbool.h>
-#include "headers/cursor.h"
-#include "headers/globalVariables.h"
-#include "headers/font.h"
+#include "src/headers/cursor.h"
+#include "src/headers/globalVariables.h"
+#include "src/headers/font.h"
 
 
 void setupAll(void){
@@ -47,11 +48,13 @@ int main(void)
     setupAll();
     // Start all underlying Modules
     startADC();
-
+    {
+        int i;
     // Start endless loop
      while(1)
-     {
 
+         updateValues();
      }
 }
+
 
