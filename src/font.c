@@ -137,6 +137,28 @@ extern uint8_t font_V[] = {
      0x00, 0x00,  //..............
 };
 
+extern uint8_t font_u[] = {
+    0x00, 0x00,  //............
+    0x00, 0x00,  //............
+    0x00, 0x00,  //............
+    0x00, 0x00,  //............
+    0x00, 0x00,  //............
+    0x60, 0x70,  //.%%......%%%
+    0x60, 0x70,  //.%%......%%%
+    0x60, 0x70,  //.%%......%%%
+    0x60, 0x70,  //.%%......%%%
+    0x60, 0x70,  //.%%......%%%
+    0x60, 0x70,  //.%%......%%%
+    0x60, 0x70,  //.%%......%%%
+    0x60, 0x70,  //.%%......%%%
+    0x60, 0x70,  //.%%......%%%
+    0x60, 0x70,  //.%%......%%%
+    0x70, 0xf0,  //.%%%....%%%%
+    0x3f, 0xf0,  //..%%%%%%%%%%
+    0x1f, 0x30,  //...%%%%%..%%
+    0x00, 0x00,  //............
+};
+
 extern uint8_t font_0[] = {
      0x00, 0x00,  //.............
      0x0f, 0x80,  //....%%%%%....
@@ -579,17 +601,17 @@ void drawMilliVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroun
     drawFont(font_V,x+7*fontWidth+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
 }
 
-void drawMilliSeconds(int time_ms,int x, int y,int foregroundColor,int backgroundColor){
+void drawMikroSeconds(int time_us,int x, int y,int foregroundColor,int backgroundColor){
     // No Negative
-    if(time_ms<0){
-        time_ms *= -1;           // Make positive so the conversion works as intended
+    if(time_us<0){
+        time_us *= -1;           // Make positive so the conversion works as intended
     }
     // Draws a 4 digit time in ms (XXX,1 mV) at postitions x and y
     int digit[4];
-    digit[0] = (int)(time_ms/1000);  // Calculate digit 0
-    digit[1] = (int)((time_ms-digit[0]*1000)/100);   // Calculate digit 2
-    digit[2] = (int)((time_ms-digit[0]*1000-digit[1]*100)/10);   // Calculate digit 2
-    digit[3] = (int)(time_ms-digit[0]*1000-digit[1]*100-digit[2]*10)%10;   // Calculate digit 3
+    digit[0] = (int)(time_us/1000);  // Calculate digit 0
+    digit[1] = (int)((time_us-digit[0]*1000)/100);   // Calculate digit 2
+    digit[2] = (int)((time_us-digit[0]*1000-digit[1]*100)/10);   // Calculate digit 2
+    digit[3] = (int)(time_us-digit[0]*1000-digit[1]*100-digit[2]*10)%10;   // Calculate digit 3
     // Draw first 3 digits digit
     int i;
     for(i=0;i<3;i++){
@@ -600,7 +622,7 @@ void drawMilliSeconds(int time_ms,int x, int y,int foregroundColor,int backgroun
     // Draw last  digits
     drawFont(numbtofont(digit[i]),x+4.7*fontWidth,y,foregroundColor,backgroundColor);
     // Draw mV
-    drawFont(font_m,x+6*(fontWidth)+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+    drawFont(font_u,x+6*(fontWidth)+0.1*(fontWidth),y,foregroundColor,backgroundColor);
     drawFont(font_s,x+7*fontWidth+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
 }
 /********************************************************************************/

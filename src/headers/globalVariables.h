@@ -29,8 +29,9 @@ extern int triggerValue;          // Value, at which to start saving the data
 extern int prevValueCH1;          // Last Value, to check if Trigger has been reached
 extern int triggered;             // Remeber if triggered
 // Conversion of units
-extern int timeLenXAxis;       // TotalLength of X Axis in
+extern int timeLenXAxis;       // TotalLength of X Axis in ms
 #define loadValue (timeLenXAxis*120000/arrayLen)    // Conversion of X Axis time into timer load value
+#define tSample (timeLenXAxis*1000/arrayLen)
 
 // constants for display initialization
 #define RST 0x10
