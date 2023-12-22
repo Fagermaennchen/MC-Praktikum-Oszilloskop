@@ -34,6 +34,12 @@ void setupAll(void){
     drawAxes();
     initTriggerAxis();
     initTimebaseAxis();
+    SYSCTL_RCGCGPIO_R = 0x0008; //Enable clock Port D
+    init_ports_display(); // Init Port L for Display Control and Port M for Display Data
+    while ((SYSCTL_PRGPIO_R & 0x08) == 0);  //GPIO Clock ready?
+    GPIO_PORTD_AHB_DEN_R = 0x1F;            //PortD digital enable
+    GPIO_PORTD_AHB_DIR_R = 0x0D;            //PortD Input/Output
+    GPIO_PORTD_AHB_DATA_R &= 0xF7;          //Clk=0
     //------------
     // Setups all underlying Modules
     setupADC();
@@ -48,9 +54,11 @@ int main(void)
     // Start all underlying Modules
     startADC();
     // Start endless loop
+    int i;
      while(1)
      {
          updateCursorValues();
+         readTouchValues();
      }
 }
 

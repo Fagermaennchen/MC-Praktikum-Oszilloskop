@@ -1,15 +1,21 @@
+#include <stdio.h>
+#include <stdbool.h>
 #include "headers/cursor.h"
 #include "headers/display.h"
 #include "headers/globalVariables.h"
 #include "headers/font.h"
 #include "headers/ADC.h"
-#include <stdio.h>
-#include <stdbool.h>
+#include "headers/display.h"
+
 
 
 // Global Variables
-cursor1ArrPos = 30;      // Cursor one start position
-cursor2ArrPos = 300;      // Cursor one start position
+cursor1ArrPos = 200;      // Cursor one start position in Array
+cursor2ArrPos = 400;      // Cursor two start position in Array
+cursor1DispPos = 221;         // Cursor one start position on Screen
+cursor2DispPos = 421;         // Cursor two start position on Screen
+cursorSelected = 0;     // Remeber if cursor is currently seclted
+
 
 void initValueDescriptions(void){
     // Channel 1
@@ -71,8 +77,104 @@ void updateCursorValues(void){            // Moves the cursors position on scree
 
 }
 
+void moveCursor1Position(int x){
+    // Moves the cursors position on screen and in the value arrays
+    // Check x for left bounds
+    if (x<XaxisXbegin){
+        x=XaxisXbegin;
+    }
+    // Check x for right bounds
+    else if(x>XaxisXend-1){
+        x=XaxisXend-1;
+    }
+    // Remove Cursor line at old position
+    window_set(cursor1DispPos,YaxisYbegin,cursor1DispPos,XaxisXend);
+    write_command(0x2C); //write pixel command
+    int i;
+    for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
+        //  Draw Color
+            write_data((BLACK>>16)&0xff); // red
+            write_data((BLACK>>8)&0xff); // green
+            write_data((BLACK)&0xff); // blue
+    }
+    // Fix Middle line
+    window_set(cursor1DispPos,XaxisYmiddle,cursor1DispPos,XaxisYmiddle-1);
+    write_command(0x2C); //write pixel command
+    for(i=0;i<2;i++){
+        write_data((WHITE>>16)&0xff); // red
+        write_data((WHITE>>8)&0xff); // green
+        write_data((WHITE)&0xff); // blue
+    }
+    // Draw new line
+    window_set(x,YaxisYbegin,x,XaxisXend);
+    write_command(0x2C); //write pixel command
+    for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
+        //  Draw Color
+            write_data((GREEN>>16)&0xff); // red
+            write_data((GREEN>>8)&0xff); // green
+            write_data((GREEN)&0xff); // blue
+    }
+    // Move position in array
+    cursor1ArrPos = x - XaxisXbegin - 1;
+    // Remember position
+    cursor1DispPos = x;
+}
+
+void moveCursor2Position(int x){
+    // Moves the cursors position on screen and in the value arrays
+    // Check x for left bounds
+    if (x<XaxisXbegin){
+        x=XaxisXbegin;
+    }
+    // Check x for right bounds
+    else if(x>XaxisXend-1){
+        x=XaxisXend-1;
+    }
+    // Remove Cursor line at old position
+    window_set(cursor2DispPos,YaxisYbegin,cursor2DispPos,XaxisXend);
+    write_command(0x2C); //write pixel command
+    int i;
+    for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
+        //  Draw Color
+            write_data((BLACK>>16)&0xff); // red
+            write_data((BLACK>>8)&0xff); // green
+            write_data((BLACK)&0xff); // blue
+    }
+    // Fix Middle line
+    window_set(cursor2DispPos,XaxisYmiddle,cursor2DispPos,XaxisYmiddle-1);
+    write_command(0x2C); //write pixel command
+    for(i=0;i<2;i++){
+        write_data((WHITE>>16)&0xff); // red
+        write_data((WHITE>>8)&0xff); // green
+        write_data((WHITE)&0xff); // blue
+    }
+    // Draw new line
+    window_set(x,YaxisYbegin,x,XaxisXend);
+    write_command(0x2C); //write pixel command
+    for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
+        //  Draw Color
+            write_data((RED>>16)&0xff); // red
+            write_data((RED>>8)&0xff); // green
+            write_data((RED)&0xff); // blue
+    }
+    // Redraw other cursor if on same prev position
+    if(cursor2DispPos == cursor1DispPos ){
+        moveCursor1Position(cursor1DispPos);
+    }
+    // Redraw other cursor if on same prev position
+    if(cursor1DispPos == cursor2DispPos ){
+        moveCursor2Position(cursor2DispPos);
+    }
+    // Move position in array
+    cursor2ArrPos = x - XaxisXbegin - 1;
+    // Remember position
+    cursor2DispPos = x;
+}
+
 void setupCursor(void){
     initValueDescriptions();
+    moveCursor1Position(121+cursor1ArrPos);
+    moveCursor2Position(121+cursor2ArrPos);
 }
 
 

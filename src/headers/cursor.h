@@ -1,4 +1,4 @@
-
+# include <stdbool.h>
 
 //Cursor Value
 #define xStartCHX  170          // x Position of CHX Label [Pixels]
@@ -16,10 +16,11 @@ extern int cursor2ArrPos;       // Position of cursor 2 in the value arrays
 // Cursor Line variables
 #define cursorTouchWidth 15     // Wrapper around the cursor, to detect touch hits [Pixels]
 extern int cursor1DispPos;       // Position of cursor 1 on the screen
-
-
+extern int cursor2DispPos;       // Position of cursor 1 on the screen
+extern int cursorSelected;     // Remeber if cursor is currently seclted: 0 = no Cursor, 1 = Cursor , 2 = Cursor 2
 // Function Prototypes
 void setupCursor(void);             // Setups all the cursor fucntions
 void initValueDescriptions(void);   // Initialised the descriptions for the cursor values
 void updateCursorValues(void);            // Updates the displayed cursor values
-void moveCursorPosition(int x);      // Moves the cursors position on screen and in the value arrays
+void moveCursor1Position(int x);      // Moves cursor 1 position on screen and in the value arrays
+void moveCursor2Position(int x);      // Moves cursor 1 position on screen and in the value arrays

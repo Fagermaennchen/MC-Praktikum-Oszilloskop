@@ -20,6 +20,8 @@ void initDisplay(void);
 *********************************************************************************/
 void touch_write(unsigned char value);
 /********************************************************************************/
+int pixelPosY(int ypos);// Converts the Pixel position byte into the selected pixel
+int pixelPosX(int xpos);// Converts the Pixel position byte into the selected pixel
 unsigned int touch_read();
 /********************************************************************************
                         Drawing functions

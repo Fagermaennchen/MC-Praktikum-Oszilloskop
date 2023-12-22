@@ -43,10 +43,10 @@ void readADCvalue_routine(void){ // Service Routine to get the ADC Values
             triggerZeroReached = false;  // Reset Trigger Status
             triggered = false;
             prevValueCH1 = 9999;           // Default Value Trigger Zero
-            printf("Restart Triggering");
+    //       printf("Restart Triggering");
         }
         // Print result for debug purpose
-        printf("CH1: %d, CH2 %d \n",resultsCH1[arrayPosition],resultsCH2[arrayPosition]);
+    //    printf("CH1: %d, CH2 %d \n",resultsCH1[arrayPosition],resultsCH2[arrayPosition]);
         arrayPosition++;
     }
     // Save Current Value for next Trigger Check

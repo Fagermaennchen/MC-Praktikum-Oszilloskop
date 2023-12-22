@@ -11,6 +11,7 @@
 #include "headers/globalVariables.h"
 #include "headers/font.h"
 #include "headers/display.h"
+#include "headers/cursor.h"
 
 
 
@@ -234,19 +235,52 @@ void drawLine(x0,y0,x1,y1,color)
 
 }
 
+int pixelPosY(int ypos){
+    // Converts the Pixel position byte into the selected pixel
+    return ypos*480/4095;
+}
+
+int pixelPosX(int xpos){
+    // Converts the Pixel position byte into the selected pixel
+    return 800-xpos*800/4095;
+}
+
 
 void readTouchValues(void){
-
     //read Touch values
     touch_write(0xD0);                  //Touch Command XPos read
     int x;
-    for (x = 0; x < 100; x++);           //Busy wait
-    xpos = touch_read();                //xpos value read ( 0......4095 )
-    //printf("xpos= %5d ", xpos);
+    for (x = 0; x < 100; x++);          //Busy wait
+    xpos = pixelPosX(touch_read());     //xpos value read ( 0......800 )
     touch_write(0x90);                  //Touch Command YPos read
-    for (x = 0; x < 100; x++);           //Busy wait
-    ypos = touch_read();                //ypos value read ( 0.....4095 )
-    //printf("ypos= %5d\n", ypos);
+    for (x = 0; x < 100; x++);          //Busy wait
+    ypos = pixelPosY(touch_read());     //ypos value read ( 0.....480 )
+    // Adjust Touch widgets
+    // No touch detected
+    printf("touch: xpos: %d ypos: %d \n",xpos,ypos);
+    if(xpos==800){
+        // Redo selection
+        cursorSelected = 0;
+    }
+    // Cursor 1
+    else if(cursorSelected == 1){    // When selected: Move to new position
+        moveCursor1Position(xpos);
+        if(x == cursor2DispPos ){
+            moveCursor2Position(cursor2DispPos);   // Debug: Redraw other cursor if on same prev position
+        }
+    }
+    else if((cursor1DispPos-cursorTouchWidth)<xpos && xpos<(cursor1DispPos+cursorTouchWidth) && cursorSelected == 0){ // When not selected, but hit: Inform about hit
+        cursorSelected = 1;
+    }
+    // Cursor 2
+    else if(cursorSelected == 2){    // When selected: Move to new position
+        moveCursor2Position(xpos);
+    }
+    else if((cursor2DispPos-cursorTouchWidth)<xpos && xpos<(cursor2DispPos+cursorTouchWidth) && cursorSelected == 0 ){ // When not selected, but hit: Inform about hit
+        cursorSelected = 2;
+    }
+
+
 }
 
 
