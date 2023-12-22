@@ -1,5 +1,12 @@
-"./main.obj"
 "./tm4c1294ncpdt_startup_ccs.obj"
+"./src/ADC.obj"
+"./src/cursor.obj"
+"./src/curve.obj"
+"./src/display.obj"
+"./src/font.obj"
+"./src/globalVariables.obj"
+"./src/main.obj"
+"./src/slider.obj"
 "../tm4c1294ncpdt.cmd"
 -llibc.a
 -l"C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/ccs/Debug/driverlib.lib"

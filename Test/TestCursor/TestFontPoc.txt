@@ -1,0 +1,105 @@
+// Testprogram two LCD Displays 480x272 and 800x480 RGB
+// Display controller Type SSD 1963 => Solomon Systech
+// Initialisation + Single Pixel and Rectangle Output
+// ARM-Contoller Clock not changed ... to be tested
+// Based partially of tests and sources from Ole Roenna 2020
+// V0.1-V0.4 K.R. Riemschneider .. 1-4 Oct 2020
+
+// #define SMALL_DISPLAY
+
+#include <stdint.h>
+#include <stdbool.h> // type bool for giop.h
+#include "inc/hw_types.h"
+#include "inc/tm4c1294ncpdt.h"
+#include <stdio.h>   // Debug only
+#include <driverlib/sysctl.h>
+#include <driverlib/gpio.h>     // GPIO_PIN_X
+#include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
+#include "src/headers/font.h"
+#include "src/headers/globalVariables.h"
+
+
+
+/********************************************************************************
+     Elementary output functions  => speed optimized as inline
+*********************************************************************************/
+inline void write_command(unsigned char command)
+{   GPIO_PORTM_DATA_R = command;        // Write command byte
+    GPIO_PORTL_DATA_R = 0x11;           // Chip select = 0, Command mode select = 0, Write state = 0
+    GPIO_PORTL_DATA_R = 0x1F;           // Initial state
+}
+/********************************************************************************/
+inline void write_data(unsigned char data)
+{   GPIO_PORTM_DATA_R = data;           // Write data byte
+    GPIO_PORTL_DATA_R = 0x15;           // Chip select = 0, Write state = 0
+    GPIO_PORTL_DATA_R = 0x1F;           // Initial state
+}
+/********************************************************************************/
+inline void window_set(min_x, min_y, max_x, max_y)
+{
+    write_command(0x2A);           // Set row address x-axis
+    write_data(min_x >> 8);        // Set start  address           (high byte)
+    write_data(min_x);             // as above                     (low byte)
+    write_data(max_x >> 8);        // Set stop address             (high byte)
+    write_data(max_x);             // as above                     (low byte)
+    write_command(0x2B);           // Set column address (y-axis)
+    write_data(min_y >> 8);        // Set start column address     (high byte)
+    write_data(min_y);             // as above                     (low byte)
+    write_data(max_y >> 8);        // Set stop column address      (high byte)
+    write_data(max_y);             // as above                     (low byte)
+}
+//******************************************************************************/
+
+
+void main(void)
+{
+
+    int i,j,x,y;
+
+   enum colors color;   // see global definition
+   sysClock = SysCtlClockFreqSet(   SYSCTL_OSC_INT | SYSCTL_USE_PLL |SYSCTL_CFG_VCO_480,120000000); // Set system frequency to 120 MHz
+   init_ports_display(); // Init Port L for Display Control and Port M for Display Data
+   // Display initialization
+    #ifdef LARGE_DISPLAY
+    #define MAX_X 800
+    #define MAX_Y 480
+        configure_display_controller_large();  // initalize and  configuration
+    #endif
+    #ifdef SMALL DISPLAY
+    #define MAX_X 480
+    #define MAX_Y 272
+        configure_display_controller_small();  // initalize and  configuration
+    #endif
+   printf("Start Background Pixel by Pixel set\n"); // for debug only
+   // set pixel by pixel to change the background colors
+   color=BLACK;
+   window_set(0,0,MAX_X-1,MAX_Y-1); // set single position see B.4  // to do faster ?
+   write_command(0x2C); //write pixel command
+    for (x=0;x<=(MAX_X)-1;x++)
+        for (y=0;y<=(MAX_Y)-1;y++)
+        {
+            write_data((color>>16)&0xff); // red
+            write_data((color>>8)&0xff); // green
+            write_data((color)&0xff); // blue
+        }
+    printf("Background ready \n"); // for debug only
+    // Draw Segment 0
+    drawFont(font_C,100,100,WHITE,BLACK);
+    drawFont(font_H,100+fontWidth+fontSpace,100,WHITE,BLACK);
+    drawFont(font_1,100+2*fontWidth+2*fontSpace,100,WHITE,BLACK);
+    drawFont(font_colon,100+3*fontWidth+3*fontSpace,100,WHITE,BLACK);
+    // Test All Numbers
+    int numbers[] = {font_0,font_1,font_2,font_3,font_4,font_5,font_6,font_7,font_8,font_9,font_m,font_V};
+    for(i=1;i<13;i++){
+        drawFont(numbers[i-1],100+(3+i)*fontWidth+(3+i)*fontSpace,100,WHITE,BLACK);
+    }
+    drawMilliVolt(1234,250,250,WHITE,BLACK);
+
+
+    // Start endless loop
+    while(1)
+    {
+
+    }
+}
+

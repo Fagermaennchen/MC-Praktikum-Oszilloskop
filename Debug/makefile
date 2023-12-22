@@ -10,8 +10,15 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
-"./main.obj" \
 "./tm4c1294ncpdt_startup_ccs.obj" \
+"./src/ADC.obj" \
+"./src/cursor.obj" \
+"./src/curve.obj" \
+"./src/display.obj" \
+"./src/font.obj" \
+"./src/globalVariables.obj" \
+"./src/main.obj" \
+"./src/slider.obj" \
 "../tm4c1294ncpdt.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
@@ -25,7 +32,9 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include src/subdir_vars.mk
 -include subdir_rules.mk
+-include src/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -143,8 +152,8 @@ MC-Praktikum-Oszilloskop.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.obj" "tm4c1294ncpdt_startup_ccs.obj" 
-	-$(RM) "main.d" "tm4c1294ncpdt_startup_ccs.d" 
+	-$(RM) "tm4c1294ncpdt_startup_ccs.obj" "src\ADC.obj" "src\cursor.obj" "src\curve.obj" "src\display.obj" "src\font.obj" "src\globalVariables.obj" "src\main.obj" "src\slider.obj" 
+	-$(RM) "tm4c1294ncpdt_startup_ccs.d" "src\ADC.d" "src\cursor.d" "src\curve.d" "src\display.d" "src\font.d" "src\globalVariables.d" "src\main.d" "src\slider.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
