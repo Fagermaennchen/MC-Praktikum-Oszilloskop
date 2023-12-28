@@ -1,4 +1,5 @@
 
+
 /********************************************************************************
      Elementary output functions  => speed optimized as inline
 *********************************************************************************/
@@ -28,5 +29,6 @@ unsigned int touch_read();
 *********************************************************************************/
 void drawRectangle(x0,y0,x1,y1,color);
 void drawLine(x0,y0,x1,y1,color);
+void moveTrigSliderPosition(int y);
 void readTouchValues(void);
 

@@ -65,25 +65,25 @@ void setupADC(void){    // Setup the timer triggered ADC
     int wt = 0; // Variable for very short wait times
     // Port and ADC Clock Gating Control
     // Clock switch on AIN of ADC0 ... Pin is PE0
-    SYSCTL_RCGCGPIO_R |= 0x00000018; // Clock Port E + D enable
-    SYSCTL_RCGCADC_R |= 0x1;
-    wt++; // Clock ADC0 enable set
+    SYSCTL_RCGCGPIO_R |= 0x00000018;    // Clock Port E + D enable
+    SYSCTL_RCGCADC_R |= 0x1;            // Clock ADC0 enable
+    wt++;                               // short wait after enable
 
     // Configure the Timer 0 to Trigger the ADC
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);  // Enable the Timer0 peripheral
-    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER0)) {} // Wait for the Timer0 module to be ready
-    TimerConfigure(TIMER0_BASE, (TIMER_CFG_A_PERIODIC )); // Timer 0 in periodic mode
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);           // Enable the Timer0 peripheral
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER0)) {}  // Wait for the Timer0 module to be ready
+    TimerConfigure(TIMER0_BASE, (TIMER_CFG_A_PERIODIC ));   // Timer 0 in periodic mode
     printf("load vlaue %d",loadValue);
-    TimerLoadSet(TIMER0_BASE,TIMER_A,loadValue);  // 1 Second Intervall
-    TimerControlTrigger(TIMER0_BASE,TIMER_A,true); // Activate Timer ADC control Trigger
+    TimerLoadSet(TIMER0_BASE,TIMER_A,loadValue);        // 1 Second Intervall
+    TimerControlTrigger(TIMER0_BASE,TIMER_A,true);      // Activate Timer ADC control Trigger
 
     // Start the ADC Clocking
-    SYSCTL_PLLFREQ0_R |= SYSCTL_PLLFREQ0_PLLPWR; // power on the PLL
-    while (!(SYSCTL_PLLSTAT_R & SYSCTL_PLLSTAT_LOCK)); // wait till PLL has locked
+    SYSCTL_PLLFREQ0_R |= SYSCTL_PLLFREQ0_PLLPWR;            // power on the PLL
+    while (!(SYSCTL_PLLSTAT_R & SYSCTL_PLLSTAT_LOCK));      // wait till PLL has locked
     ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 24);  // Use the external OSC at 20MHz
     wt++;
 
-    // Configure ADC for Ports PE2+PE3
+    // Configure ADC for Ports PE2+PE3  (PE2: Vsin, PE3: Vcos)
     GPIO_PORTE_AHB_AFSEL_R |= 0x14; //PE2+PE3 alternative function select
     GPIO_PORTE_AHB_AMSEL_R |= 0x14; //PE2+PE3 analog function selecttitle
     GPIO_PORTE_AHB_DEN_R &= ~0x14; // PE2+PE3 digital pin function DISABLE

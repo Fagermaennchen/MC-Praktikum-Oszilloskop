@@ -47,6 +47,8 @@ void setupAll(void){
     // Enable Interrupts
     IntMasterEnable();
 }
+
+
 int main(void)
 {
     // Setup all underlying Modules
@@ -54,11 +56,15 @@ int main(void)
     // Start all underlying Modules
     startADC();
     // Start endless loop
-    int i;
+    int j;
+    for(j = 0; j<arrayLen;j++){
+        oldVoltage[j]=0;
+    }
      while(1)
      {
          updateCursorValues();
          readTouchValues();
+         drawVoltageCurve();
      }
 }
 

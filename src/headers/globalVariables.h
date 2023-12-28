@@ -1,33 +1,39 @@
 // This Module is the Header of the Global Variables
 #include <stdbool.h>
 #include <stdint.h>
+
 // Size of Display define
 #define LARGE_DISPLAY
 #define MAX_X 800
 #define MAX_Y 480
-// Global Variables
+
+// Global Variables for display
 #define Buchstabenhöhe 4
 #define XaxisXbegin  120
 #define XaxisXend  (MAX_X - 1)
 #define XaxisYmiddle  219
 #define YaxisYbegin  80 //2 Zeilen oben für Schieberegler und Bezeichnungen (Beginn bei 81. Pixel)
-#define YaxisXmiddle =120          //((YaxisEnd-YaxisBegin)/2)-YaxisBegin
+#define YaxisXmiddle 120          //((YaxisEnd-YaxisBegin)/2)-YaxisBegin
 #define YaxisYend  (MAX_Y - 121) //3 Zeilen unten zum Anzeigen der Werte (Ende 1 Pixel vorher)
 #define arrowLength 20
 #define arrowWidth 10
-
+#define sliderWidth 60
+#define sliderHeight 20
 
 // Value Array
 extern int arrayPosition;      // Current Position in the Arrays
 #define arrayLen 678   // Fixed lenght of Arrays
 int resultsCH1[arrayLen];   // Array for Channel 1
 int resultsCH2[arrayLen];   // Array for Channel 2
+int oldVoltage[arrayLen];
+
 // Triggering at CH1
 #define triggerZeroValue 2000     // Value, at which the Sine function is Zero and the derivative is positive
 extern int triggerZeroReached;    // Remeber, if zero has been reached
 extern int triggerValue;          // Value, at which to start saving the data
 extern int prevValueCH1;          // Last Value, to check if Trigger has been reached
 extern int triggered;             // Remeber if triggered
+
 // Conversion of units
 extern int timeLenXAxis;       // TotalLength of X Axis in ms
 #define loadValue (timeLenXAxis*120000/arrayLen)    // Conversion of X Axis time into timer load value
@@ -58,4 +64,7 @@ enum colors{BLACK=0x00000000,WHITE=0x00FFFFFF,GREY=0x00AAAAAA,RED=0x00FF0000,GRE
 /* same values as array for indexed colors */
 extern int colorarray[];
 extern int xpos,ypos;      //Touch position variables
+
+
+
 
