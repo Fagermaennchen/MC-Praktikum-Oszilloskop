@@ -1,5 +1,6 @@
 #include "headers/curve.h"
 #include "headers/globalVariables.h"
+#include "headers/cursor.h"
 
 
 
@@ -15,7 +16,7 @@ void refreshTimebaseButton(void){
 }
 void initTimebaseAxis(void){
     // Inisialises the timebase axis
-    drawRectangle(160,398,759,402,GREY);
+    drawRectangle(160,399,759,401,GREY);
     drawRectangle(450,370,470,430,GREY);
 }
 void drawAxes(void){
@@ -43,10 +44,46 @@ void drawAxes(void){
 }
 void initTriggerAxis(void){
     // draws the trigegr axis
-    drawRectangle(57,80,61,359,GREY);       //draw Trigger Axis
+    drawRectangle(58,80,60,359,GREY);       //draw Trigger Axis
     drawRectangle(29,210,89,230,GREY);
 }
 
+
+void drawVoltageCurve(void){
+    int i,j;
+    int voltageY0, voltageY1;
+    double voltagePixel;
+    int voltagePixelint;
+    enum colors color = WHITE;
+
+    //Spannungsreferenz erstmal f�r 0-5V
+
+    for(i = 0; i < arrayLen-1; i++){
+
+        voltageY0 = resultsCH1[i];
+        voltagePixel = 360 - ((voltageY0-300)*0.08);
+        voltagePixelint = (int) voltagePixel;
+
+        if(!(voltagePixelint==219 | voltagePixelint==220 | i==cursor1ArrPos | i==cursor2ArrPos)){
+            //Overwrite Old pixels
+            drawLine(121+i,oldVoltage[i],121+i,oldVoltage[i],BLACK);
+            //Write current pixels
+            drawLine(121+i,voltagePixelint,121+i,voltagePixelint,WHITE);
+            //Save written pixel to be deletable in next cycle
+            oldVoltage[i]=voltagePixelint;
+        }
+
+
+
+
+
+        //printf("voltage: %d\n", voltageY0);
+        //printf("pixelpos: %lf\n", voltagePixel);
+        //printf("PixelInt: %d\n" , voltagePixelint);
+
+
+    }
+}
 
 
 
