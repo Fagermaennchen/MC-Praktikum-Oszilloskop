@@ -8,17 +8,18 @@
 #define MAX_Y 480
 
 // Global Variables for display
-#define Buchstabenhöhe 4
+#define BuchstabenhÃ¶he 4
 #define XaxisXbegin  120
 #define XaxisXend  (MAX_X - 1)
 #define XaxisYmiddle  219
-#define YaxisYbegin  80 //2 Zeilen oben für Schieberegler und Bezeichnungen (Beginn bei 81. Pixel)
+#define YaxisYbegin  80 //2 Zeilen oben fÃ¼r Schieberegler und Bezeichnungen (Beginn bei 81. Pixel)
 #define YaxisXmiddle 120          //((YaxisEnd-YaxisBegin)/2)-YaxisBegin
 #define YaxisYend  (MAX_Y - 121) //3 Zeilen unten zum Anzeigen der Werte (Ende 1 Pixel vorher)
 #define arrowLength 20
 #define arrowWidth 10
 #define sliderWidth 60
 #define sliderHeight 20
+
 
 // Value Array
 extern int arrayPosition;      // Current Position in the Arrays
@@ -64,7 +65,3 @@ enum colors{BLACK=0x00000000,WHITE=0x00FFFFFF,GREY=0x00AAAAAA,RED=0x00FF0000,GRE
 /* same values as array for indexed colors */
 extern int colorarray[];
 extern int xpos,ypos;      //Touch position variables
-
-
-
-

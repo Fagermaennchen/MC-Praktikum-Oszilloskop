@@ -13,11 +13,11 @@
 #include "headers/display.h"
 #include "headers/cursor.h"
 
-
 extern int trigSliderSelected = 0;      // Startup: not selected
 extern int timeSliderSelected = 0;      // Startup: not selected
 extern int trigSliderPos = 220;         // Startup y-position, x-position is fixed
 extern int timeSliderPos = 460;         // Startup x-position, y-position is fixed
+
 
 
 /********************************************************************************
@@ -248,6 +248,7 @@ int pixelPosX(int xpos){
     return 800-xpos*800/4095;
 }
 
+
 void moveTrigSliderPosition(int y){
     // Moves the Trigger Slider
 
@@ -294,6 +295,7 @@ void moveTimeSliderPosition(int x){
 
 }
 
+
 void readTouchValues(void){
     //read Touch values
     touch_write(0xD0);                  //Touch Command XPos read
@@ -305,6 +307,7 @@ void readTouchValues(void){
     ypos = pixelPosY(touch_read());     //ypos value read ( 0.....480 )
     // Adjust Touch widgets
     // No touch detected
+
     //printf("touch: xpos: %d ypos: %d \n",xpos,ypos);
     if(xpos==800){
         // Redo selection
@@ -319,13 +322,16 @@ void readTouchValues(void){
             moveCursor2Position(cursor2DispPos);   // Debug: Redraw other cursor if on same prev position
         }
     }
+
     else if((cursor1DispPos-cursorTouchWidth)<xpos && xpos<(cursor1DispPos+cursorTouchWidth) && ypos>YaxisYbegin && ypos<YaxisYend && cursorSelected == 0){ // When not selected, but hit: Inform about hit
+
         cursorSelected = 1;
     }
     // Cursor 2
     else if(cursorSelected == 2){    // When selected: Move to new position
         moveCursor2Position(xpos);
     }
+
     else if((cursor2DispPos-cursorTouchWidth)<xpos && xpos<(cursor2DispPos+cursorTouchWidth) && ypos>YaxisYbegin && ypos<YaxisYend && cursorSelected == 0 ){ // When not selected, but hit: Inform about hit
         cursorSelected = 2;
     }
@@ -343,8 +349,6 @@ void readTouchValues(void){
     else if((xpos>160)&&(xpos<759)&&(ypos>360)&&(ypos<440)&&(timeSliderSelected==0)){
         timeSliderSelected = 1;
     }
-
-
 }
 
 

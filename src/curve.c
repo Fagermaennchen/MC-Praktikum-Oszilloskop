@@ -56,7 +56,7 @@ void drawVoltageCurve(void){
     int voltagePixelint;
     enum colors color = WHITE;
 
-    //Spannungsreferenz erstmal für 0-5V
+    //Spannungsreferenz erstmal fï¿½r 0-5V
 
     for(i = 0; i < arrayLen-1; i++){
 
@@ -84,7 +84,6 @@ void drawVoltageCurve(void){
 
     }
 }
-
 
 
 

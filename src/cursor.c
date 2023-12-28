@@ -81,7 +81,7 @@ void moveCursor1Position(int x){
     // Moves the cursors position on screen and in the value arrays
     // Check x for left bounds
     if (x<(XaxisXbegin+2)){             // +2 to not overwrite Y-axis (axis-width=2)
-        x=(XaxisXbegin+2);
+        x=(XaxisXbegin+2); 
     }
     // Check x for right bounds
     else if(x>XaxisXend-1){
@@ -118,7 +118,6 @@ void moveCursor1Position(int x){
     cursor1ArrPos = x - XaxisXbegin - 1;
     // Remember position
     cursor1DispPos = x;
-
 }
 
 void moveCursor2Position(int x){
@@ -126,6 +125,7 @@ void moveCursor2Position(int x){
     // Check x for left bounds
     if (x<(XaxisXbegin+2)){         // +2 to not overwrite Y-axis (axis-width=2)
         x=(XaxisXbegin+2);
+    
     }
     // Check x for right bounds
     else if(x>XaxisXend-1){
@@ -154,9 +154,11 @@ void moveCursor2Position(int x){
     write_command(0x2C); //write pixel command
     for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
         //  Draw Color
+
         write_data((RED>>16)&0xff); // red
         write_data((RED>>8)&0xff); // green
         write_data((RED)&0xff); // blue
+
     }
     // Redraw other cursor if on same prev position
     if(cursor2DispPos == cursor1DispPos ){

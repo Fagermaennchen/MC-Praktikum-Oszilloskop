@@ -65,6 +65,7 @@ void setupADC(void){    // Setup the timer triggered ADC
     int wt = 0; // Variable for very short wait times
     // Port and ADC Clock Gating Control
     // Clock switch on AIN of ADC0 ... Pin is PE0
+
     SYSCTL_RCGCGPIO_R |= 0x00000018;    // Clock Port E + D enable
     SYSCTL_RCGCADC_R |= 0x1;            // Clock ADC0 enable
     wt++;                               // short wait after enable
@@ -84,6 +85,7 @@ void setupADC(void){    // Setup the timer triggered ADC
     wt++;
 
     // Configure ADC for Ports PE2+PE3  (PE2: Vsin, PE3: Vcos)
+
     GPIO_PORTE_AHB_AFSEL_R |= 0x14; //PE2+PE3 alternative function select
     GPIO_PORTE_AHB_AMSEL_R |= 0x14; //PE2+PE3 analog function selecttitle
     GPIO_PORTE_AHB_DEN_R &= ~0x14; // PE2+PE3 digital pin function DISABLE

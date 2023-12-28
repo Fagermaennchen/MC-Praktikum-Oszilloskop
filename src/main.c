@@ -47,8 +47,6 @@ void setupAll(void){
     // Enable Interrupts
     IntMasterEnable();
 }
-
-
 int main(void)
 {
     // Setup all underlying Modules
