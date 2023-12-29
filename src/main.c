@@ -32,6 +32,7 @@ void setupAll(void){
     init_ports_display(); // Init Port L for Display Control and Port M for Display Data
     initDisplay();
     drawAxes();
+    drawLogo();
     initTriggerAxis();
     initTimebaseAxis();
     SYSCTL_RCGCGPIO_R = 0x0008; //Enable clock Port D
@@ -47,22 +48,25 @@ void setupAll(void){
     // Enable Interrupts
     IntMasterEnable();
 }
-int main(void)
-{
+int main(void){
+
     // Setup all underlying Modules
     setupAll();
     // Start all underlying Modules
     startADC();
     // Start endless loop
-    int j;
+    int j,k;
     for(j = 0; j<arrayLen;j++){
-        oldVoltage[j]=0;
+        oldVoltageCH1[j]=0;
+        oldVoltageCH2[j]=0;
     }
+    k=0;
      while(1)
      {
-         updateCursorValues();
-         readTouchValues();
-         drawVoltageCurve();
+
+        updateCursorValues();
+        readTouchValues();
+        drawVoltageCurve();
      }
 }
 

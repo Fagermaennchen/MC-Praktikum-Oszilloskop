@@ -43,7 +43,6 @@ void initValueDescriptions(void){
     drawFont(font_H, xStartCHX+fontWidth+fontSpace, yStartCHsecondLine, BLUE, BLACK);
     drawFont(font_2, xStartCHX+2*fontWidth+2*fontSpace, yStartCHsecondLine, BLUE, BLACK);
     drawFont(font_colon, xStartCHX+3*fontWidth+2*fontSpace, yStartCHsecondLine, BLUE, BLACK);
-    drawFont(font_C, 450, 439,BLUE,BLACK);
     // Draw Delta Voltage
     drawFont(font_delta, xStartDelta, yStartCHsecondLine, BLUE, BLACK);
     drawMilliVolt(0,xStartDeltaVolVal,yStartCHsecondLine,BLUE,BLACK,false);
@@ -53,6 +52,27 @@ void initValueDescriptions(void){
     drawMilliVolt(0,xStartVol2,yStartCHsecondLine,RED,BLACK,true);
 
 
+}
+
+void resetValueDescriptions(void){
+      // Channel 1
+      // Draw Delta Voltage
+      drawFont(font_delta, xStartDelta, yStartCHfirstLine, YELLOW, BLACK);
+      drawMilliVolt(0,xStartDeltaVolVal,yStartCHfirstLine,YELLOW,BLACK,false);
+      // Draw Cursor 1 Values
+      drawMilliVolt(0,xStartVol1,yStartCHfirstLine,GREEN,BLACK,true);
+      // Draw Cursor 2 Values
+      drawMilliVolt(0,xStartVol2,yStartCHfirstLine,RED,BLACK,true);
+      // Draw Time
+      drawMikroSeconds(0,xStartValTime,yStartCHfirstLine, WHITE, BLACK);
+      //Channel 2
+      // Draw Delta Voltage
+      drawFont(font_delta, xStartDelta, yStartCHsecondLine, BLUE, BLACK);
+      drawMilliVolt(0,xStartDeltaVolVal,yStartCHsecondLine,BLUE,BLACK,false);
+      // Draw Cursor 1 Values
+      drawMilliVolt(0,xStartVol1,yStartCHsecondLine,GREEN,BLACK,true);
+      // Draw Cursor 2 Values
+      drawMilliVolt(0,xStartVol2,yStartCHsecondLine,RED,BLACK,true);
 }
 
 void updateCursorValues(void){            // Moves the cursors position on screen and in the value arrays

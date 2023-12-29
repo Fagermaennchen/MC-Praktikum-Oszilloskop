@@ -75,7 +75,7 @@ void ADC0_Init(void)
 }
 
 
-int main2353(void)
+int main(void)
 {
         ADC0_Init();    // initialize ADC0 and Timer0
         GPIO_Init();                // initialize gpio

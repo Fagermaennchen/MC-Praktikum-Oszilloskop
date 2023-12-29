@@ -8,7 +8,9 @@ arrayPosition = 0;      // Current Position in the Arrays
 triggerZeroReached = 0;    // Remember, if zero has been reached
 triggerValue = 2500;       // Value, at which to start saving the data
 prevValueCH1 = 9999;       // Last Value, to check if Trigger has been reached
+prevPrevValueCH1 = 9999;   // Value before Last Value, to check filter noise at trigger check
 triggered = 0;             // Remeber if triggered
+noTrigCounter = 0;         // Count iterations not triggered
 // Conversion of units
 timeLenXAxis = 8;       // TotalLength of X Axis in ms
 /* some predefined basic colors to use with names */

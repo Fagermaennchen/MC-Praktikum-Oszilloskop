@@ -84,12 +84,12 @@ void main(void)
             printf(" FIFO IS FULL \n ");
         else
             printf(" FIFO NOT FULL \n ");
-        printf("Nr. Waiting1 Waiting2 Result Ch1 Result Ch2 \n");
+        printf("Nr. Waiting1 Waiting2 Result Ch1 Result Ch2 Result Diff\n");
         for (j = 0; j < MAXARRAY; j++)
         {
-            printf("%05d %05d %05d %4x=%04d %4x=%04d \n", j, i, k, result1[j],
+            printf("%05d %05d %05d %4x=%04d %4x=%04d %d \n", j, i, k, result1[j],
                    result1[j] * 5000UL / 4096, result2[j],
-                   result2[j] * 5000UL / 4096);
+                   result2[j] * 5000UL / 4096,result1[j]-result2[j]);
         }
         //Test for Full FIFO overun, typically must be overfull because of slow printf before
         if (ADC0_SSFSTAT0_R & (1 << 12))

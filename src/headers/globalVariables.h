@@ -26,15 +26,18 @@ extern int arrayPosition;      // Current Position in the Arrays
 #define arrayLen 678   // Fixed lenght of Arrays
 int resultsCH1[arrayLen];   // Array for Channel 1
 int resultsCH2[arrayLen];   // Array for Channel 2
-int oldVoltage[arrayLen];
+int oldVoltageCH1[arrayLen];
+int oldVoltageCH2[arrayLen];
 
 // Triggering at CH1
 #define triggerZeroValue 2000     // Value, at which the Sine function is Zero and the derivative is positive
+#define dcSignalToler 2           // Tolerance at which values are seen as the same
 extern int triggerZeroReached;    // Remeber, if zero has been reached
 extern int triggerValue;          // Value, at which to start saving the data
 extern int prevValueCH1;          // Last Value, to check if Trigger has been reached
+extern int prevPrevValueCH1;      // Value before Last Value, to check filter noise at trigger check
 extern int triggered;             // Remeber if triggered
-
+extern int noTrigCounter;         // Count iterations not triggered
 // Conversion of units
 extern int timeLenXAxis;       // TotalLength of X Axis in ms
 #define loadValue (timeLenXAxis*120000/arrayLen)    // Conversion of X Axis time into timer load value

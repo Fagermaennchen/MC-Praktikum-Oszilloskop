@@ -1,6 +1,7 @@
 #include "headers/curve.h"
 #include "headers/globalVariables.h"
 #include "headers/cursor.h"
+#include "headers/font.h"
 
 
 
@@ -18,6 +19,7 @@ void initTimebaseAxis(void){
     // Inisialises the timebase axis
     drawRectangle(160,399,759,401,GREY);
     drawRectangle(450,370,470,430,GREY);
+    drawFont(font_t, 450, 439,WHITE,BLACK);
 }
 void drawAxes(void){
     // Draws the axis of the coordinate system
@@ -46,6 +48,11 @@ void initTriggerAxis(void){
     // draws the trigegr axis
     drawRectangle(58,80,60,359,GREY);       //draw Trigger Axis
     drawRectangle(29,210,89,230,GREY);
+    drawFont(font_t,30,370,WHITE,BLACK);
+    drawFont(font_r,30+fontWidth,370,WHITE,BLACK);
+    drawFont(font_i,30+2*fontWidth,370,WHITE,BLACK);
+    drawFont(font_g,30+3*fontWidth,375,WHITE,BLACK);
+
 }
 
 
@@ -53,7 +60,7 @@ void drawVoltageCurve(void){
     int i,j;
     int voltageY0, voltageY1;
     double voltagePixel;
-    int voltagePixelint;
+    int voltagePixelintCH1,voltagePixelintCH2;
     enum colors color = WHITE;
 
     //Spannungsreferenz erstmal f�r 0-5V
@@ -62,26 +69,25 @@ void drawVoltageCurve(void){
 
         voltageY0 = resultsCH1[i];
         voltagePixel = 360 - ((voltageY0-300)*0.08);
-        voltagePixelint = (int) voltagePixel;
+        voltagePixelintCH1 = (int) voltagePixel;
+        voltageY0 = resultsCH2[i];
+        voltagePixel = 360 - ((voltageY0-300)*0.08);
+        voltagePixelintCH2 = (int) voltagePixel;
 
-        if(!(voltagePixelint==219 | voltagePixelint==220 | i==cursor1ArrPos | i==cursor2ArrPos)){
+        if(!(voltagePixelintCH1==219 | voltagePixelintCH1==220 | i==cursor1ArrPos | i==cursor2ArrPos)){
             //Overwrite Old pixels
-            drawLine(121+i,oldVoltage[i],121+i,oldVoltage[i],BLACK);
+            drawLine(121+i,oldVoltageCH1[i],121+i,oldVoltageCH1[i],BLACK);
+            drawLine(121+i,oldVoltageCH2[i],121+i,oldVoltageCH2[i],BLACK);
             //Write current pixels
-            drawLine(121+i,voltagePixelint,121+i,voltagePixelint,WHITE);
+            drawLine(121+i,voltagePixelintCH1,121+i,voltagePixelintCH1,YELLOW);
+            drawLine(121+i,voltagePixelintCH2,121+i,voltagePixelintCH2,BLUE);
             //Save written pixel to be deletable in next cycle
-            oldVoltage[i]=voltagePixelint;
+            oldVoltageCH1[i]=voltagePixelintCH1;
+            oldVoltageCH2[i]=voltagePixelintCH2;
         }
-
-
-
-
-
         //printf("voltage: %d\n", voltageY0);
         //printf("pixelpos: %lf\n", voltagePixel);
         //printf("PixelInt: %d\n" , voltagePixelint);
-
-
     }
 }
 
