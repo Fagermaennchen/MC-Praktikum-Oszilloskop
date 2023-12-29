@@ -63,7 +63,6 @@ int main(void){
     k=0;
      while(1)
      {
-
         updateCursorValues();
         readTouchValues();
         drawVoltageCurve();

@@ -4,6 +4,7 @@
  *  Created on: 02.12.2023
  *      Author: sfage
  */
+#include <src/headers/globalVariables.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "stdio.h"
@@ -14,7 +15,6 @@
 #include "driverlib/sysctl.h"
 #include "headers/ADC.h"
 #include "headers/cursor.h"
-#include "src/headers/globalVariables.h"
 
 // Values of Service Routine
 int resultCH1, resultCH2,k;
@@ -101,7 +101,7 @@ void setupADC(void){    // Setup the timer triggered ADC
     // Start the ADC Clocking
     SYSCTL_PLLFREQ0_R |= SYSCTL_PLLFREQ0_PLLPWR;            // power on the PLL
     while (!(SYSCTL_PLLSTAT_R & SYSCTL_PLLSTAT_LOCK));      // wait till PLL has locked
-    ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 24);  // Use the external OSC at 20MHz
+    ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 4);  // Use the external OSC at 120MHz
     wt++;
 
     // Configure ADC for Ports PE2+PE3  (PE2: Vsin, PE3: Vcos)

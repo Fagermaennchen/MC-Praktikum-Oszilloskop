@@ -8,7 +8,7 @@
 #include <driverlib/sysctl.h>
 #include <driverlib/gpio.h>     // GPIO_PIN_X
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
-#include "headers/globalVariables.h"
+#include <src/headers/globalVariables.h>
 #include "headers/font.h"
 #include "headers/display.h"
 #include "headers/cursor.h"
@@ -317,10 +317,7 @@ void readTouchValues(void){
     }
     // Cursor 1
     else if(cursorSelected == 1){    // When selected: Move to new position
-        moveCursor1Position(xpos);
-        if(x == cursor2DispPos ){
-            moveCursor2Position(cursor2DispPos);   // Debug: Redraw other cursor if on same prev position
-        }
+        moveCursor1Position(xpos,true);
     }
 
     else if((cursor1DispPos-cursorTouchWidth)<xpos && xpos<(cursor1DispPos+cursorTouchWidth) && ypos>YaxisYbegin && ypos<YaxisYend && cursorSelected == 0){ // When not selected, but hit: Inform about hit
@@ -329,7 +326,7 @@ void readTouchValues(void){
     }
     // Cursor 2
     else if(cursorSelected == 2){    // When selected: Move to new position
-        moveCursor2Position(xpos);
+        moveCursor2Position(xpos,true);
     }
 
     else if((cursor2DispPos-cursorTouchWidth)<xpos && xpos<(cursor2DispPos+cursorTouchWidth) && ypos>YaxisYbegin && ypos<YaxisYend && cursorSelected == 0 ){ // When not selected, but hit: Inform about hit

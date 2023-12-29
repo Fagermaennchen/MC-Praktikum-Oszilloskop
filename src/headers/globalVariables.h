@@ -39,8 +39,10 @@ extern int prevPrevValueCH1;      // Value before Last Value, to check filter no
 extern int triggered;             // Remeber if triggered
 extern int noTrigCounter;         // Count iterations not triggered
 // Conversion of units
-extern int timeLenXAxis;       // TotalLength of X Axis in ms
-#define loadValue (timeLenXAxis*120000/arrayLen)    // Conversion of X Axis time into timer load value
+extern int timeLenXAxis;       // Total Length of X Axis in us
+#define mintimeLenXAxis 10;   // Min length of X Axis in us
+#define maxtimeLenXAxis 99999;   // Min length of X Axis in us
+#define loadValue (timeLenXAxis*120/arrayLen)    // Conversion of X Axis time into timer load value
 #define tSample (timeLenXAxis*1000/arrayLen)
 
 // constants for display initialization

@@ -1,8 +1,8 @@
+#include <src/headers/globalVariables.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include "headers/cursor.h"
 #include "headers/display.h"
-#include "headers/globalVariables.h"
 #include "headers/font.h"
 #include "headers/ADC.h"
 #include "headers/display.h"
@@ -97,7 +97,7 @@ void updateCursorValues(void){            // Moves the cursors position on scree
 
 }
 
-void moveCursor1Position(int x){
+void moveCursor1Position(int x, bool redraw){
     // Moves the cursors position on screen and in the value arrays
     // Check x for left bounds
     if (x<(XaxisXbegin+2)){             // +2 to not overwrite Y-axis (axis-width=2)
@@ -134,13 +134,17 @@ void moveCursor1Position(int x){
             write_data((GREEN>>8)&0xff); // green
             write_data((GREEN)&0xff); // blue
     }
+    // Redraw other cursor if on same prev position
+    if(cursor1DispPos == cursor2DispPos && redraw ){
+        moveCursor2Position(cursor2DispPos,false);
+    }
     // Move position in array
     cursor1ArrPos = x - XaxisXbegin - 1;
     // Remember position
     cursor1DispPos = x;
 }
 
-void moveCursor2Position(int x){
+void moveCursor2Position(int x, bool redraw){
     // Moves the cursors position on screen and in the value arrays
     // Check x for left bounds
     if (x<(XaxisXbegin+2)){         // +2 to not overwrite Y-axis (axis-width=2)
@@ -181,12 +185,8 @@ void moveCursor2Position(int x){
 
     }
     // Redraw other cursor if on same prev position
-    if(cursor2DispPos == cursor1DispPos ){
-        moveCursor1Position(cursor1DispPos);
-    }
-    // Redraw other cursor if on same prev position
-    if(cursor1DispPos == cursor2DispPos ){
-        moveCursor2Position(cursor2DispPos);
+    if(cursor2DispPos == cursor1DispPos && redraw  ){
+        moveCursor1Position(cursor1DispPos,false);
     }
     // Move position in array
     cursor2ArrPos = x - XaxisXbegin - 1;
@@ -196,8 +196,8 @@ void moveCursor2Position(int x){
 
 void setupCursor(void){
     initValueDescriptions();
-    moveCursor1Position(121+cursor1ArrPos);
-    moveCursor2Position(121+cursor2ArrPos);
+    moveCursor1Position(121+cursor1ArrPos,false);
+    moveCursor2Position(121+cursor2ArrPos,false);
 }
 
 

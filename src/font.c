@@ -1,6 +1,6 @@
 
+#include <src/headers/globalVariables.h>
 #include "headers/font.h"
-#include "headers/globalVariables.h"
 #include <stdbool.h>
 
 

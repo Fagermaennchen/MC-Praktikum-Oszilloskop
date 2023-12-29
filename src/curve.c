@@ -1,5 +1,5 @@
+#include <src/headers/globalVariables.h>
 #include "headers/curve.h"
-#include "headers/globalVariables.h"
 #include "headers/cursor.h"
 #include "headers/font.h"
 
