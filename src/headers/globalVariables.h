@@ -44,6 +44,8 @@ extern int timeLenXAxis;       // Total Length of X Axis in us
 #define maxtimeLenXAxis 99999;   // Min length of X Axis in us
 #define loadValue (timeLenXAxis*120/arrayLen)    // Conversion of X Axis time into timer load value
 #define tSample (timeLenXAxis*1000/arrayLen)
+// Intterrupts
+#define cursorLoadValue 120000000    // Load Value of the cursor service routine trigger timer (100ms)
 
 // constants for display initialization
 #define RST 0x10
