@@ -20,6 +20,7 @@ extern int cursor2DispPos;       // Position of cursor 1 on the screen
 extern int cursorSelected;     // Remeber if cursor is currently seclted: 0 = no Cursor, 1 = Cursor , 2 = Cursor 2
 // Function Prototypes
 void setupCursor(void);             // Setups all the cursor fucntions
+void startCursorValueUpdates(void);             // Starts the cursor Values dispaly Function
 void initValueDescriptions(void);   // Initialised the descriptions for the cursor values
 void updateCursorValues(void);            // Updates the displayed cursor values
 void moveCursor1Position(int x,bool redraw);      // Moves cursor 1 position on screen and in the value arrays

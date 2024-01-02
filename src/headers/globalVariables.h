@@ -44,7 +44,9 @@ extern int timeLenXAxis;            // Total Length of X Axis in us
 #define maxtimeLenXAxis 99999;      // Min length of X Axis in us
 extern int loadValue;               // Conversion of X Axis time into timer load value
 #define tSample (timeLenXAxis*1000/arrayLen)
+
 extern int adcResolution;            // to make ADC resolution adjustable for timebase slider
+
 
 // constants for display initialization
 #define RST 0x10

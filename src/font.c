@@ -712,6 +712,27 @@ void drawMilliVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroun
     drawFont(font_V,x+7*fontWidth+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
 }
 
+void drawDeltaVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroundColor){
+    // Make positive so the conversion works as intended
+    if(voltage_mv<0){
+        voltage_mv *= -1;
+    }
+    // Draws a 4 digit voltage in mV (XXXX mV) at postitions x and y
+    int digit[4];
+    digit[0] = (int)(voltage_mv/1000);  // Calculate digit 0
+    digit[1] = (int)((voltage_mv-digit[0]*1000)/100);   // Calculate digit 2
+    digit[2] = (int)((voltage_mv-digit[0]*1000-digit[1]*100)/10);   // Calculate digit 2
+    digit[3] = (int)(voltage_mv-digit[0]*1000-digit[1]*100-digit[2]*10)%10;   // Calculate digit 3
+    // Draw digits
+    int i;
+    for(i=0;i<4;i++){
+        drawFont(numbtofont(digit[i]),x+(i+1)*(fontWidth),y,foregroundColor,backgroundColor);
+    }
+    // Draw mV
+    drawFont(font_m,x+6*(fontWidth)+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+    drawFont(font_V,x+7*fontWidth+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+}
+
 void drawMikroSeconds(int time_us,int x, int y,int foregroundColor,int backgroundColor){
     // No Negative
     if(time_us<0){

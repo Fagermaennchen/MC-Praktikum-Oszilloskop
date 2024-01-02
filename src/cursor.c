@@ -1,6 +1,12 @@
 #include <src/headers/globalVariables.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include "inc/tm4c1294ncpdt.h"
+#include "inc/hw_memmap.h"
+#include "inc/hw_ints.h"
+#include "driverlib/timer.h"
+#include "driverlib/interrupt.h"
+#include "driverlib/sysctl.h"
 #include "headers/cursor.h"
 #include "headers/display.h"
 #include "headers/font.h"
@@ -26,7 +32,7 @@ void initValueDescriptions(void){
     drawFont(font_colon, xStartCHX+3*fontWidth+3*fontSpace, yStartCHfirstLine, YELLOW, BLACK);
     // Draw Delta Voltage
     drawFont(font_delta, xStartDelta, yStartCHfirstLine, YELLOW, BLACK);
-    drawMilliVolt(0,xStartDeltaVolVal,yStartCHfirstLine,YELLOW,BLACK,false);
+    drawDeltaVolt(0,xStartDeltaVolVal,yStartCHfirstLine,YELLOW,BLACK);
     // Draw Cursor 1 Values
     drawMilliVolt(0,xStartVol1,yStartCHfirstLine,GREEN,BLACK,true);
     // Draw Cursor 2 Values
@@ -45,7 +51,7 @@ void initValueDescriptions(void){
     drawFont(font_colon, xStartCHX+3*fontWidth+2*fontSpace, yStartCHsecondLine, BLUE, BLACK);
     // Draw Delta Voltage
     drawFont(font_delta, xStartDelta, yStartCHsecondLine, BLUE, BLACK);
-    drawMilliVolt(0,xStartDeltaVolVal,yStartCHsecondLine,BLUE,BLACK,false);
+    drawDeltaVolt(0,xStartDeltaVolVal,yStartCHsecondLine,BLUE,BLACK);
     // Draw Cursor 1 Values
     drawMilliVolt(0,xStartVol1,yStartCHsecondLine,GREEN,BLACK,true);
     // Draw Cursor 2 Values
@@ -76,9 +82,13 @@ void resetValueDescriptions(void){
 }
 
 void updateCursorValues(void){            // Moves the cursors position on screen and in the value arrays
+    // Clear Interrupt
+    TimerIntClear(TIMER1_BASE,TIMER_TIMA_TIMEOUT);
+    // Only update of signal is currently triggered no signal is detected
     //printf("CH1: %d, CH2 : %d \n",resultsCH1[cursor1ArrPos],resultsCH2[cursor1ArrPos]);
     // Channel 1
-    drawMilliVolt(convertADCtoVolt(resultsCH1[cursor1ArrPos])-convertADCtoVolt(resultsCH1[cursor2ArrPos]),xStartDeltaVolVal,yStartCHfirstLine,YELLOW,BLACK,false);
+    // Draw Delta Voltage
+    drawDeltaVolt((convertADCtoVolt(resultsCH1[cursor1ArrPos])-convertADCtoVolt(resultsCH1[cursor2ArrPos]))/10,xStartDeltaVolVal,yStartCHfirstLine,YELLOW,BLACK);
     // Draw Cursor 1 Values
     drawMilliVolt(convertADCtoVolt(resultsCH1[cursor1ArrPos]),xStartVol1,yStartCHfirstLine,GREEN,BLACK,true);
     // Draw Cursor 2 Values
@@ -89,11 +99,12 @@ void updateCursorValues(void){            // Moves the cursors position on scree
 
     //Channel 2
     // Draw Delta Voltage
-    drawMilliVolt(convertADCtoVolt(resultsCH2[cursor1ArrPos])-convertADCtoVolt(resultsCH2[cursor2ArrPos]),xStartDeltaVolVal,yStartCHsecondLine,BLUE,BLACK,false);
+    drawDeltaVolt((convertADCtoVolt(resultsCH2[cursor1ArrPos])-convertADCtoVolt(resultsCH2[cursor2ArrPos]))/10,xStartDeltaVolVal,yStartCHsecondLine,BLUE,BLACK);
     // Draw Cursor 1 Values
     drawMilliVolt(convertADCtoVolt(resultsCH2[cursor1ArrPos]),xStartVol1,yStartCHsecondLine,GREEN,BLACK,true);
     // Draw Cursor 2 Values
     drawMilliVolt(convertADCtoVolt(resultsCH2[cursor2ArrPos]),xStartVol2,yStartCHsecondLine,RED,BLACK,true);
+
 
 }
 
@@ -201,9 +212,26 @@ void moveCursor2Position(int x, bool redraw){
 }
 
 void setupCursor(void){
+    // Initialise Value Descriptions
     initValueDescriptions();
+    // Show Cursors on starting position
     moveCursor1Position(121+cursor1ArrPos,false);
     moveCursor2Position(121+cursor2ArrPos,false);
+    // Configure the Timer 1
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);           // Enable the Timer1 peripheral
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER1)) {}  // Wait for the Timer1 module to be ready
+    TimerConfigure(TIMER1_BASE, (TIMER_CFG_A_PERIODIC ));   // Timer 1 in periodic mode
+    TimerLoadSet(TIMER1_BASE,TIMER_A,cursorLoadValue);        // 1 Second Intervall
+    // Create Timer 1 Interrupt source
+    TimerIntEnable(TIMER1_BASE,TIMER_TIMA_TIMEOUT);         // Enable Timer 1A as Int Source
+    TimerIntRegister(TIMER1_BASE,TIMER_A,updateCursorValues);   // Register Timer 1A Int to updateCursorValues Routine
+    IntPrioritySet(INT_TIMER1A_TM4C123,0x40);               // Priority to 2
+    printf("prio: %d \n",IntPriorityGet(INT_TIMER1A_TM4C123));
+}
+
+void startCursorValueUpdates(void){
+    // Starts the timer triggert interrupts
+    TimerEnable(TIMER1_BASE,TIMER_A);
 }
 
 
