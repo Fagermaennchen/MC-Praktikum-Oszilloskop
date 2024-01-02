@@ -124,8 +124,8 @@ void setupADC(void){    // Setup the timer triggered ADC
     ADC0_SAC_R = 0x3; // Averaging over 8 samples in HW
     ADC0_SSMUX0_R = 0x00000000; // Sequencer 3 channel AIN1 (PE3) and AIN0 (PE2)
     ADCSequenceConfigure(ADC0_BASE, 0, ADC_TRIGGER_TIMER, 0); // will use ADC0, SS0, processor-trigger, priority 0
-    ADCSequenceStepConfigure(ADC0_BASE, 0, 1, ADC_CTL_CH1);
-    ADCSequenceStepConfigure(ADC0_BASE, 0, 0, ADC_CTL_CH0 | ADC_CTL_IE |
+    ADCSequenceStepConfigure(ADC0_BASE, 0, 0, ADC_CTL_CH0);
+    ADCSequenceStepConfigure(ADC0_BASE, 0, 1, ADC_CTL_CH1 | ADC_CTL_IE |
                              ADC_CTL_END);
     // Register and enable ADC Interrupt
     ADCIntRegister(ADC0_BASE,0,readADCvalue_routine);
