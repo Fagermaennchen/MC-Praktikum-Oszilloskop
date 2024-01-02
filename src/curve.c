@@ -102,7 +102,7 @@ void drawVoltageCurve(void){
             drawLine(122+i,XaxisYmiddle,122+i,XaxisYmiddle+1,WHITE);
 
             // Fix Y-axis arrow
-            /*if(i>(arrayLen-arrowLength-2)){
+            if(i>(arrayLen-arrowLength-2)){
                 if(((VoltagePixelIntCH1>(XaxisYmiddle - arrowWidth - 1))&&(VoltagePixelIntCH1<(XaxisYmiddle + arrowWidth + 2)))||(VoltagePixelIntCH2>(XaxisYmiddle - arrowWidth - 1))&&(VoltagePixelIntCH2<(XaxisYmiddle + arrowWidth + 2))){
                     drawLine(XaxisXend - 1, XaxisYmiddle - 1, XaxisXend - arrowLength - 1, XaxisYmiddle - arrowWidth - 1, WHITE);       // Upper upper arrow line
                     drawLine(XaxisXend - 2, XaxisYmiddle - 1, XaxisXend - arrowLength - 2, XaxisYmiddle - arrowWidth - 1, WHITE);       // Lower upper arrow line
@@ -110,7 +110,7 @@ void drawVoltageCurve(void){
                     drawLine(XaxisXend - 2, XaxisYmiddle + 2, XaxisXend - arrowLength - 2, XaxisYmiddle + arrowWidth + 2, WHITE);       // Lower lower arrow line
                 }
             }
-            */
+
             //Save written pixel to be deletable in next cycle
             oldVoltageCH1[i]=VoltagePixelIntCH1;
             oldVoltageCH2[i]=VoltagePixelIntCH2;

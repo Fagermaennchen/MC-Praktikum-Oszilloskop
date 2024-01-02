@@ -39,11 +39,12 @@ extern int prevPrevValueCH1;      // Value before Last Value, to check filter no
 extern int triggered;             // Remember if triggered
 extern int noTrigCounter;         // Count iterations not triggered
 // Conversion of units
-extern int timeLenXAxis;       // Total Length of X Axis in us
-#define mintimeLenXAxis 2000;   // Min length of X Axis in us
-#define maxtimeLenXAxis 99999;   // Min length of X Axis in us
-#define loadValue (timeLenXAxis*120/arrayLen)    // Conversion of X Axis time into timer load value
+extern int timeLenXAxis;            // Total Length of X Axis in us
+#define mintimeLenXAxis 2000;       // Min length of X Axis in us
+#define maxtimeLenXAxis 99999;      // Min length of X Axis in us
+extern int loadValue;               // Conversion of X Axis time into timer load value
 #define tSample (timeLenXAxis*1000/arrayLen)
+extern int adcResolution;            // to make ADC resolution adjustable for timebase slider
 
 // constants for display initialization
 #define RST 0x10

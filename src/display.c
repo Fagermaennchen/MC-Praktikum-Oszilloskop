@@ -11,6 +11,9 @@
 #include "headers/font.h"
 #include "headers/display.h"
 #include "headers/cursor.h"
+#include "driverlib/timer.h"
+#include "headers/ADC.h"
+
 
 extern int trigSliderSelected = 0;      // Startup: not selected
 extern int timeSliderSelected = 0;      // Startup: not selected
@@ -290,6 +293,12 @@ void moveTimeSliderPosition(int x){
     drawRectangle(timeSliderPos-(sliderHeight/2),402,timeSliderPos+(sliderWidth/2),430,BLACK);
 
     timeSliderPos = x;
+    timeLenXAxis = timeSliderPos * 70;
+    loadValue = (timeLenXAxis*120/arrayLen);
+    TimerLoadSet(TIMER0_BASE,TIMER_A,loadValue);        // refresh timer
+
+    // adjust resolution of ADC
+    //changeADCclock(timeSliderPos);
 
 
     //Draw new sliderbutton
