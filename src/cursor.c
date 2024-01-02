@@ -134,6 +134,9 @@ void moveCursor1Position(int x, bool redraw){
             write_data((GREEN>>8)&0xff); // green
             write_data((GREEN)&0xff); // blue
     }
+    // Fix Y-axis arrow
+    drawLine(XaxisXbegin + 2, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);      // Right right arrow line
+    drawLine(XaxisXbegin + 2, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);      // Left right arrow line
     // Redraw other cursor if on same prev position
     if(cursor1DispPos == cursor2DispPos && redraw ){
         moveCursor2Position(cursor2DispPos,false);
@@ -184,6 +187,9 @@ void moveCursor2Position(int x, bool redraw){
         write_data((RED)&0xff); // blue
 
     }
+    // Fix Y-axis arrow
+    drawLine(XaxisXbegin + 2, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);      // Right right arrow line
+    drawLine(XaxisXbegin + 2, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);      // Left right arrow line
     // Redraw other cursor if on same prev position
     if(cursor2DispPos == cursor1DispPos && redraw  ){
         moveCursor1Position(cursor1DispPos,false);

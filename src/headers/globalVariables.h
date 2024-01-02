@@ -32,11 +32,11 @@ int oldVoltageCH2[arrayLen];
 // Triggering at CH1
 #define triggerZeroValue 2000     // Value, at which the Sine function is Zero and the derivative is positive
 #define dcSignalToler 2           // Tolerance at which values are seen as the same
-extern int triggerZeroReached;    // Remeber, if zero has been reached
+extern int triggerZeroReached;    // Remember, if zero has been reached
 extern int triggerValue;          // Value, at which to start saving the data
 extern int prevValueCH1;          // Last Value, to check if Trigger has been reached
 extern int prevPrevValueCH1;      // Value before Last Value, to check filter noise at trigger check
-extern int triggered;             // Remeber if triggered
+extern int triggered;             // Remember if triggered
 extern int noTrigCounter;         // Count iterations not triggered
 // Conversion of units
 extern int timeLenXAxis;       // Total Length of X Axis in us

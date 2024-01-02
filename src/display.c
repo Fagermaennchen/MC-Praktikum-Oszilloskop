@@ -1,5 +1,4 @@
 
-
 #include <stdint.h>
 #include <stdbool.h> // type bool for giop.h
 #include "inc/hw_types.h"
@@ -252,6 +251,7 @@ int pixelPosX(int xpos){
 void moveTrigSliderPosition(int y){
     // Moves the Trigger Slider
 
+    // Y-Range: 90->359 (resolution of 270 positions)
     // Check y for upper bounds
     if(y<(YaxisYbegin+10)){
         y=(YaxisYbegin+10);
@@ -266,6 +266,7 @@ void moveTrigSliderPosition(int y){
     drawRectangle(61, trigSliderPos-(sliderHeight/2), 89, trigSliderPos+(sliderHeight/2), BLACK);
 
     trigSliderPos = y;
+    triggerValue = (400 - trigSliderPos) * 10;
     //Draw new sliderbutton
     drawRectangle(59-(sliderWidth/2), trigSliderPos-(sliderHeight/2), 59+(sliderWidth/2), trigSliderPos+(sliderHeight/2), GREY);
 
@@ -289,6 +290,7 @@ void moveTimeSliderPosition(int x){
     drawRectangle(timeSliderPos-(sliderHeight/2),402,timeSliderPos+(sliderWidth/2),430,BLACK);
 
     timeSliderPos = x;
+
 
     //Draw new sliderbutton
     drawRectangle(timeSliderPos-(sliderHeight/2), 400-(sliderWidth/2), timeSliderPos+(sliderHeight/2), 400+(sliderWidth/2), GREY);
