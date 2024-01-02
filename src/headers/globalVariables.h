@@ -32,20 +32,21 @@ int oldVoltageCH2[arrayLen];
 // Triggering at CH1
 #define triggerZeroValue 2000     // Value, at which the Sine function is Zero and the derivative is positive
 #define dcSignalToler 2           // Tolerance at which values are seen as the same
-extern int triggerZeroReached;    // Remeber, if zero has been reached
+extern int triggerZeroReached;    // Remember, if zero has been reached
 extern int triggerValue;          // Value, at which to start saving the data
 extern int prevValueCH1;          // Last Value, to check if Trigger has been reached
 extern int prevPrevValueCH1;      // Value before Last Value, to check filter noise at trigger check
-extern int triggered;             // Remeber if triggered
+extern int triggered;             // Remember if triggered
 extern int noTrigCounter;         // Count iterations not triggered
 // Conversion of units
-extern int timeLenXAxis;       // Total Length of X Axis in us
-#define mintimeLenXAxis 2000;   // Min length of X Axis in us
-#define maxtimeLenXAxis 99999;   // Min length of X Axis in us
-#define loadValue (timeLenXAxis*120/arrayLen)    // Conversion of X Axis time into timer load value
+extern int timeLenXAxis;            // Total Length of X Axis in us
+#define mintimeLenXAxis 2000;       // Min length of X Axis in us
+#define maxtimeLenXAxis 99999;      // Min length of X Axis in us
+extern int loadValue;               // Conversion of X Axis time into timer load value
 #define tSample (timeLenXAxis*1000/arrayLen)
-// Intterrupts
-#define cursorLoadValue 120000000    // Load Value of the cursor service routine trigger timer (100ms)
+
+extern int adcResolution;            // to make ADC resolution adjustable for timebase slider
+
 
 // constants for display initialization
 #define RST 0x10

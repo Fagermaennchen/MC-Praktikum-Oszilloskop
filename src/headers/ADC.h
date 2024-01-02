@@ -6,6 +6,7 @@
  */
 
 // Headers
+void changeADCclock(int timeSliderPos);     // Change ADC clock with timebase slider
 void readADCvalue_routine(void); //Routine to read adc value from FIFO
 void setupADC(void);    // Setup the timer triggered ADC
 void startADC(void);    // Starts the timer triggered ADC

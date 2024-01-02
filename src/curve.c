@@ -38,10 +38,10 @@ void drawAxes(void){
     drawLine(XaxisXbegin, YaxisYbegin, XaxisXbegin, YaxisYend, WHITE);
     drawLine(XaxisXbegin + 1,YaxisYbegin,XaxisXbegin + 1,YaxisYend, WHITE);
     //Write Y-Axis Arrow (double lined)
-    drawLine(XaxisXend - 1, XaxisYmiddle - 1, XaxisXend - arrowLength - 1, XaxisYmiddle - arrowWidth - 1, WHITE);
-    drawLine(XaxisXend - 2, XaxisYmiddle - 1, XaxisXend - arrowLength - 2, XaxisYmiddle - arrowWidth - 1, WHITE);
-    drawLine(XaxisXend - 1, XaxisYmiddle + 2, XaxisXend - arrowLength - 1, XaxisYmiddle + arrowWidth + 2, WHITE);
-    drawLine(XaxisXend - 2, XaxisYmiddle + 2, XaxisXend - arrowLength - 2, XaxisYmiddle + arrowWidth + 2, WHITE);
+    drawLine(XaxisXend - 1, XaxisYmiddle - 1, XaxisXend - arrowLength - 1, XaxisYmiddle - arrowWidth - 1, WHITE);       // Upper upper arrow line
+    drawLine(XaxisXend - 2, XaxisYmiddle - 1, XaxisXend - arrowLength - 2, XaxisYmiddle - arrowWidth - 1, WHITE);       // Lower upper arrow line
+    drawLine(XaxisXend - 1, XaxisYmiddle + 2, XaxisXend - arrowLength - 1, XaxisYmiddle + arrowWidth + 2, WHITE);       // Upper lower arrow line
+    drawLine(XaxisXend - 2, XaxisYmiddle + 2, XaxisXend - arrowLength - 2, XaxisYmiddle + arrowWidth + 2, WHITE);       // Lower lower arrow line
     printf("Axes ready\n");
 }
 void initTriggerAxis(void){
@@ -57,37 +57,64 @@ void initTriggerAxis(void){
 
 
 void drawVoltageCurve(void){
-    int i,j;
-    int voltageY0, voltageY1;
-    double voltagePixel;
-    int voltagePixelintCH1,voltagePixelintCH2;
-    enum colors color = WHITE;
+    int i;
+    int VoltageY;
+    //int nextVoltageY;
+    double VoltagePixel;
+    int VoltagePixelIntCH1,VoltagePixelIntCH2;
+    //int nextVoltagePixelIntCH1, nextVoltagePixelIntCH2;
 
     //Spannungsreferenz erstmal f�r 0-5V
 
-    for(i = 0; i < arrayLen-1; i++){
+    for(i = 0; i < arrayLen-2; i++){                    // Array iteration to show all pixel in the current timebase, arrayLen-2 to not run out of bounds du to drawLine(i+1)
 
-        voltageY0 = resultsCH1[i];
-        voltagePixel = 360 - ((voltageY0-300)*0.08);
-        voltagePixelintCH1 = (int) voltagePixel;
-        voltageY0 = resultsCH2[i];
-        voltagePixel = 360 - ((voltageY0-300)*0.08);
-        voltagePixelintCH2 = (int) voltagePixel;
+        // calculate pixel from received voltage CH1
+        VoltageY = resultsCH1[i];                           // Get voltage from ADC CH1
+        VoltagePixel = 360 - ((VoltageY-300)*0.08);         // Calculate pixel position for CH1
+        VoltagePixelIntCH1 = (int) VoltagePixel;            // cast double value to int for pixel position
+        /*
+        // calculate next pixel from received voltage CH1 for drawLine purpose
+        nextVoltageY = resultsCH1[i+1];                     // Calculate next value
+        VoltagePixel = 360 - ((VoltageY-300)*0.08);         // Calculate next pixel position for CH1
+        nextVoltagePixelIntCH1 = (int) VoltagePixel;        // cast double value to int for next pixel position
+        */
+        // calculate pixel from received voltage CH2
+        VoltageY = resultsCH2[i];                           // Get voltage from ADC CH2
+        VoltagePixel = 360 - ((VoltageY-300)*0.08);         // Calculate pixel position for CH2
+        VoltagePixelIntCH2 = (int) VoltagePixel;            // cast double value to int for pixel position
+        /*
+        // calculate next pixel from received voltage CH1 for drawLine purpose
+        nextVoltageY = resultsCH2[i+1];                     // Calculate next value
+        VoltagePixel = 360 - ((VoltageY-300)*0.08);         // Calculate next pixel position for CH1
+        nextVoltagePixelIntCH2 = (int) VoltagePixel;        // cast double value to int for next pixel position
+        */
+        if(!(VoltagePixelIntCH1==218 | VoltagePixelIntCH1==219 | i==(cursor1ArrPos - 1) | i==(cursor2ArrPos - 1))){     // draw line if not on cursor or x-axis
 
-        if(!(voltagePixelintCH1==219 | voltagePixelintCH1==220 | i==cursor1ArrPos | i==cursor2ArrPos)){
             //Overwrite Old pixels
-            drawLine(121+i,oldVoltageCH1[i],121+i,oldVoltageCH1[i],BLACK);
-            drawLine(121+i,oldVoltageCH2[i],121+i,oldVoltageCH2[i],BLACK);
+            drawLine(122+i,oldVoltageCH1[i],122+i,oldVoltageCH1[i],BLACK);                  // Channel 1
+            drawLine(122+i,oldVoltageCH2[i],122+i,oldVoltageCH2[i],BLACK);                  // Channel 2
+
             //Write current pixels
-            drawLine(121+i,voltagePixelintCH1,121+i,voltagePixelintCH1,YELLOW);
-            drawLine(121+i,voltagePixelintCH2,121+i,voltagePixelintCH2,BLUE);
+            drawLine(122+i,VoltagePixelIntCH1,122+i,VoltagePixelIntCH1,YELLOW);         // Channel 1
+            drawLine(122+i,VoltagePixelIntCH2,122+i,VoltagePixelIntCH2,BLUE);               // Channel 2
+
+            // Fix middle line
+            drawLine(122+i,XaxisYmiddle,122+i,XaxisYmiddle+1,WHITE);
+
+            // Fix Y-axis arrow
+            if(i>(arrayLen-arrowLength-2)){
+                if(((VoltagePixelIntCH1>(XaxisYmiddle - arrowWidth - 1))&&(VoltagePixelIntCH1<(XaxisYmiddle + arrowWidth + 2)))||(VoltagePixelIntCH2>(XaxisYmiddle - arrowWidth - 1))&&(VoltagePixelIntCH2<(XaxisYmiddle + arrowWidth + 2))){
+                    drawLine(XaxisXend - 1, XaxisYmiddle - 1, XaxisXend - arrowLength - 1, XaxisYmiddle - arrowWidth - 1, WHITE);       // Upper upper arrow line
+                    drawLine(XaxisXend - 2, XaxisYmiddle - 1, XaxisXend - arrowLength - 2, XaxisYmiddle - arrowWidth - 1, WHITE);       // Lower upper arrow line
+                    drawLine(XaxisXend - 1, XaxisYmiddle + 2, XaxisXend - arrowLength - 1, XaxisYmiddle + arrowWidth + 2, WHITE);       // Upper lower arrow line
+                    drawLine(XaxisXend - 2, XaxisYmiddle + 2, XaxisXend - arrowLength - 2, XaxisYmiddle + arrowWidth + 2, WHITE);       // Lower lower arrow line
+                }
+            }
+
             //Save written pixel to be deletable in next cycle
-            oldVoltageCH1[i]=voltagePixelintCH1;
-            oldVoltageCH2[i]=voltagePixelintCH2;
+            oldVoltageCH1[i]=VoltagePixelIntCH1;
+            oldVoltageCH2[i]=VoltagePixelIntCH2;
         }
-        //printf("voltage: %d\n", voltageY0);
-        //printf("pixelpos: %lf\n", voltagePixel);
-        //printf("PixelInt: %d\n" , voltagePixelint);
     }
 }
 
