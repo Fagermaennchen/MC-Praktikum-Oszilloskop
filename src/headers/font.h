@@ -42,6 +42,7 @@ void drawComma(int x, int y,int color,int backdrop); // Draws a comma
 int* numbtofont(int number);    // Maps a font array to a one digit number
 void drawMilliVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroundColor,bool includeNegatives);    // Draws a 4 digit voltage in mV (XXX,1 mV) at postitions x and y
 void drawMikroSeconds(int time_us,int x, int y,int foregroundColor,int backgroundColor);    // Draws a 4 digit time in us (XXX,1 mV) at postitions x and y
+void drawDeltaVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroundColor);    // Draws an absolute 4 digit voltage in mV (XXXX mV) at postitions x and y
 void drawText(void); // Draws the Channal 1 Line
 void drawLogo(void); // Draws the Haw Logo
 

@@ -293,16 +293,22 @@ void moveTimeSliderPosition(int x){
     drawRectangle(timeSliderPos-(sliderHeight/2),402,timeSliderPos+(sliderWidth/2),430,BLACK);
 
     timeSliderPos = x;
+<<<<<<< HEAD
     timeLenXAxis = timeSliderPos * 50;
+=======
+    timeLenXAxis = timeSliderPos * 20;
+>>>>>>> b429589d8f94e23240e80dc88e953e675a92d9b4
     loadValue = (timeLenXAxis*120/arrayLen);
     TimerLoadSet(TIMER0_BASE,TIMER_A,loadValue);        // refresh timer
 
     // adjust resolution of ADC
-    //changeADCclock(timeSliderPos);
+    changeADCclock(timeSliderPos);
 
 
     //Draw new sliderbutton
     drawRectangle(timeSliderPos-(sliderHeight/2), 400-(sliderWidth/2), timeSliderPos+(sliderHeight/2), 400+(sliderWidth/2), GREY);
+    // Update cursors
+    updateCursorValues();
 
 }
 
@@ -329,8 +335,9 @@ void readTouchValues(void){
     // Cursor 1
     else if(cursorSelected == 1){    // When selected: Move to new position
         moveCursor1Position(xpos,true);
-    }
-
+        updateCursorValues();
+    }   // Check for selection if not selected
+    // Check for selection if not selected
     else if((cursor1DispPos-cursorTouchWidth)<xpos && xpos<(cursor1DispPos+cursorTouchWidth) && ypos>YaxisYbegin && ypos<YaxisYend && cursorSelected == 0){ // When not selected, but hit: Inform about hit
 
         cursorSelected = 1;
@@ -338,8 +345,9 @@ void readTouchValues(void){
     // Cursor 2
     else if(cursorSelected == 2){    // When selected: Move to new position
         moveCursor2Position(xpos,true);
+        updateCursorValues();
     }
-
+    // Check for selection if not selected
     else if((cursor2DispPos-cursorTouchWidth)<xpos && xpos<(cursor2DispPos+cursorTouchWidth) && ypos>YaxisYbegin && ypos<YaxisYend && cursorSelected == 0 ){ // When not selected, but hit: Inform about hit
         cursorSelected = 2;
     }

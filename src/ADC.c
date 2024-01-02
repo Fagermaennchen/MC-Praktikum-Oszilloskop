@@ -23,6 +23,11 @@ void changeADCclock(int timeSliderPos)
 {
     int wt = 0;
     adcResolution = timeSliderPos*4/170+1;
+<<<<<<< HEAD
+=======
+   // printf("time slider pos %d\n",timeSliderPos);
+   // printf("adc divider pos %d\n",adcResolution);
+>>>>>>> b429589d8f94e23240e80dc88e953e675a92d9b4
     ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, adcResolution);  // Use the external OSC at 120MHz
     wt++;
 }
@@ -66,8 +71,7 @@ void readADCvalue_routine(void){ // Service Routine to get the ADC Values
             noTrigCounter = 0;   // Reset no Trigger Counter
         }
         // Detect not Triggerable signal (AC Coupling)
-        if(noTrigCounter == 1000){
-            printf("no Value \n");
+        if(noTrigCounter == 10000){
             // Set DC Signal to 0
             for(k=0;k<arrayLen;k++){
                 resultsCH1[k] = triggerZeroValue;
@@ -130,6 +134,8 @@ void setupADC(void){    // Setup the timer triggered ADC
     ADCIntRegister(ADC0_BASE,0,readADCvalue_routine);
     ADCIntEnable(ADC0_BASE,0);
     ADCIntClear(ADC0_BASE, 0);
+    IntPrioritySet(INT_TIMER0A_TM4C123,0x00);   // Priority to 0
+    printf("ADC prio: %d \n",IntPriorityGet(INT_TIMER0A_TM4C123));
 
     // Enable ADC interrupts
     ADCIntEnableEx(ADC0_BASE, ADC_INT_SS0);

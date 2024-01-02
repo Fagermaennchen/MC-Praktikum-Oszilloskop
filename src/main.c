@@ -54,6 +54,7 @@ int main(void){
     setupAll();
     // Start all underlying Modules
     startADC();
+    startCursorValueUpdates();
     // Start endless loop
     int j,k;
     for(j = 0; j<arrayLen;j++){
@@ -63,7 +64,7 @@ int main(void){
     k=0;
      while(1)
      {
-        updateCursorValues();
+      //  updateCursorValues();
         readTouchValues();
         drawVoltageCurve();
      }
