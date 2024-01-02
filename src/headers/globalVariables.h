@@ -45,6 +45,9 @@ extern int timeLenXAxis;            // Total Length of X Axis in us
 extern int loadValue;               // Conversion of X Axis time into timer load value
 #define tSample (timeLenXAxis*1000/arrayLen)
 
+// Intterrupts
+#define cursorLoadValue 120000000    // Load Value of the cursor service routine trigger timer (100ms)
+
 extern int adcResolution;            // to make ADC resolution adjustable for timebase slider
 
 
