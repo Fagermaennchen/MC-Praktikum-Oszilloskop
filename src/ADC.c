@@ -23,11 +23,6 @@ void changeADCclock(int timeSliderPos)
 {
     int wt = 0;
     adcResolution = timeSliderPos*4/170+1;
-<<<<<<< HEAD
-=======
-   // printf("time slider pos %d\n",timeSliderPos);
-   // printf("adc divider pos %d\n",adcResolution);
->>>>>>> b429589d8f94e23240e80dc88e953e675a92d9b4
     ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, adcResolution);  // Use the external OSC at 120MHz
     wt++;
 }
