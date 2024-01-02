@@ -56,13 +56,19 @@ void readADCvalue_routine(void){ // Service Routine to get the ADC Values
     }
 
     else{
-        // Triggering at Channel 1: Check for Zero Value crossed on positive slope
-        if( prevValueCH1 < triggerZeroValue && resultCH1 > triggerZeroValue){      // Zero Value has been crossed on positive slope
-            triggerZeroReached = true;
+        // Triggering at Channel 1: Check for Zero Value
+        if(triggerValue > triggerZeroValue ){       // Cross Zero on positive slop for trigger > 0
+            if( prevValueCH1 < triggerZeroValue && resultCH1 > triggerZeroValue){      // Zero Value has been crossed on positive slope
+                triggerZeroReached = true;
+            }
+        }   // Cross Zero on positive slop for trigger < 0
+        else{
+            if( prevValueCH1 > triggerZeroValue && resultCH1 < triggerZeroValue){      // Zero Value has been crossed on positive slope
+                     triggerZeroReached = true;
+            }
         }
         // Triggering at Channel 2: Check if Trigger is crosses
-        if( triggerZeroReached && (((prevValueCH1 < triggerValue || prevPrevValueCH1 < triggerValue) && resultCH1 > triggerValue) || // Trigger crossed on positive slope
-            (prevValueCH1 > triggerValue && resultCH1 < triggerValue)))   // Trigger crossed on negative slope
+        if( triggerZeroReached && (((prevValueCH1 < triggerValue || prevPrevValueCH1 < triggerValue) && resultCH1 > triggerValue))) //Trigger crossed on positive slope
         {
             triggered = true;       // Remeber Trigger
             noTrigCounter = 0;   // Reset no Trigger Counter
