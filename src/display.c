@@ -293,7 +293,7 @@ void moveTimeSliderPosition(int x){
     drawRectangle(timeSliderPos-(sliderHeight/2),402,timeSliderPos+(sliderWidth/2),430,BLACK);
 
     timeSliderPos = x;
-    timeLenXAxis = timeSliderPos * 70;
+    timeLenXAxis = timeSliderPos * 50;
     loadValue = (timeLenXAxis*120/arrayLen);
     TimerLoadSet(TIMER0_BASE,TIMER_A,loadValue);        // refresh timer
 

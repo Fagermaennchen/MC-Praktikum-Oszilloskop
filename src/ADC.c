@@ -22,7 +22,7 @@ int resultCH1, resultCH2,k;
 void changeADCclock(int timeSliderPos)
 {
     int wt = 0;
-    adcResolution = timeSliderPos * (4/170);
+    adcResolution = timeSliderPos*4/170+1;
     ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, adcResolution);  // Use the external OSC at 120MHz
     wt++;
 }
