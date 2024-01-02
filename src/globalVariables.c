@@ -12,11 +12,11 @@ prevPrevValueCH1 = 9999;   // Value before Last Value, to check filter noise at 
 triggered = 0;             // Remeber if triggered
 noTrigCounter = 0;         // Count iterations not triggered
 // Conversion of units
-timeLenXAxis = 9200;       // initial TotalLength of X Axis in us
+timeLenXAxis = 10120;       // initial TotalLength of X Axis in us (460*22)-->middlePixelTimebase*factor
 /* some predefined basic colors to use with names */
 colorarray[]={0x00000000,0x00FFFFFF,0x00AAAAAA,0x00FF0000,0x0000FF00,0x000000FF,0x00FFFF00};
 xpos = 0;
 ypos = 0;
-loadValue = (9200*120/arrayLen);
+loadValue = (10120*120/arrayLen);
 adcResolution = 12;
 
