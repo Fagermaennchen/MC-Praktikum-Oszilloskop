@@ -40,10 +40,10 @@ extern int triggered;             // Remember if triggered
 extern int noTrigCounter;         // Count iterations not triggered
 // Conversion of units
 extern int timeLenXAxis;            // Total Length of X Axis in us
-#define mintimeLenXAxis 2000;       // Min length of X Axis in us
-#define maxtimeLenXAxis 99999;      // Min length of X Axis in us
+//#define mintimeLenXAxis 3100;       // Min length of X Axis in us
+//#define maxtimeLenXAxis 16000;      // Max length of X Axis in us
 extern int loadValue;               // Conversion of X Axis time into timer load value
-#define tSample (timeLenXAxis*1000/arrayLen)
+#define tSample (timeLenXAxis*10/arrayLen) // Sample time in 0,1*us
 
 // Intterrupts
 #define cursorLoadValue 120000000    // Load Value of the cursor service routine trigger timer (100ms)
