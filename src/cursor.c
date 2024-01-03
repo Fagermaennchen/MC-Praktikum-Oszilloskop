@@ -119,7 +119,7 @@ void moveCursor1Position(int x, bool redraw){
         x=XaxisXend-1;
     }
     // Remove Cursor line at old position
-    window_set(cursor1DispPos,YaxisYbegin,cursor1DispPos,XaxisXend);
+    window_set(cursor1DispPos,YaxisYbegin,cursor1DispPos,YaxisYend);
     write_command(0x2C); //write pixel command
     int i;
     for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
@@ -137,7 +137,7 @@ void moveCursor1Position(int x, bool redraw){
         write_data((WHITE)&0xff); // blue
     }
     // Draw new line
-    window_set(x,YaxisYbegin,x,XaxisXend);
+    window_set(x,YaxisYbegin,x,YaxisYend);
     write_command(0x2C); //write pixel command
     for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
         //  Draw Color
@@ -170,7 +170,7 @@ void moveCursor2Position(int x, bool redraw){
         x=XaxisXend-1;
     }
     // Remove Cursor line at old position
-    window_set(cursor2DispPos,YaxisYbegin,cursor2DispPos,XaxisXend);
+    window_set(cursor2DispPos,YaxisYbegin,cursor2DispPos,YaxisYend);
     write_command(0x2C); //write pixel command
     int i;
     for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
@@ -188,7 +188,7 @@ void moveCursor2Position(int x, bool redraw){
         write_data((WHITE)&0xff); // blue
     }
     // Draw new line
-    window_set(x,YaxisYbegin,x,XaxisXend);
+    window_set(x,YaxisYbegin,x,YaxisYend);
     write_command(0x2C); //write pixel command
     for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
         //  Draw Color

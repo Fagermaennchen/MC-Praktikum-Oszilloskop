@@ -6,7 +6,7 @@
 #define commaHeight 23    // Comma width in pixels
 #define fontWidth 15    // Font width in pixels
 #define fontSpace 2     // font space inbetween in pixels
-#define fontArrayLen 38 // Length of fotn arrays
+#define fontArrayLen 38 // Length of font arrays
 
 // Arrays with indivual characters
 extern uint8_t font_C[fontArrayLen];
