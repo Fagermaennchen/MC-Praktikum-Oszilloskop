@@ -230,9 +230,9 @@ void drawLine(x0,y0,x1,y1,color)
     while(1){
         window_set(x0,y0,x0,y0);
         write_command(0x2C); //write pixel command
-        write_data((WHITE>>16)&0xff); // red
-        write_data((WHITE>>8)&0xff); // green
-        write_data((WHITE)&0xff); // blue
+        write_data((color>>16)&0xff); // red
+        write_data((color>>8)&0xff); // green
+        write_data((color)&0xff); // blue
         if(x0 == x1 && y0 == y1) break;
         e2 = 2 * err;
         if(e2 > dy){
