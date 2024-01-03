@@ -46,7 +46,7 @@ extern int loadValue;               // Conversion of X Axis time into timer load
 #define tSample (timeLenXAxis*10/arrayLen) // Sample time in 0,1*us
 
 // Intterrupts
-#define cursorLoadValue 120000000    // Load Value of the cursor service routine trigger timer (100ms)
+#define cursorLoadValue 30000000    // Load Value of the cursor service routine trigger timer (25ms)
 extern int displayWriteCommandSemaphore;            // Semaphore to prevent two display write commands interfering
 
 extern int adcResolution;            // to make ADC resolution adjustable for timebase slider

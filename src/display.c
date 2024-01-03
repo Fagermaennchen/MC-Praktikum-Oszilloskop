@@ -216,23 +216,27 @@ void drawRectangle(x0,y0,x1,y1,color){
 
 void drawLine(x0,y0,x1,y1,color)
 {
-    // Abort, if another write process is running
-    if(displayWriteCommandSemaphore){
-        return;
-    }
-    // Set Semaphore to block other write processes
-    displayWriteCommandSemaphore = 1;
-    // Draw Line
+
+
     int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
     int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
     int err = dx + dy, e2;
 
     while(1){
+        // Abort, if another write process is running
+        if(displayWriteCommandSemaphore){
+            return;
+        }
+        // Set Semaphore to block other write processes
+        displayWriteCommandSemaphore = 1;
+        // Draw Line
         window_set(x0,y0,x0,y0);
         write_command(0x2C); //write pixel command
         write_data((color>>16)&0xff); // red
         write_data((color>>8)&0xff); // green
         write_data((color)&0xff); // blue
+        // Reset Semaphore to free other write processes
+        displayWriteCommandSemaphore = 0;
         if(x0 == x1 && y0 == y1) break;
         e2 = 2 * err;
         if(e2 > dy){
@@ -243,9 +247,9 @@ void drawLine(x0,y0,x1,y1,color)
             err += dx;
             y0 += sy;
         }
+
     }
-    // Reset Semaphore to free other write processes
-    displayWriteCommandSemaphore = 0;
+
 
 }
 
