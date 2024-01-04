@@ -42,7 +42,7 @@ void initValueDescriptions(void){
     drawFont(font_t, xStartDeltaT+fontWidth+fontSpace, yStartCHfirstLine, WHITE, BLACK);
     drawFont(font_colon, xStartDeltaT+2*(fontWidth+fontSpace), yStartCHfirstLine, WHITE, BLACK);
     // Draw Time
-    drawMikroSeconds(0,xStartValTime,yStartCHfirstLine, WHITE, BLACK);
+    drawMilliSeconds(0,xStartValTime,yStartCHfirstLine, WHITE, BLACK);
 
     //Channel 2
     drawFont(font_C, xStartCHX, yStartCHsecondLine, BLUE, BLACK);
@@ -70,7 +70,7 @@ void resetValueDescriptions(void){
       // Draw Cursor 2 Values
       drawMilliVolt(0,xStartVol2,yStartCHfirstLine,RED,BLACK,true);
       // Draw Time
-      drawMikroSeconds(0,xStartValTime,yStartCHfirstLine, WHITE, BLACK);
+      drawMilliSeconds(0,xStartValTime,yStartCHfirstLine, WHITE, BLACK);
       //Channel 2
       // Draw Delta Voltage
       drawFont(font_delta, xStartDelta, yStartCHsecondLine, BLUE, BLACK);
@@ -88,18 +88,18 @@ void updateCursorValues(void){            // Moves the cursors position on scree
     //printf("CH1: %d, CH2 : %d \n",resultsCH1[cursor1ArrPos],resultsCH2[cursor1ArrPos]);
     // Channel 1
     // Draw Delta Voltage
-    drawDeltaVolt((convertADCtoVolt(resultsCH1[cursor1ArrPos])-convertADCtoVolt(resultsCH1[cursor2ArrPos]))/10,xStartDeltaVolVal,yStartCHfirstLine,YELLOW,BLACK);
+    drawDeltaVolt((convertADCtoVolt(resultsCH1[cursor1ArrPos])-convertADCtoVolt(resultsCH1[cursor2ArrPos])),xStartDeltaVolVal,yStartCHfirstLine,YELLOW,BLACK);
     // Draw Cursor 1 Values
     drawMilliVolt(convertADCtoVolt(resultsCH1[cursor1ArrPos]),xStartVol1,yStartCHfirstLine,GREEN,BLACK,true);
     // Draw Cursor 2 Values
     drawMilliVolt(convertADCtoVolt(resultsCH1[cursor2ArrPos]),xStartVol2,yStartCHfirstLine,RED,BLACK,true);
     // Draw Time Description
     // Draw Time
-    drawMikroSeconds((cursor1ArrPos-cursor2ArrPos)*tSample,xStartValTime,yStartCHfirstLine, WHITE, BLACK);
+    drawMilliSeconds((cursor1ArrPos-cursor2ArrPos)*tSample,xStartValTime,yStartCHfirstLine, WHITE, BLACK);
 
     //Channel 2
     // Draw Delta Voltage
-    drawDeltaVolt((convertADCtoVolt(resultsCH2[cursor1ArrPos])-convertADCtoVolt(resultsCH2[cursor2ArrPos]))/10,xStartDeltaVolVal,yStartCHsecondLine,BLUE,BLACK);
+    drawDeltaVolt((convertADCtoVolt(resultsCH2[cursor1ArrPos])-convertADCtoVolt(resultsCH2[cursor2ArrPos])),xStartDeltaVolVal,yStartCHsecondLine,BLUE,BLACK);
     // Draw Cursor 1 Values
     drawMilliVolt(convertADCtoVolt(resultsCH2[cursor1ArrPos]),xStartVol1,yStartCHsecondLine,GREEN,BLACK,true);
     // Draw Cursor 2 Values
@@ -119,7 +119,7 @@ void moveCursor1Position(int x, bool redraw){
         x=XaxisXend-1;
     }
     // Remove Cursor line at old position
-    window_set(cursor1DispPos,YaxisYbegin,cursor1DispPos,XaxisXend);
+    window_set(cursor1DispPos,YaxisYbegin,cursor1DispPos,YaxisYend);
     write_command(0x2C); //write pixel command
     int i;
     for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
@@ -137,7 +137,7 @@ void moveCursor1Position(int x, bool redraw){
         write_data((WHITE)&0xff); // blue
     }
     // Draw new line
-    window_set(x,YaxisYbegin,x,XaxisXend);
+    window_set(x,YaxisYbegin,x,YaxisYend);
     write_command(0x2C); //write pixel command
     for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
         //  Draw Color
@@ -170,7 +170,7 @@ void moveCursor2Position(int x, bool redraw){
         x=XaxisXend-1;
     }
     // Remove Cursor line at old position
-    window_set(cursor2DispPos,YaxisYbegin,cursor2DispPos,XaxisXend);
+    window_set(cursor2DispPos,YaxisYbegin,cursor2DispPos,YaxisYend);
     write_command(0x2C); //write pixel command
     int i;
     for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
@@ -188,7 +188,7 @@ void moveCursor2Position(int x, bool redraw){
         write_data((WHITE)&0xff); // blue
     }
     // Draw new line
-    window_set(x,YaxisYbegin,x,XaxisXend);
+    window_set(x,YaxisYbegin,x,YaxisYend);
     write_command(0x2C); //write pixel command
     for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
         //  Draw Color

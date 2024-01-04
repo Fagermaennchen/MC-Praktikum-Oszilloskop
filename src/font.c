@@ -25,7 +25,7 @@ extern uint8_t font_C[] = {
     0x38, 0x00,  //..%%%........
     0x1f, 0xf0,  //...%%%%%%%%%.
     0x07, 0xf0,  //.....%%%%%%%.
-    0x00, 0x00,  //.............
+    0x00, 0x00  //.............
 
 };
 extern uint8_t font_H[] = {
@@ -47,7 +47,7 @@ extern uint8_t font_H[] = {
      0x60, 0x30,  //.%%.......%%
      0x60, 0x30,  //.%%.......%%
      0x60, 0x30,  //.%%.......%%
-     0x00, 0x00,  //............
+     0x00, 0x00  //............
 };
 extern uint8_t font_m[] = {
      0x00, 0x00,  //.............
@@ -68,7 +68,7 @@ extern uint8_t font_m[] = {
      0xc6, 0x30,  //%%...%%...%%.
      0xc6, 0x30,  //%%...%%...%%.
      0xc6, 0x30,  //%%...%%...%%.
-     0x00, 0x00,  //.............
+     0x00, 0x00  //.............
 };
 
 extern uint8_t font_t[] = {
@@ -90,7 +90,7 @@ extern uint8_t font_t[] = {
     0x0c, 0x00,  //....%%......
     0x0f, 0xe0,  //....%%%%%%%.
     0x03, 0xe0,  //......%%%%%.
-    0x00, 0x00,  //............
+    0x00, 0x00  //............
 };
 
 extern uint8_t font_r[] = {
@@ -112,7 +112,7 @@ extern uint8_t font_r[] = {
     0xc0, 0x00,  //%%........
     0xc0, 0x00,  //%%........
     0xc0, 0x00,  //%%........
-    0x00, 0x00,  //..........
+    0x00, 0x00  //..........
 };
 
 extern uint8_t font_i[] = {
@@ -134,7 +134,7 @@ extern uint8_t font_i[] = {
     0x0c, 0x00,  //....%%.....
     0xff, 0xc0,  //%%%%%%%%%%.
     0xff, 0xe0,  //%%%%%%%%%%%
-    0x00, 0x00,  //...........
+    0x00, 0x00  //...........
 };
 
 extern uint8_t font_g[] = {
@@ -156,7 +156,7 @@ extern uint8_t font_g[] = {
     0xc0, 0x30,  //%%........%%.
     0xe0, 0x70,  //%%%......%%%.
     0x7f, 0xe0,  //.%%%%%%%%%%..
-    0x3f, 0x80,  //..%%%%%%%....
+    0x3f, 0x80  //..%%%%%%%....
 };
 
 
@@ -179,7 +179,7 @@ extern uint8_t font_s[] = {
         0x01, 0xc0,  //.......%%%
         0xff, 0x80,  //%%%%%%%%%.
         0x7f, 0x00,  //.%%%%%%%..
-        0x00, 0x00,  //..........
+        0x00, 0x00  //..........
 };
 
 extern uint8_t font_V[] = {
@@ -201,7 +201,7 @@ extern uint8_t font_V[] = {
      0x07, 0x80,  //.....%%%%.....
      0x03, 0x80,  //......%%%.....
      0x03, 0x00,  //......%%......
-     0x00, 0x00,  //..............
+     0x00, 0x00  //..............
 };
 
 extern uint8_t font_u[] = {
@@ -223,7 +223,7 @@ extern uint8_t font_u[] = {
     0x70, 0xf0,  //.%%%....%%%%
     0x3f, 0xf0,  //..%%%%%%%%%%
     0x1f, 0x30,  //...%%%%%..%%
-    0x00, 0x00,  //............
+    0x00, 0x00  //............
 };
 
 extern uint8_t font_A[] = {
@@ -245,7 +245,7 @@ extern uint8_t font_A[] = {
     0x60, 0x18,  //.%%........%%.
     0x60, 0x1c,  //.%%........%%%
     0x60, 0x0c,  //.%%.........%%
-    0x00, 0x00,  //..............
+    0x00, 0x00  //..............
 };
 
 extern uint8_t font_W[] = {
@@ -267,7 +267,7 @@ extern uint8_t font_W[] = {
     0x38, 0x78,  //..%%%....%%%%..
     0x38, 0x30,  //..%%%.....%%...
     0x38, 0x30,  //..%%%.....%%...
-    0x00, 0x00,  //...............
+    0x00, 0x00  //...............
 };
 
 extern uint8_t font_0[] = {
@@ -289,7 +289,7 @@ extern uint8_t font_0[] = {
      0x70, 0xe0,  //.%%%....%%%..
      0x3f, 0xc0,  //..%%%%%%%%...
      0x0f, 0x80,  //....%%%%%....
-     0x00, 0x00,  //.............
+     0x00, 0x00  //.............
 
 };
 
@@ -312,7 +312,7 @@ extern uint8_t font_1[] = {
     0x01, 0x80,  //.....%%..
     0x01, 0x80,  //.....%%..
     0x01, 0x80,  //.....%%..
-    0x01, 0x80,  //.....%%..
+    0x01, 0x80  //.....%%..
 };
 
 extern uint8_t font_2[] = {
@@ -334,7 +334,7 @@ extern uint8_t font_2[] = {
     0x30, 0x00,  //..%%........
     0x7f, 0xe0,  //.%%%%%%%%%%.
     0x7f, 0xf0,  //.%%%%%%%%%%%
-    0x00, 0x00,  //............
+    0x00, 0x00  //............
 
 };
 
@@ -357,7 +357,7 @@ extern uint8_t font_3[] = {
      0x00, 0xe0,  //........%%%.
      0x7f, 0xc0,  //.%%%%%%%%%..
      0x3f, 0x00,  //..%%%%%%....
-     0x00, 0x00,  //............
+     0x00, 0x00  //............
 
 };
 
@@ -380,7 +380,7 @@ extern uint8_t font_4[] = {
      0x00, 0x60,  //.........%%...
      0x00, 0x60,  //.........%%...
      0x00, 0x60,  //.........%%...
-     0x00, 0x00,  //..............
+     0x00, 0x00  //..............
 
 };
 
@@ -403,7 +403,7 @@ extern uint8_t font_5[] = {
     0x60, 0xe0,  //.%.. .... %%%.
     0x7f, 0xc0,  //.%%% %%%% %%..
     0x3f, 0x00,  //..%% %%%%....
-    0x00, 0x00,  //.... ...........
+    0x00, 0x00  //.... ...........
 
 
 
@@ -428,7 +428,7 @@ extern uint8_t font_6[] = {
     0x38, 0xe0,  //..%%%...%%%.
     0x1f, 0xc0,  //...%%%%%%%..
     0x0f, 0x80,  //....%%%%%...
-    0x00, 0x00,  //............
+    0x00, 0x00  //............
 
 };
 
@@ -451,7 +451,7 @@ extern uint8_t font_7[] = {
      0x0c, 0x00,  //....%%......
      0x0c, 0x00,  //....%%......
      0x18, 0x00,  //...%%.......
-     0x00, 0x00,  //............
+     0x00, 0x00  //............
 
 };
 extern uint8_t font_8[] = {
@@ -473,7 +473,7 @@ extern uint8_t font_8[] = {
      0x70, 0x60,  //.%%%.....%%.
      0x3f, 0xc0,  //..%%%%%%%%..
      0x1f, 0x80,  //...%%%%%%...
-     0x00, 0x00,  //............
+     0x00, 0x00  //............
 
 };
 
@@ -496,7 +496,7 @@ extern uint8_t font_9[] = {
      0x01, 0xc0,  //.......%%%..
      0x3f, 0x80,  //..%%%%%%%...
      0x3e, 0x00,  //..%%%%%.....
-     0x00, 0x00,  //............
+     0x00, 0x00  //............
 
 };
 
@@ -520,30 +520,34 @@ extern uint8_t font_colon[] = {
      0x70,0x00,  //.%%%
      0x60,0x00,  //.%%.
      0x00,0x00,  //....
-     0x00,0x00,  //....
+     0x00,0x00  //....
 
 };
 
 extern uint8_t font_comma[] = {
-     0x00,  //.....
-     0x00,  //.....
-     0x00, //.....
      0x00,     //.....
-     0x00,       //.....
-     0x00,   //.....
-     0x00, //.....
      0x00,     //.....
-     0x00,  //.....
-     0x00,    //.....
-     0x70,  //.%%%.
+     0x00,     //.....
+     0x00,     //.....
+     0x00,     //.....
+     0x00,     //.....
+     0x00,     //.....
+     0x00,     //.....
+     0x00,     //.....
+     0x00,     //.....
+     0x00,     //.....
+     0x00,     //.....
+     0x00,     //.....
+     0x00,     //.....
      0x70,     //.%%%.
-     0x60,      //.%%..
+     0x70,     //.%%%.
      0x60,     //.%%..
-     0x60,      //.%%..
-     0xc0, //%%...
-     0x00,      //.....
+     0x60,     //.%%..
+     0x60,     //.%%..
+     0xc0,     //%%...
      0x00,     //.....
      0x00,     //.....
+     0x00     //.....
 };
 
 extern uint8_t font_delta[] = {
@@ -564,7 +568,7 @@ extern uint8_t font_delta[] = {
     0x60, 0x0c,  //.%%..........%%.
     0x60, 0x0c,  //.%%........   %%.
     0xFF, 0xFe,  //.%%%%%%%%%%%%%%%
-    0xFF, 0xFe,  //.%%%%%%%%%%%%%
+    0xFF, 0xFe  //.%%%%%%%%%%%%%
 
 };
 
@@ -587,7 +591,7 @@ extern uint8_t font_minus[] = {
     0x00, 0x00,  //.........
     0x00, 0x00,  //.........
     0x00, 0x00,  //.........
-    0x00, 0x00,  //.........
+    0x00, 0x00  //.........
 };
 
 extern uint8_t font_space[] = {
@@ -609,13 +613,20 @@ extern uint8_t font_space[] = {
     0x00, 0x00,  //.........
     0x00, 0x00,  //.........
     0x00, 0x00,  //.........
-    0x00, 0x00,  //.........
+    0x00, 0x00  //.........
 };
 
 
 
 void drawFont(const uint8_t character[],int x, int y,int color,int backdrop){
-    window_set(x,y,x+fontWidth,x+fontHeight); // Set Window
+    // Abort, if another write process is running
+    if(displayWriteCommandSemaphore){
+        return;
+    }
+    // Set Semaphore to block other write processes
+    displayWriteCommandSemaphore = 1;
+    // Draw Font
+    window_set(x,y,x+fontWidth,y+fontHeight-1); // Set Window
     write_command(0x2C); //write pixel command
     int i;
     int k;
@@ -635,14 +646,23 @@ void drawFont(const uint8_t character[],int x, int y,int color,int backdrop){
                 write_data((backdrop)&0xff); // blue
             }
         }
+    // Reset Semaphore to free other write processes
+    displayWriteCommandSemaphore = 0;
 }
 void drawComma(int x, int y,int color,int backdrop){
-    window_set(x,y,x+7,x+fontHeight); // Set Window
+    // Abort, if another write process is running
+    if(displayWriteCommandSemaphore){
+        return;
+    }
+    // Set Semaphore to block other write processes
+    displayWriteCommandSemaphore = 1;
+    // Draw Comma
+    window_set(x,y,x+7,y+commaHeight-1); // Set Window
     write_command(0x2C); //write pixel command
     int i;
     int k;
     // Draw each Pixel
-    for(i=0;i<fontHeight ;i++)     // Each Entry in Byte Array
+    for(i=0;i<commaHeight ;i++)     // Each Entry in Byte Array
         for(k=0;k<8;k++){
         //     Draw Color if 1
             if(font_comma[i] & 0x80 >> k){
@@ -657,6 +677,8 @@ void drawComma(int x, int y,int color,int backdrop){
                 write_data((backdrop)&0xff); // blue
             }
         }
+    // Reset Semaphore to free other write processes
+    displayWriteCommandSemaphore = 0;
 }
 
 int* numbtofont(int number){
@@ -704,7 +726,7 @@ void drawMilliVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroun
         drawFont(numbtofont(digit[i]),x+(i+1)*(fontWidth),y,foregroundColor,backgroundColor);
     }
     // Draw Comma
-    drawComma(x+fontWidth+3*(fontWidth),y+5,foregroundColor,backgroundColor);
+    drawComma(x+fontWidth+3*(fontWidth),y,foregroundColor,backgroundColor);
     // Draw last  digits
     drawFont(numbtofont(digit[i]),x+4.7*fontWidth,y,foregroundColor,backgroundColor);
     // Draw mV
@@ -713,49 +735,103 @@ void drawMilliVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroun
 }
 
 void drawDeltaVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroundColor){
+    // Draws an absolute 4 digit voltage in mV or V (XXX,X mV or X,XXX V) at postitions x and y
+    int commaPosition;
     // Make positive so the conversion works as intended
     if(voltage_mv<0){
         voltage_mv *= -1;
     }
-    // Draws a 4 digit voltage in mV (XXXX mV) at postitions x and y
+    // Determine Unit
+    if(voltage_mv > 9999){  // Volt needed for more then 999,9 mV
+        voltage_mv /= 10;   // Calculate Voltage in V
+        drawFont(font_V,x+2*(fontWidth),y,backgroundColor,backgroundColor); // Cover possible digit leftovers of previous second digit
+        drawComma(x+fontWidth+1*(fontWidth)+0.1*(fontWidth),y,foregroundColor,backgroundColor);   // Put Comma after first digit
+        drawComma(x+fontWidth+3*(fontWidth)+0.1*(fontWidth),y,backgroundColor,backgroundColor);   // Delete possible Comma after third digit
+        commaPosition = 1;  // Remember comma position
+        // Draw V
+        drawFont(font_V,x+6*fontWidth+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+        drawFont(font_m,x+7*fontWidth+fontSpace+0.1*(fontWidth),y,backgroundColor,backgroundColor); // Delete second digit
+    }
+    else{   // Millivot needed for less then 999,9 mV
+        drawComma(x+fontWidth+3*(fontWidth)+0.1*(fontWidth),y,foregroundColor,backgroundColor);   // Put Comma after third digit
+        drawComma(x+fontWidth+1*(fontWidth)+0.1*(fontWidth),y,backgroundColor,backgroundColor);   // Delete possible Comma after third digit
+        commaPosition = 3;  // Remember comma position
+        // Draw mV
+        drawFont(font_m,x+6*(fontWidth)+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+        drawFont(font_V,x+7*fontWidth+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+    }
+
     int digit[4];
     digit[0] = (int)(voltage_mv/1000);  // Calculate digit 0
     digit[1] = (int)((voltage_mv-digit[0]*1000)/100);   // Calculate digit 2
     digit[2] = (int)((voltage_mv-digit[0]*1000-digit[1]*100)/10);   // Calculate digit 2
     digit[3] = (int)(voltage_mv-digit[0]*1000-digit[1]*100-digit[2]*10)%10;   // Calculate digit 3
-    // Draw digits
+    // Draw digits depending on comma position
     int i;
-    for(i=0;i<4;i++){
+    for(i=0;i<commaPosition;i++){       // Draw digits before comma
         drawFont(numbtofont(digit[i]),x+(i+1)*(fontWidth),y,foregroundColor,backgroundColor);
     }
-    // Draw mV
-    drawFont(font_m,x+6*(fontWidth)+0.1*(fontWidth),y,foregroundColor,backgroundColor);
-    drawFont(font_V,x+7*fontWidth+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+    for(i=commaPosition;i<4;i++){       // Draw digits after comma
+        drawFont(numbtofont(digit[i]),x+(i+1)*(fontWidth)+0.7*(fontWidth),y,foregroundColor,backgroundColor);
+    }
+
 }
 
-void drawMikroSeconds(int time_us,int x, int y,int foregroundColor,int backgroundColor){
-    // No Negative
+void drawMilliSeconds(int time_us,int x, int y,int foregroundColor,int backgroundColor){
+    // Draws a 4 digit time in us or ms (XXX,X mV or X,XXX ms)  at postitions x and y
+    int commaPosition = 1;
+    // No negatives
     if(time_us<0){
-        time_us *= -1;           // Make positive so the conversion works as intended
+        time_us *= -1;
     }
-    // Draws a 4 digit time in ms (XXX,1 mV) at postitions x and y
+    // Determine Comma position
+    if(time_us > 99999){  // Milliseconds and Comma after 2nd digit needed for more then 9999,9 us
+        time_us /= 100;   // Calculate Time
+        drawFont(font_V,x+2*(fontWidth),y,backgroundColor,backgroundColor); // Cover possible digit leftovers of previous second digit
+        drawComma(x+fontWidth+2*(fontWidth)+0.1*(fontWidth),y,foregroundColor,backgroundColor);   // Put Comma after first digit
+        drawComma(x+fontWidth+3*(fontWidth)+0.1*(fontWidth),y,backgroundColor,backgroundColor);   // Delete possible Comma after third digit
+        drawComma(x+fontWidth+1*(fontWidth)+0.1*(fontWidth),y,backgroundColor,backgroundColor);   // Delete possible Comma after first digit
+        commaPosition = 2;  // Remember comma position
+        // Draw ms
+        drawFont(font_m,x+6*(fontWidth)+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+        drawFont(font_s,x+7*fontWidth+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+    }
+    else if (time_us > 9999){   // Milliseconds and  Comma after 1st digit needed for more then 999,9 us
+        time_us /= 10;   // Calculate Time
+        drawFont(font_V,x+2*(fontWidth),y,backgroundColor,backgroundColor); // Cover possible digit leftovers of previous second digit
+        drawComma(x+fontWidth+1*(fontWidth)+0.1*(fontWidth),y,foregroundColor,backgroundColor);   // Put Comma after first digit
+        drawComma(x+fontWidth+2*(fontWidth)+0.1*(fontWidth),y,backgroundColor,backgroundColor);   // Delete possible Comma after second digit
+        drawComma(x+fontWidth+3*(fontWidth)+0.1*(fontWidth),y,backgroundColor,backgroundColor);   // Delete possible Comma after third digit
+        commaPosition = 1;  // Remember comma position
+        // Draw ms
+        drawFont(font_m,x+6*(fontWidth)+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+        drawFont(font_s,x+7*fontWidth+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+    }
+    else{   // Mikroseconds and Comma after 3rd digit needed for less then 999,9 us
+        drawComma(x+fontWidth+3*(fontWidth)+0.1*(fontWidth),y,foregroundColor,backgroundColor);   // Put Comma after third digit
+        drawComma(x+fontWidth+2*(fontWidth)+0.1*(fontWidth),y,backgroundColor,backgroundColor);   // Delete possible Comma after second digit
+        drawComma(x+fontWidth+1*(fontWidth)+0.1*(fontWidth),y,backgroundColor,backgroundColor);   // Delete possible Comma after first digit
+        commaPosition = 3;  // Remember comma position
+        // Draw us
+        drawFont(font_u,x+6*(fontWidth)+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+        drawFont(font_s,x+7*fontWidth+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+    }
+
     int digit[4];
     digit[0] = (int)(time_us/1000);  // Calculate digit 0
     digit[1] = (int)((time_us-digit[0]*1000)/100);   // Calculate digit 2
     digit[2] = (int)((time_us-digit[0]*1000-digit[1]*100)/10);   // Calculate digit 2
     digit[3] = (int)(time_us-digit[0]*1000-digit[1]*100-digit[2]*10)%10;   // Calculate digit 3
-    // Draw first 3 digits digit
+    // Draw digits depending on comma position
     int i;
-    for(i=0;i<3;i++){
+    for(i=0;i<commaPosition;i++){       // Draw digits before comma
         drawFont(numbtofont(digit[i]),x+(i+1)*(fontWidth),y,foregroundColor,backgroundColor);
     }
-    // Draw Comma
-    drawComma(x+fontWidth+3*(fontWidth)+0.1*(fontWidth),y+5,foregroundColor,backgroundColor);
-    // Draw last  digits
-    drawFont(numbtofont(digit[i]),x+4.7*fontWidth,y,foregroundColor,backgroundColor);
-    // Draw mV
-    drawFont(font_u,x+6*(fontWidth)+0.1*(fontWidth),y,foregroundColor,backgroundColor);
-    drawFont(font_s,x+7*fontWidth+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
+    for(i=commaPosition;i<4;i++){       // Draw digits after comma
+        drawFont(numbtofont(digit[i]),x+(i+1)*(fontWidth)+0.7*(fontWidth),y,foregroundColor,backgroundColor);
+    }
+
+
 }
 
 void drawLogo(void){

@@ -13,6 +13,8 @@ triggered = 0;             // Remeber if triggered
 noTrigCounter = 0;         // Count iterations not triggered
 // Conversion of units
 timeLenXAxis = 10120;       // initial TotalLength of X Axis in us (460*22)-->middlePixelTimebase*factor
+// Intterrupts
+displayWriteCommandSemaphore = 0;            // Semaphore to prevent two display write commands interfering
 /* some predefined basic colors to use with names */
 colorarray[]={0x00000000,0x00FFFFFF,0x00AAAAAA,0x00FF0000,0x0000FF00,0x000000FF,0x00FFFF00};
 xpos = 0;

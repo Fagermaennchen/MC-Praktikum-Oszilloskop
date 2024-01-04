@@ -3,9 +3,10 @@
 
 // Font NotoMono
 #define fontHeight 19   // Font Height in pixels
+#define commaHeight 23    // Comma width in pixels
 #define fontWidth 15    // Font width in pixels
 #define fontSpace 2     // font space inbetween in pixels
-#define fontArrayLen 38 // Length of fotn arrays
+#define fontArrayLen 38 // Length of font arrays
 
 // Arrays with indivual characters
 extern uint8_t font_C[fontArrayLen];
@@ -41,8 +42,8 @@ void drawFont(const uint8_t character[],int x, int y,int color,int backdrop); //
 void drawComma(int x, int y,int color,int backdrop); // Draws a comma
 int* numbtofont(int number);    // Maps a font array to a one digit number
 void drawMilliVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroundColor,bool includeNegatives);    // Draws a 4 digit voltage in mV (XXX,1 mV) at postitions x and y
-void drawMikroSeconds(int time_us,int x, int y,int foregroundColor,int backgroundColor);    // Draws a 4 digit time in us (XXX,1 mV) at postitions x and y
-void drawDeltaVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroundColor);    // Draws an absolute 4 digit voltage in mV (XXXX mV) at postitions x and y
+void drawMikroSeconds(int time_us,int x, int y,int foregroundColor,int backgroundColor);    // Draws a 4 digit time in or ms or us (XX,XX ms or X,XXX ms or X,XXX us)  at postitions x and y
+void drawDeltaVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroundColor);    // Draws an absolute 4 digit voltage in mV or V (XXX,X mV or X,XXX V) at postitions x and y
 void drawText(void); // Draws the Channal 1 Line
 void drawLogo(void); // Draws the Haw Logo
 
