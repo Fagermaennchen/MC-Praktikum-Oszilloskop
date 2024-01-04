@@ -6,7 +6,7 @@
 arrayPosition = 0;      // Current Position in the Arrays
 // Triggering at CH1
 triggerZeroReached = 0;    // Remember, if zero has been reached
-triggerValue = 2500;       // Value, at which to start saving the data
+triggerValue = 2058;       // Value, at which to start saving the data, calculated value for middle of trigSlider at Y=220
 prevValueCH1 = 9999;       // Last Value, to check if Trigger has been reached
 prevPrevValueCH1 = 9999;   // Value before Last Value, to check filter noise at trigger check
 triggered = 0;             // Remeber if triggered

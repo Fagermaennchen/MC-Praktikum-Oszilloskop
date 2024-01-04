@@ -56,15 +56,15 @@ int main(void){
     startADC();
     startCursorValueUpdates();
     // Start endless loop
-    int j,k;
+    int j;
     for(j = 0; j<arrayLen;j++){
         oldVoltageCH1[j]=0;
         oldVoltageCH2[j]=0;
     }
-    k=0;
+    j=0;
      while(1)
      {
-        readTouchValues();
+        processTouch();
         drawVoltageCurve();
      }
 }

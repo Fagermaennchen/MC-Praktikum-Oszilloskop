@@ -23,11 +23,13 @@
 
 // Value Array
 extern int arrayPosition;      // Current Position in the Arrays
-#define arrayLen 678   // Fixed lenght of Arrays
+#define arrayLen 657   // Fixed lenght of Arrays, old one: 678
 int resultsCH1[arrayLen];   // Array for Channel 1
 int resultsCH2[arrayLen];   // Array for Channel 2
 int oldVoltageCH1[arrayLen];
 int oldVoltageCH2[arrayLen];
+int nextOldVoltageCH1[arrayLen];
+int nextOldVoltageCH2[arrayLen];
 
 // Triggering at CH1
 #define triggerZeroValue 2000     // Value, at which the Sine function is Zero and the derivative is positive
