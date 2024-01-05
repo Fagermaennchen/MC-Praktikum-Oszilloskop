@@ -9,6 +9,8 @@
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
 #include "driverlib/timer.h"
 
+
+
 /*********************************************************************************
                         Touch configuration
 *********************************************************************************/
@@ -120,4 +122,14 @@ void setupProcessTouch_routine(void){
     TimerIntEnable(TIMER3_BASE, TIMER_TIMA_TIMEOUT);
     TimerIntRegister(TIMER3_BASE, TIMER_A, processTouch);
     IntPrioritySet(INT_TIMER3A, 0x20); // Adjust priority as needed
+}
+
+int pixelPosY(int ypos){
+    // Converts the Pixel position byte into the selected pixel
+    return ypos*480/4095;
+}
+
+int pixelPosX(int xpos){
+    // Converts the Pixel position byte into the selected pixel
+    return 800-xpos*800/4095;
 }

@@ -210,14 +210,5 @@ void drawLine(int x0,int y0,int x1,int y1,enum colors color)
 
 }
 
-int pixelPosY(int ypos){
-    // Converts the Pixel position byte into the selected pixel
-    return ypos*480/4095;
-}
-
-int pixelPosX(int xpos){
-    // Converts the Pixel position byte into the selected pixel
-    return 800-xpos*800/4095;
-}
 
 

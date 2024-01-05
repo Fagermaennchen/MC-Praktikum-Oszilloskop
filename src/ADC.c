@@ -105,7 +105,7 @@ void readADCvalue_routine(void)
         // Array full: Start Again
         if (arrayPosition == arrayLen)
         {
-            arrayPosition = 0;          // Reset Array Position
+            arrayPosition = -1;          // Reset Array Position
             triggerZeroReached = false;  // Reset Trigger Status
             triggered = false;
             prevValueCH1 = 9999;

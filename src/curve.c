@@ -142,6 +142,3 @@ void drawVoltageCurve(void){
         }
     }
 }
-
-
-
