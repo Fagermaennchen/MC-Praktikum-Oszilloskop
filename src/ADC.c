@@ -19,17 +19,19 @@
 // Values of Service Routine
 int resultCH1, resultCH2,k;
 
+
+// ADC clock changeable with timebase slider
 void changeADCclock(int timeSliderPos)
 {
     int wt = 0;
     adcResolution = timeSliderPos*4/170+1;
-   // printf("time slider pos %d\n",timeSliderPos);
-   // printf("adc divider pos %d\n",adcResolution);
     ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, adcResolution);  // Use the external OSC at 120MHz
     wt++;
 }
 
-void readADCvalue_routine(void){ // Service Routine to get the ADC Values
+// Service Routine to get the ADC Values
+void readADCvalue_routine(void)
+{
     ADCIntClear(ADC0_BASE, 0); // clear the interrupt
     // Get Results
     resultCH1 = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO for Channel 1
@@ -37,27 +39,27 @@ void readADCvalue_routine(void){ // Service Routine to get the ADC Values
     // Print result for debug purpose
    // printf("CH1: %d, Prev CH1: %d, Zero: %d, Trigger: %d , ZeroReached: %d \n",resultCH1,prevValueCH1,triggerZeroValue,triggerValue,triggerZeroReached);
     // Save Data to Array if Triggered
-    if(triggered){
+    if(triggered)
+    {
         resultsCH1[arrayPosition] =  resultCH1;
         resultsCH2[arrayPosition] =  resultCH2;
         // Array full: Start Again
-        if (arrayPosition == arrayLen){
+        if (arrayPosition == arrayLen)
+        {
             arrayPosition = 0;          // Reset Array Position
             triggerZeroReached = false;  // Reset Trigger Status
             triggered = false;
             prevValueCH1 = 9999;
             prevPrevValueCH1 = 9999;
-
-    //       printf("Restart Triggering");
         }
-        // Print result for debug purpose
-    //    printf("CH1: %d, CH2 %d \n",resultsCH1[arrayPosition],resultsCH2[arrayPosition]);
         arrayPosition++;
     }
 
-    else{
-        // Triggering at Channel 1: Check for Zero Value
-        if(triggerValue > triggerZeroValue ){       // Cross Zero on positive slop for trigger > 0
+    else
+    {
+        /******** Triggering at Channel 1: Check for Zero Value ********/
+        if(triggerValue > triggerZeroValue )            // Cross Zero on positive slop for trigger > 0
+        {
             if( prevValueCH1 < triggerZeroValue && resultCH1 > triggerZeroValue){      // Zero Value has been crossed on positive slope
                 triggerZeroReached = true;
             }
@@ -67,12 +69,14 @@ void readADCvalue_routine(void){ // Service Routine to get the ADC Values
                      triggerZeroReached = true;
             }
         }
-        // Triggering at Channel 2: Check if Trigger is crosses
+
+        /******** Triggering at Channel 2: Check if Trigger is crosses ********/
         if( triggerZeroReached && (((prevValueCH1 < triggerValue || prevPrevValueCH1 < triggerValue) && resultCH1 > triggerValue))) //Trigger crossed on positive slope
         {
             triggered = true;       // Remeber Trigger
             noTrigCounter = 0;   // Reset no Trigger Counter
         }
+
         // Detect not Triggerable signal (AC Coupling)
         if(noTrigCounter == 10000){
             // Set DC Signal to 0
@@ -81,9 +85,11 @@ void readADCvalue_routine(void){ // Service Routine to get the ADC Values
                 resultsCH2[k] = triggerZeroValue;
             }
         }
+
         // Save Current Value for next Trigger Check
         prevPrevValueCH1 = prevValueCH1;
         prevValueCH1 = resultCH1;
+
         // Increment no Trigger Counter
         noTrigCounter++;
     }
@@ -109,7 +115,7 @@ void setupADC(void){    // Setup the timer triggered ADC
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER0)) {}  // Wait for the Timer0 module to be ready
     TimerConfigure(TIMER0_BASE, (TIMER_CFG_A_PERIODIC ));   // Timer 0 in periodic mode
     //printf("load vlaue %d",loadValue);
-    TimerLoadSet(TIMER0_BASE,TIMER_A,loadValue);        // 1 Second Intervall
+    TimerLoadSet(TIMER0_BASE,TIMER_A,loadValueADC);        // 1 Second Intervall
     TimerControlTrigger(TIMER0_BASE,TIMER_A,true);      // Activate Timer ADC control Trigger
 
     // Start the ADC Clocking

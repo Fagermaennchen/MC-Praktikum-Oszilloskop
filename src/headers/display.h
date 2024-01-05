@@ -26,8 +26,10 @@ unsigned int touch_read();
 /********************************************************************************
                         Drawing functions
 *********************************************************************************/
-void drawRectangle(x0,y0,x1,y1,color);
-void drawLine(x0,y0,x1,y1,color);
+void drawRectangle(int x0,int y0,int x1,int y1,enum colors color);
+void drawLine(int x0,int y0,int x1,int y1,enum colors color);
 void moveTrigSliderPosition(int y);
-void readTouchValues(void);
+void moveTimeSliderPosition(int x);
+void processTouch(void);
+void setupTouchHandler(void);
 

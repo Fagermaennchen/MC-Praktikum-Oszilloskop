@@ -1,25 +1,23 @@
 
+#include <src/headers/globalVariables.h>
 #include <stdint.h>
 #include <stdbool.h> // type bool for giop.h
-#include "inc/hw_types.h"
-#include "inc/tm4c1294ncpdt.h"
 #include <stdio.h>   // Debug only
+#include "inc/tm4c1294ncpdt.h"
+#include "driverlib/timer.h"
+#include "driverlib/interrupt.h"
 #include <driverlib/sysctl.h>
+#include "inc/hw_types.h"
 #include <driverlib/gpio.h>     // GPIO_PIN_X
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
-#include <src/headers/globalVariables.h>
 #include "headers/font.h"
 #include "headers/display.h"
 #include "headers/cursor.h"
-#include "driverlib/timer.h"
 #include "headers/ADC.h"
 
 
 extern int trigSliderSelected = 0;      // Startup: not selected
 extern int timeSliderSelected = 0;      // Startup: not selected
-extern int trigSliderPos = 220;         // Startup y-position, x-position is fixed
-extern int timeSliderPos = 460;         // Startup x-position, y-position is fixed
-
 
 
 /********************************************************************************
@@ -201,7 +199,7 @@ unsigned int touch_read()
 /********************************************************************************
                         Drawing functions
 *********************************************************************************/
-void drawRectangle(x0,y0,x1,y1,color){
+void drawRectangle(int x0,int y0,int x1,int y1,enum colors color){
     window_set(x0,y0,x1,y1); // set rectangle position see B.4
     write_command(0x2C); //write pixel command
     int x,y;
@@ -214,7 +212,7 @@ void drawRectangle(x0,y0,x1,y1,color){
         }
 }
 
-void drawLine(x0,y0,x1,y1,color)
+void drawLine(int x0,int y0,int x1,int y1,enum colors color)
 {
 
 
@@ -263,85 +261,26 @@ int pixelPosX(int xpos){
     return 800-xpos*800/4095;
 }
 
-
-void moveTrigSliderPosition(int y){
-    // Moves the Trigger Slider
-
-    // Y-Range: 90->359 (resolution of 270 positions)
-    // Check y for upper bounds
-    if(y<(YaxisYbegin+10)){
-        y=(YaxisYbegin+10);
-    }
-    // Check y for lower bounds
-    else if(y>(YaxisYend-10)){
-        y=(YaxisYend-10);
-    }
-
-    //Remove sliderbutton at old position
-    drawRectangle(29, trigSliderPos-(sliderHeight/2), 57, trigSliderPos+(sliderHeight/2), BLACK);
-    drawRectangle(61, trigSliderPos-(sliderHeight/2), 89, trigSliderPos+(sliderHeight/2), BLACK);
-
-    trigSliderPos = y;
-    triggerValue = (400 - trigSliderPos) * 10;
-    //Draw new sliderbutton
-    drawRectangle(59-(sliderWidth/2), trigSliderPos-(sliderHeight/2), 59+(sliderWidth/2), trigSliderPos+(sliderHeight/2), GREY);
-
-}
-
-void moveTimeSliderPosition(int x){
-    // Moves the Timebase Slider
-
-    // Check x for left bounds
-    if(x<(160+10)){
-        x=(160+10);
-    }
-    // Check x for right bounds
-    else if(x>(759-10)){
-        x=(759-10);
-    }
-
-
-    //Remove sliderbutton at old position
-    drawRectangle(timeSliderPos-(sliderHeight/2),370,timeSliderPos+(sliderWidth/2),398,BLACK);
-    drawRectangle(timeSliderPos-(sliderHeight/2),402,timeSliderPos+(sliderWidth/2),430,BLACK);
-
-    timeSliderPos = x;
-    timeLenXAxis = timeSliderPos * 22;
-    loadValue = (timeLenXAxis*120/arrayLen);
-    TimerLoadSet(TIMER0_BASE,TIMER_A,loadValue);        // refresh timer
-
-    // adjust resolution of ADC
-    changeADCclock(timeSliderPos);
-
-
-    //Draw new sliderbutton
-    drawRectangle(timeSliderPos-(sliderHeight/2), 400-(sliderWidth/2), timeSliderPos+(sliderHeight/2), 400+(sliderWidth/2), GREY);
-    // Update cursors
-    updateCursorValues();
-
-}
-
-
-void readTouchValues(void){
+void processTouch(void){
+    TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
     //read Touch values
     touch_write(0xD0);                  //Touch Command XPos read
     int x;
-    for (x = 0; x < 100; x++);          //Busy wait
+    for (x = 0; x < 10; x++);          //Busy wait, 10 works well also, before: 100
     xpos = pixelPosX(touch_read());     //xpos value read ( 0......800 )
     touch_write(0x90);                  //Touch Command YPos read
-    for (x = 0; x < 100; x++);          //Busy wait
+    for (x = 0; x < 10; x++);          //Busy wait, 10 works well also, before: 100
     ypos = pixelPosY(touch_read());     //ypos value read ( 0.....480 )
-    // Adjust Touch widgets
-    // No touch detected
 
-    //printf("touch: xpos: %d ypos: %d \n",xpos,ypos);
+    // No touch: xpos=800 -> deselect all touch buttons
     if(xpos==800){
         // Redo selection
         cursorSelected = 0;
         trigSliderSelected = 0;
         timeSliderSelected = 0;
     }
-    // Cursor 1
+
+    /****** Cursor 1 *******/
     else if(cursorSelected == 1){    // When selected: Move to new position
         moveCursor1Position(xpos,true);
         updateCursorValues();
@@ -351,7 +290,8 @@ void readTouchValues(void){
 
         cursorSelected = 1;
     }
-    // Cursor 2
+
+    /****** Cursor 2 *******/
     else if(cursorSelected == 2){    // When selected: Move to new position
         moveCursor2Position(xpos,true);
         updateCursorValues();
@@ -360,14 +300,16 @@ void readTouchValues(void){
     else if((cursor2DispPos-cursorTouchWidth)<xpos && xpos<(cursor2DispPos+cursorTouchWidth) && ypos>YaxisYbegin && ypos<YaxisYend && cursorSelected == 0 ){ // When not selected, but hit: Inform about hit
         cursorSelected = 2;
     }
-    // Trigger Slider
+
+    /****** Triggerslider *******/
     else if(trigSliderSelected == 1){
         moveTrigSliderPosition(ypos);
     }
     else if((xpos>19)&&(xpos<99)&&(ypos>80)&&(ypos<360)&&(trigSliderSelected==0)){
         trigSliderSelected = 1;
     }
-    // Time Slider
+
+    /****** Timeslider *******/
     else if(timeSliderSelected == 1){
         moveTimeSliderPosition(xpos);
     }
@@ -376,4 +318,15 @@ void readTouchValues(void){
     }
 }
 
+void setupTouchHandler(void){
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);
+    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER1)){}
+    TimerConfigure(TIMER1_BASE, TIMER_CFG_A_PERIODIC);
+    TimerLoadSet(TIMER1_BASE, TIMER_A, loadValueTouch);
+    TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
+    TimerIntRegister(TIMER1_BASE, TIMER_A, processTouch);
+    IntPrioritySet(INT_TIMER1A, 0x20); // Adjust priority as needed
 
+    // Start Timer1
+    TimerEnable(TIMER1_BASE, TIMER_A);
+}

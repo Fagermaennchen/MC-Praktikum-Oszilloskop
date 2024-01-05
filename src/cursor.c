@@ -16,11 +16,11 @@
 
 
 // Global Variables
-cursor1ArrPos = 200;      // Cursor one start position in Array
-cursor2ArrPos = 400;      // Cursor two start position in Array
-cursor1DispPos = 221;         // Cursor one start position on Screen
-cursor2DispPos = 421;         // Cursor two start position on Screen
-cursorSelected = 0;     // Remeber if cursor is currently seclted
+cursor1ArrPos = 200;        // Cursor one start position in Array
+cursor2ArrPos = 400;        // Cursor two start position in Array
+cursor1DispPos = 221;       // Cursor one start position on Screen
+cursor2DispPos = 421;       // Cursor two start position on Screen
+cursorSelected = 0;         // Remember if cursor is currently selected
 
 
 void initValueDescriptions(void){
