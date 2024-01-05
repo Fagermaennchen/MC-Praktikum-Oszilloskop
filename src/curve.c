@@ -1,4 +1,11 @@
 #include <src/headers/globalVariables.h>
+#include <stdint.h>
+#include <stdio.h>   // Debug only
+#include "inc/tm4c1294ncpdt.h"
+#include "driverlib/timer.h"
+#include "driverlib/interrupt.h"
+#include <driverlib/sysctl.h>
+#include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
 #include "headers/curve.h"
 #include "headers/cursor.h"
 #include "headers/font.h"
@@ -60,10 +67,10 @@ void initTriggerAxis(void){
 
 void drawVoltageCurve(void){
     int i;                                          // Array iterator
-    int VoltageY, nextVoltageY;                                   // variable for receiving voltage from ADC array
+    int VoltageY/*, nextVoltageY*/;                 // variable for receiving voltage from ADC array
     double VoltagePixel;                            // calculated pixel (decimal) from voltage
     int VoltagePixelIntCH1,VoltagePixelIntCH2;      // precise INT pixel from decimal pixel
-    int nextVoltagePixelIntCH1, nextVoltagePixelIntCH2;
+    //int nextVoltagePixelIntCH1, nextVoltagePixelIntCH2;
 
     // Voltage reference: 0-3,5V
 
@@ -126,5 +133,18 @@ void drawVoltageCurve(void){
     }
 }
 
+void setupDrawVoltageCurveHandler(void){
+
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER2);               // Enable Timer 2 periphal
+    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER2)) {}     // Wait for Timer 2 module to be ready
+    TimerConfigure(TIMER2_BASE, TIMER_CFG_A_PERIODIC);          // Configure Timer 2 in periodic mode
+    TimerLoadSet(TIMER2_BASE, TIMER_A, loadValueDrawVoltage);   // Set the load value for Timer 2
+    TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);            // Enable Timer 2A timeout interrupt
+    TimerIntRegister(TIMER2_BASE, TIMER_A, drawVoltageCurve);
+    IntPrioritySet(INT_TIMER2A, 0x40); // Adjust priority as needed
+
+    // Start Timer2
+    TimerEnable(TIMER2_BASE, TIMER_A);
+}
 
 

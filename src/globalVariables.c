@@ -19,6 +19,8 @@ displayWriteCommandSemaphore = 0;            // Semaphore to prevent two display
 colorarray[]={0x00000000,0x00FFFFFF,0x00AAAAAA,0x00FF0000,0x0000FF00,0x000000FF,0x00FFFF00};
 xpos = 0;
 ypos = 0;
-loadValue = (10120*120/arrayLen);
+loadValueADC = (10120*120/arrayLen);
+loadValueTouch = (10120*120/arrayLen);
+loadValueDrawVoltage = (10120*120/arrayLen);
 adcResolution = 12;
 

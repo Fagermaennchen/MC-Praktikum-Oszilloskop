@@ -44,7 +44,7 @@ extern int noTrigCounter;         // Count iterations not triggered
 extern int timeLenXAxis;            // Total Length of X Axis in us
 //#define mintimeLenXAxis 3100;       // Min length of X Axis in us
 //#define maxtimeLenXAxis 16000;      // Max length of X Axis in us
-extern int loadValue;               // Conversion of X Axis time into timer load value
+extern int loadValueADC;               // Conversion of X Axis time into timer load value
 #define tSample (timeLenXAxis*10/arrayLen) // Sample time in 0,1*us
 
 // Intterrupts
@@ -52,7 +52,8 @@ extern int loadValue;               // Conversion of X Axis time into timer load
 extern int displayWriteCommandSemaphore;            // Semaphore to prevent two display write commands interfering
 
 extern int adcResolution;            // to make ADC resolution adjustable for timebase slider
-
+extern int loadValueDrawVoltage;
+extern int loadValueTouch;
 
 // constants for display initialization
 #define RST 0x10

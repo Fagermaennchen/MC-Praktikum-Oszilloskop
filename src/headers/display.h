@@ -31,4 +31,5 @@ void drawLine(int x0,int y0,int x1,int y1,enum colors color);
 void moveTrigSliderPosition(int y);
 void moveTimeSliderPosition(int x);
 void processTouch(void);
+void setupTouchHandler(void);
 

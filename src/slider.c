@@ -63,8 +63,8 @@ void moveTimeSliderPosition(int x){
 
     timeSliderPos = x;
     timeLenXAxis = timeSliderPos * 22;
-    loadValue = (timeLenXAxis*120/arrayLen);
-    TimerLoadSet(TIMER0_BASE,TIMER_A,loadValue);        // refresh timer
+    loadValueADC = (timeLenXAxis*120/arrayLen);
+    TimerLoadSet(TIMER0_BASE,TIMER_A,loadValueADC);        // refresh timer
 
     // adjust resolution of ADC
     changeADCclock(timeSliderPos);

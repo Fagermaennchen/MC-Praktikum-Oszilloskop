@@ -12,6 +12,8 @@
 #include "headers/display.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
+#include "driverlib/timer.h"
+#include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
 #include <stdbool.h>
 #include "headers/cursor.h"
 #include "headers/globalVariables.h"
@@ -44,6 +46,8 @@ void setupAll(void){
     //------------
     // Setups all underlying Modules
     setupADC();
+    setupTouchHandler();
+    setupDrawVoltageCurveHandler();
     setupCursor();
     // Enable Interrupts
     IntMasterEnable();
@@ -64,8 +68,8 @@ int main(void){
     j=0;
      while(1)
      {
-        processTouch();
-        drawVoltageCurve();
+        //processTouch();
+        //drawVoltageCurve();
      }
 }
 

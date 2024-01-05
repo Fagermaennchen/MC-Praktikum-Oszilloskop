@@ -1,17 +1,18 @@
 
+#include <src/headers/globalVariables.h>
 #include <stdint.h>
 #include <stdbool.h> // type bool for giop.h
-#include "inc/hw_types.h"
-#include "inc/tm4c1294ncpdt.h"
 #include <stdio.h>   // Debug only
+#include "inc/tm4c1294ncpdt.h"
+#include "driverlib/timer.h"
+#include "driverlib/interrupt.h"
 #include <driverlib/sysctl.h>
+#include "inc/hw_types.h"
 #include <driverlib/gpio.h>     // GPIO_PIN_X
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
-#include <src/headers/globalVariables.h>
 #include "headers/font.h"
 #include "headers/display.h"
 #include "headers/cursor.h"
-#include "driverlib/timer.h"
 #include "headers/ADC.h"
 
 
@@ -261,6 +262,7 @@ int pixelPosX(int xpos){
 }
 
 void processTouch(void){
+    TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
     //read Touch values
     touch_write(0xD0);                  //Touch Command XPos read
     int x;
@@ -316,4 +318,15 @@ void processTouch(void){
     }
 }
 
+void setupTouchHandler(void){
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);
+    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER1)){}
+    TimerConfigure(TIMER1_BASE, TIMER_CFG_A_PERIODIC);
+    TimerLoadSet(TIMER1_BASE, TIMER_A, loadValueTouch);
+    TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
+    TimerIntRegister(TIMER1_BASE, TIMER_A, processTouch);
+    IntPrioritySet(INT_TIMER1A, 0x20); // Adjust priority as needed
 
+    // Start Timer1
+    TimerEnable(TIMER1_BASE, TIMER_A);
+}

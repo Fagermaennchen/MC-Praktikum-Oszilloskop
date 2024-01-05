@@ -115,7 +115,7 @@ void setupADC(void){    // Setup the timer triggered ADC
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER0)) {}  // Wait for the Timer0 module to be ready
     TimerConfigure(TIMER0_BASE, (TIMER_CFG_A_PERIODIC ));   // Timer 0 in periodic mode
     //printf("load vlaue %d",loadValue);
-    TimerLoadSet(TIMER0_BASE,TIMER_A,loadValue);        // 1 Second Intervall
+    TimerLoadSet(TIMER0_BASE,TIMER_A,loadValueADC);        // 1 Second Intervall
     TimerControlTrigger(TIMER0_BASE,TIMER_A,true);      // Activate Timer ADC control Trigger
 
     // Start the ADC Clocking
