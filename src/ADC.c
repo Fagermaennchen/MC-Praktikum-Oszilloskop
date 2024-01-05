@@ -17,7 +17,7 @@
 #include "headers/cursor.h"
 
 // Values of Service Routine
-int resultCH1, resultCH2,k;
+int resultCH1, resultCH2,k,prevAvg,currentAvg;
 
 
 // ADC clock changeable with timebase slider
@@ -50,28 +50,38 @@ void readADCvalue_routine(void)
             triggerZeroReached = false;  // Reset Trigger Status
             triggered = false;
             prevValueCH1 = 9999;
-            prevPrevValueCH1 = 9999;
+            prev2ValueCH1 = 9999;
+            prev3ValueCH1 = 9999;
+            prev4ValueCH1 = 9999;
+            prev5ValueCH1 = 9999;
+            prev6ValueCH1 = 9999;
+            prev7ValueCH1 = 9999;
+            prev8ValueCH1 = 9999;
+            prev9ValueCH1 = 9999;
         }
         arrayPosition++;
     }
 
     else
     {
-        /******** Triggering at Channel 1: Check for Zero Value ********/
+        // Filter previous values for noise
+        prevAvg = (prev5ValueCH1+prev6ValueCH1+prev7ValueCH1+prev8ValueCH1+prev9ValueCH1) / 5;
+        currentAvg = (resultCH1 + prevValueCH1+prev2ValueCH1+prev3ValueCH1+prev4ValueCH1) / 5;
+        // Triggering at Channel 1: Check for Zero Value
         if(triggerValue > triggerZeroValue )            // Cross Zero on positive slop for trigger > 0
         {
-            if( prevValueCH1 < triggerZeroValue && resultCH1 > triggerZeroValue){      // Zero Value has been crossed on positive slope
+            if( prevAvg < triggerZeroValue  && currentAvg > triggerZeroValue){      // Zero Value has been crossed on positive slope
                 triggerZeroReached = true;
             }
         }   // Cross Zero on positive slop for trigger < 0
         else{
-            if( prevValueCH1 > triggerZeroValue && resultCH1 < triggerZeroValue){      // Zero Value has been crossed on positive slope
+            if( prevAvg > triggerZeroValue && currentAvg < triggerZeroValue && prevValueCH1 < triggerZeroValue && prev2ValueCH1 < triggerZeroValue){      // Zero Value has been crossed on positive slope
                      triggerZeroReached = true;
             }
         }
 
-        /******** Triggering at Channel 2: Check if Trigger is crosses ********/
-        if( triggerZeroReached && (((prevValueCH1 < triggerValue || prevPrevValueCH1 < triggerValue) && resultCH1 > triggerValue))) //Trigger crossed on positive slope
+        // Triggering at Channel 2: Check if Trigger is crosses
+        if( triggerZeroReached && ((prevAvg < triggerValue && currentAvg > triggerValue))) //Trigger crossed on positive slope
         {
             triggered = true;       // Remeber Trigger
             noTrigCounter = 0;   // Reset no Trigger Counter
@@ -86,8 +96,15 @@ void readADCvalue_routine(void)
             }
         }
 
-        // Save Current Value for next Trigger Check
-        prevPrevValueCH1 = prevValueCH1;
+        // Save Current Values for next Trigger Check
+        prev9ValueCH1 = prev8ValueCH1;
+        prev8ValueCH1 = prev7ValueCH1;
+        prev7ValueCH1 = prev6ValueCH1;
+        prev6ValueCH1 = prev5ValueCH1;
+        prev5ValueCH1 = prev4ValueCH1;
+        prev4ValueCH1 = prev3ValueCH1;
+        prev3ValueCH1 = prev2ValueCH1;
+        prev2ValueCH1 = prevValueCH1;
         prevValueCH1 = resultCH1;
 
         // Increment no Trigger Counter

@@ -19,6 +19,7 @@ ORDERED_OBJS += \
 "./src/globalVariables.obj" \
 "./src/main.obj" \
 "./src/slider.obj" \
+"./src/touch.obj" \
 "../tm4c1294ncpdt.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
@@ -152,8 +153,8 @@ MC-Praktikum-Oszilloskop.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "tm4c1294ncpdt_startup_ccs.obj" "src\ADC.obj" "src\cursor.obj" "src\curve.obj" "src\display.obj" "src\font.obj" "src\globalVariables.obj" "src\main.obj" "src\slider.obj" 
-	-$(RM) "tm4c1294ncpdt_startup_ccs.d" "src\ADC.d" "src\cursor.d" "src\curve.d" "src\display.d" "src\font.d" "src\globalVariables.d" "src\main.d" "src\slider.d" 
+	-$(RM) "tm4c1294ncpdt_startup_ccs.obj" "src\ADC.obj" "src\cursor.obj" "src\curve.obj" "src\display.obj" "src\font.obj" "src\globalVariables.obj" "src\main.obj" "src\slider.obj" "src\touch.obj" 
+	-$(RM) "tm4c1294ncpdt_startup_ccs.d" "src\ADC.d" "src\cursor.d" "src\curve.d" "src\display.d" "src\font.d" "src\globalVariables.d" "src\main.d" "src\slider.d" "src\touch.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

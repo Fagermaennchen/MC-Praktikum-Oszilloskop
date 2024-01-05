@@ -7,8 +7,15 @@ arrayPosition = 0;      // Current Position in the Arrays
 // Triggering at CH1
 triggerZeroReached = 0;    // Remember, if zero has been reached
 triggerValue = 2058;       // Value, at which to start saving the data, calculated value for middle of trigSlider at Y=220
-prevValueCH1 = 9999;       // Last Value, to check if Trigger has been reached
-prevPrevValueCH1 = 9999;   // Value before Last Value, to check filter noise at trigger check
+prevValueCH1 = 9999;       // Last Values, to check if Trigger has been reached
+prev2ValueCH1 = 9999;
+prev3ValueCH1 = 9999;
+prev4ValueCH1 = 9999;
+prev5ValueCH1 = 9999;
+prev6ValueCH1 = 9999;
+prev7ValueCH1 = 9999;
+prev8ValueCH1 = 9999;
+prev9ValueCH1 = 9999;
 triggered = 0;             // Remeber if triggered
 noTrigCounter = 0;         // Count iterations not triggered
 // Conversion of units

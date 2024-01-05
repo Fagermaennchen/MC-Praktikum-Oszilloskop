@@ -17,19 +17,14 @@ void configure_display_controller_large (void);
 void initDisplay(void);
 /*********************************************************************************
                         Touch configuration
-*********************************************************************************/
-void touch_write(unsigned char value);
+*********************************************************************************
 /********************************************************************************/
 int pixelPosY(int ypos);// Converts the Pixel position byte into the selected pixel
 int pixelPosX(int xpos);// Converts the Pixel position byte into the selected pixel
-unsigned int touch_read();
 /********************************************************************************
                         Drawing functions
 *********************************************************************************/
 void drawRectangle(int x0,int y0,int x1,int y1,enum colors color);
 void drawLine(int x0,int y0,int x1,int y1,enum colors color);
-void moveTrigSliderPosition(int y);
-void moveTimeSliderPosition(int x);
-void processTouch(void);
-void setupTouchHandler(void);
+
 

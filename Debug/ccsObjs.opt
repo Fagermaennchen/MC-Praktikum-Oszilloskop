@@ -7,6 +7,7 @@
 "./src/globalVariables.obj"
 "./src/main.obj"
 "./src/slider.obj"
+"./src/touch.obj"
 "../tm4c1294ncpdt.cmd"
 -llibc.a
 -l"C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/ccs/Debug/driverlib.lib"

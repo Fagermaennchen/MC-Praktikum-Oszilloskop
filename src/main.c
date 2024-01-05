@@ -18,6 +18,7 @@
 #include "headers/cursor.h"
 #include "headers/globalVariables.h"
 #include "headers/font.h"
+#include "headers/touch.h"
 
 
 void setupAll(void){
@@ -57,10 +58,10 @@ int main(void){
     setupAll();
     // Start all underlying Modules
     startADC();
-    // Start Timer
-    startCursorValueUpdates();
-    TimerEnable(TIMER2_BASE, TIMER_A);
+    // Start Timer2
     TimerEnable(TIMER3_BASE, TIMER_A);
+    TimerEnable(TIMER2_BASE, TIMER_A);
+    startCursorValueUpdates();
     // Enable Interrupts
     IntMasterEnable();
 

@@ -16,8 +16,8 @@
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
 
 
-extern int trigSliderPos = 220;         // Startup y-position, x-position is fixed
-extern int timeSliderPos = 460;         // Startup x-position, y-position is fixed
+int trigSliderPos = 220;         // Startup y-position, x-position is fixed
+int timeSliderPos = 460;         // Startup x-position, y-position is fixed
 
 
 void moveTrigSliderPosition(int y){

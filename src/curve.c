@@ -130,6 +130,8 @@ void drawVoltageCurve(void){
             }
         }
 
+
+
     }
 }
 
@@ -141,7 +143,7 @@ void setupDrawVoltageCurveHandler(void){
     TimerLoadSet(TIMER2_BASE, TIMER_A, loadValueDrawVoltage);   // Set the load value for Timer 2
     TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);            // Enable Timer 2A timeout interrupt
     TimerIntRegister(TIMER2_BASE, TIMER_A, drawVoltageCurve);
-    IntPrioritySet(INT_TIMER2A, 0x40); // Adjust priority as needed
+    IntPrioritySet(INT_TIMER2A, 0x20); // Adjust priority as needed
 
 }
 

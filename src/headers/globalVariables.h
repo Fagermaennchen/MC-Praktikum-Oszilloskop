@@ -36,8 +36,15 @@ int nextOldVoltageCH2[arrayLen];
 #define dcSignalToler 2           // Tolerance at which values are seen as the same
 extern int triggerZeroReached;    // Remember, if zero has been reached
 extern int triggerValue;          // Value, at which to start saving the data
-extern int prevValueCH1;          // Last Value, to check if Trigger has been reached
-extern int prevPrevValueCH1;      // Value before Last Value, to check filter noise at trigger check
+extern int prevValueCH1;          // Last Values, to check if Trigger has been reached
+extern int prev2ValueCH1;
+extern int prev3ValueCH1;
+extern int prev4ValueCH1;
+extern int prev5ValueCH1;
+extern int prev6ValueCH1;
+extern int prev7ValueCH1;
+extern int prev8ValueCH1;
+extern int prev9ValueCH1;
 extern int triggered;             // Remember if triggered
 extern int noTrigCounter;         // Count iterations not triggered
 // Conversion of units
@@ -48,9 +55,9 @@ extern int loadValueADC;               // Conversion of X Axis time into timer l
 #define tSample (timeLenXAxis*10/arrayLen) // Sample time in 0,1*us
 
 // Intterrupts
-#define cursorLoadValue 30000000    // Load Value of the cursor service routine trigger timer (25ms)
-#define loadValueTouch 30000000
-#define loadValueDrawVoltage 3000000       // Load Value of the cursor service routine trigger timer (2,5ms)
+#define cursorLoadValue 120000000    // Load Value of the cursor service routine trigger timer (100ms)
+#define loadValueTouch 30000000     // Load Value of the touch service routine trigger timer (25ms)
+#define loadValueDrawVoltage 120000000       // Load Value of the cursor service routine trigger timer (100ms)
 extern int displayWriteCommandSemaphore;            // Semaphore to prevent two display write commands interfering
 
 extern int adcResolution;            // to make ADC resolution adjustable for timebase slider
