@@ -56,8 +56,8 @@ extern int loadValueADC;               // Conversion of X Axis time into timer l
 
 // Intterrupts
 #define cursorLoadValue 120000000    // Load Value of the cursor service routine trigger timer (100ms)
-#define loadValueTouch 30000000     // Load Value of the touch service routine trigger timer (25ms)
-#define loadValueDrawVoltage 120000000       // Load Value of the cursor service routine trigger timer (100ms)
+#define loadValueTouch 12000     // Load Value of the touch service routine trigger timer (10us)
+#define loadValueDrawVoltage 12000000       // Load Value of the cursor service routine trigger timer (100ms)
 extern int displayWriteCommandSemaphore;            // Semaphore to prevent two display write commands interfering
 
 extern int adcResolution;            // to make ADC resolution adjustable for timebase slider

@@ -23,10 +23,10 @@ int resultCH1, resultCH2,k,prevAvg,currentAvg;
 // ADC clock changeable with timebase slider
 void changeADCclock(int timeSliderPos)
 {
-    int wt = 0;
+  /*  int wt = 0;
     adcResolution = timeSliderPos*4/170+1;
-    ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, adcResolution);  // Use the external OSC at 120MHz
-    wt++;
+    ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, adcResolution);  // Use the external OSC at v
+    wt++; */
 }
 
 // Service Routine to get the ADC Values
@@ -36,8 +36,6 @@ void readADCvalue_routine(void)
     // Get Results
     resultCH1 = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO for Channel 1
     resultCH2 = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO for Channel 2
-    // Print result for debug purpose
-   // printf("CH1: %d, Prev CH1: %d, Zero: %d, Trigger: %d , ZeroReached: %d \n",resultCH1,prevValueCH1,triggerZeroValue,triggerValue,triggerZeroReached);
     // Save Data to Array if Triggered
     if(triggered)
     {
@@ -46,7 +44,7 @@ void readADCvalue_routine(void)
         // Array full: Start Again
         if (arrayPosition == arrayLen)
         {
-            arrayPosition = 0;          // Reset Array Position
+            arrayPosition = -1;          // Reset Array Position
             triggerZeroReached = false;  // Reset Trigger Status
             triggered = false;
             prevValueCH1 = 9999;
@@ -76,7 +74,7 @@ void readADCvalue_routine(void)
         }   // Cross Zero on positive slop for trigger < 0
         else{
             if( prevAvg > triggerZeroValue && currentAvg < triggerZeroValue && prevValueCH1 < triggerZeroValue && prev2ValueCH1 < triggerZeroValue){      // Zero Value has been crossed on positive slope
-                     triggerZeroReached = true;
+                    triggerZeroReached = true;
             }
         }
 
@@ -110,7 +108,6 @@ void readADCvalue_routine(void)
         // Increment no Trigger Counter
         noTrigCounter++;
     }
-
 }
 
 int convertADCtoVolt(int adcVal){ // Conversion Values determined by Measurement with Hameg HM 412-5 Oszilloskope
@@ -138,7 +135,7 @@ void setupADC(void){    // Setup the timer triggered ADC
     // Start the ADC Clocking
     SYSCTL_PLLFREQ0_R |= SYSCTL_PLLFREQ0_PLLPWR;            // power on the PLL
     while (!(SYSCTL_PLLSTAT_R & SYSCTL_PLLSTAT_LOCK));      // wait till PLL has locked
-    ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 12);  // Use the external OSC at 120MHz
+    ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 4);  // Use the external OSC at 120MHz
     wt++;
 
     // Configure ADC for Ports PE2+PE3  (PE2: Vsin, PE3: Vcos)

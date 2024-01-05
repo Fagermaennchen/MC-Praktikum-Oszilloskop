@@ -55,7 +55,7 @@ unsigned int touch_read(void)
 
 
 void processTouch(void){
-    TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
+    TimerIntClear(TIMER3_BASE, TIMER_TIMA_TIMEOUT);
     //read Touch values
     touch_write(0xD0);                  //Touch Command XPos read
     int x;

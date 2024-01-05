@@ -192,7 +192,6 @@ void moveCursor2Position(int x, bool redraw){
     write_command(0x2C); //write pixel command
     for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
         //  Draw Color
-
         write_data((RED>>16)&0xff); // red
         write_data((RED>>8)&0xff); // green
         write_data((RED)&0xff); // blue
