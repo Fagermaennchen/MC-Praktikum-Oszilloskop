@@ -4,20 +4,17 @@
  *  Created on: 18.12.2023
  *      Author: sfage
  */
-#include <stdint.h>
+
+#include "headers/globalVariables.h"
 #include <stdbool.h> // type bool for giop.h
-#include <src/headers/globalVariables.h>
+#include <stdint.h>
+#include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
 #include "inc/hw_types.h"
 #include "inc/tm4c1294ncpdt.h"
-#include "headers/slider.h"
-#include "headers/display.h"
 #include "driverlib/timer.h"
 #include "headers/ADC.h"
-#include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
-
-
-int trigSliderPos = 220;         // Startup y-position, x-position is fixed
-int timeSliderPos = 460;         // Startup x-position, y-position is fixed
+#include "headers/display.h"
+#include "headers/slider.h"
 
 
 void moveTrigSliderPosition(int y){

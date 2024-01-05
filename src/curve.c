@@ -1,4 +1,5 @@
-#include <src/headers/globalVariables.h>
+#include "headers/globalVariables.h"
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>   // Debug only
 #include "inc/tm4c1294ncpdt.h"
@@ -11,6 +12,16 @@
 #include "headers/font.h"
 
 
+void setupDrawVoltageCurve_routine(void){
+
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER2);               // Enable Timer 2 periphal
+    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER2)) {}     // Wait for Timer 2 module to be ready
+    TimerConfigure(TIMER2_BASE, TIMER_CFG_A_PERIODIC);          // Configure Timer 2 in periodic mode
+    TimerLoadSet(TIMER2_BASE, TIMER_A, loadValueDrawVoltage);   // Set the load value for Timer 2
+    TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);            // Enable Timer 2A timeout interrupt
+    TimerIntRegister(TIMER2_BASE, TIMER_A, drawVoltageCurve);
+    IntPrioritySet(INT_TIMER2A, 0x20); // Adjust priority as needed
+}
 
 void refreshTimebaseButton(void){
     // Button to refresh the timebase
@@ -66,6 +77,7 @@ void initTriggerAxis(void){
 }
 
 void drawVoltageCurve(void){
+    //TimerIntClear(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
     int i;                                          // Array iterator
     int VoltageY/*, nextVoltageY*/;                 // variable for receiving voltage from ADC array
     double VoltagePixel;                            // calculated pixel (decimal) from voltage
@@ -126,25 +138,10 @@ void drawVoltageCurve(void){
                 oldVoltageCH2[i]=VoltagePixelIntCH2;
                 //nextOldVoltageCH1[i]=nextVoltagePixelIntCH1;
                 //nextOldVoltageCH2[i]=nextVoltagePixelIntCH2;
-
             }
         }
-
-
-
     }
 }
 
-void setupDrawVoltageCurveHandler(void){
-
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER2);               // Enable Timer 2 periphal
-    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER2)) {}     // Wait for Timer 2 module to be ready
-    TimerConfigure(TIMER2_BASE, TIMER_CFG_A_PERIODIC);          // Configure Timer 2 in periodic mode
-    TimerLoadSet(TIMER2_BASE, TIMER_A, loadValueDrawVoltage);   // Set the load value for Timer 2
-    TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);            // Enable Timer 2A timeout interrupt
-    TimerIntRegister(TIMER2_BASE, TIMER_A, drawVoltageCurve);
-    IntPrioritySet(INT_TIMER2A, 0x20); // Adjust priority as needed
-
-}
 
 

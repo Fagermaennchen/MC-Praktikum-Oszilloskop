@@ -1,5 +1,5 @@
-// This Module holds the Global Variables
-#include <src/headers/globalVariables.h>
+// This module sets the values of the global variables
+#include "headers/globalVariables.h"
 
 
 // Value Array
@@ -29,3 +29,18 @@ ypos = 0;
 loadValueADC = (10120*120/arrayLen);
 adcResolution = 12;
 
+
+// Global Variables Cursor
+cursor1ArrPos = 200;        // Cursor one start position in Array
+cursor2ArrPos = 400;        // Cursor two start position in Array
+cursor1DispPos = 221;       // Cursor one start position on Screen
+cursor2DispPos = 421;       // Cursor two start position on Screen
+cursorSelected = 0;         // Remember if cursor is currently selected
+
+//Global Variables slider
+trigSliderPos = 220;         // Startup y-position, x-position is fixed
+timeSliderPos = 460;         // Startup x-position, y-position is fixed
+
+// touch
+trigSliderSelected = 0;      // Startup: not selected
+timeSliderSelected = 0;      // Startup: not selected

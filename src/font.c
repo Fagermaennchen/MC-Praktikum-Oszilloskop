@@ -1,10 +1,12 @@
 
-#include <src/headers/globalVariables.h>
-#include "headers/font.h"
+#include "headers/globalVariables.h"
 #include <stdbool.h>
+#include <stdint.h>
+#include "headers/font.h"
 
-
-
+/********************************************************************************
+                         Definition of letters for font
+*********************************************************************************/
 
 extern uint8_t font_C[] = {
     0x00, 0x00,  //.............

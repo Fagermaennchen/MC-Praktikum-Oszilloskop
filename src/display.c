@@ -1,21 +1,19 @@
 
-#include <src/headers/globalVariables.h>
-#include <stdint.h>
+#include "headers/globalVariables.h"
 #include <stdbool.h> // type bool for giop.h
 #include <stdio.h>   // Debug only
-#include "inc/tm4c1294ncpdt.h"
-#include "driverlib/timer.h"
-#include "driverlib/interrupt.h"
-#include <driverlib/sysctl.h>
-#include "inc/hw_types.h"
-#include <driverlib/gpio.h>     // GPIO_PIN_X
+#include <stdint.h>
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
-#include "headers/font.h"
-#include "headers/display.h"
-#include "headers/cursor.h"
+#include "inc/hw_types.h"
+#include "inc/tm4c1294ncpdt.h"
+#include "driverlib/gpio.h"     // GPIO_PIN_X
+#include "driverlib/interrupt.h"
+#include "driverlib/sysctl.h"
+#include "driverlib/timer.h"
 #include "headers/ADC.h"
-
-
+#include "headers/cursor.h"
+#include "headers/display.h"
+#include "headers/font.h"
 
 
 /********************************************************************************

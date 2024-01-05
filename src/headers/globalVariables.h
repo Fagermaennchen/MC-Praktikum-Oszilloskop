@@ -8,7 +8,7 @@
 #define MAX_Y 480
 
 // Global Variables for display
-#define Buchstabenhöhe 4
+//#define Buchstabenhöhe 4
 #define XaxisXbegin  120
 #define XaxisXend  (MAX_X - 1)
 #define XaxisYmiddle  219
@@ -55,12 +55,19 @@ extern int loadValueADC;               // Conversion of X Axis time into timer l
 #define tSample (timeLenXAxis*10/arrayLen) // Sample time in 0,1*us
 
 // Intterrupts
-#define cursorLoadValue 120000000    // Load Value of the cursor service routine trigger timer (100ms)
-#define loadValueTouch 30000000     // Load Value of the touch service routine trigger timer (25ms)
-#define loadValueDrawVoltage 120000000       // Load Value of the cursor service routine trigger timer (100ms)
+#define cursorLoadValue 120000000    // Load Value of the cursor service routine trigger timer (1s)
+#define loadValueTouch 1200     // Load Value of the touch service routine trigger timer (10us)
+#define loadValueDrawVoltage 12000000       // Load Value of the cursor service routine trigger timer (100ms)
 extern int displayWriteCommandSemaphore;            // Semaphore to prevent two display write commands interfering
 
+//slider
+extern int trigSliderPos;         // Startup y-position, x-position is fixed
+extern int timeSliderPos;         // Startup x-position, y-position is fixed
 extern int adcResolution;            // to make ADC resolution adjustable for timebase slider
+
+// touch
+extern int trigSliderSelected;
+extern int timeSliderSelected;
 
 // constants for display initialization
 #define RST 0x10

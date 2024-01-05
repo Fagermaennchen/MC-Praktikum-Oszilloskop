@@ -1,26 +1,17 @@
-#include <src/headers/globalVariables.h>
-#include <stdio.h>
+
+#include "headers/globalVariables.h"
 #include <stdbool.h>
-#include "inc/tm4c1294ncpdt.h"
-#include "inc/hw_memmap.h"
+#include <stdio.h>
 #include "inc/hw_ints.h"
-#include "driverlib/timer.h"
+#include "inc/hw_memmap.h"
+#include "inc/tm4c1294ncpdt.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
+#include "driverlib/timer.h"
+#include "headers/ADC.h"
 #include "headers/cursor.h"
 #include "headers/display.h"
 #include "headers/font.h"
-#include "headers/ADC.h"
-#include "headers/display.h"
-
-
-
-// Global Variables
-cursor1ArrPos = 200;        // Cursor one start position in Array
-cursor2ArrPos = 400;        // Cursor two start position in Array
-cursor1DispPos = 221;       // Cursor one start position on Screen
-cursor2DispPos = 421;       // Cursor two start position on Screen
-cursorSelected = 0;         // Remember if cursor is currently selected
 
 
 void initValueDescriptions(void){
@@ -211,7 +202,7 @@ void moveCursor2Position(int x, bool redraw){
     cursor2DispPos = x;
 }
 
-void setupCursor(void){
+void setupCursor_routine(void){
     // Initialise Value Descriptions
     initValueDescriptions();
     // Show Cursors on starting position
@@ -225,14 +216,14 @@ void setupCursor(void){
     // Create Timer 1 Interrupt source
     TimerIntEnable(TIMER1_BASE,TIMER_TIMA_TIMEOUT);         // Enable Timer 1A as Int Source
     TimerIntRegister(TIMER1_BASE,TIMER_A,updateCursorValues);   // Register Timer 1A Int to updateCursorValues Routine
-    IntPrioritySet(INT_TIMER1A_TM4C123,0x20);               // Priority to 4
+    IntPrioritySet(INT_TIMER1A_TM4C123,0x20);               // Priority to 1
     printf("prio: %d \n",IntPriorityGet(INT_TIMER1A_TM4C123));
 }
 
-void startCursorValueUpdates(void){
+/*void startCursorValueUpdates(void){
     // Starts the timer triggert interrupts
     TimerEnable(TIMER1_BASE,TIMER_A);
-}
+}*/
 
 
 

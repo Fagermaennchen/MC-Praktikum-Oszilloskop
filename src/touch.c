@@ -1,21 +1,26 @@
-
 #include "headers/touch.h"
 #include "headers/cursor.h"
 #include "headers/slider.h"
 #include "headers/ADC.h"
-#include "headers/globalVariables.h"
+#include <src/headers/globalVariables.h>
 #include "inc/hw_types.h"
 #include "inc/tm4c1294ncpdt.h"
 #include <driverlib/sysctl.h>
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
 #include "driverlib/timer.h"
 
-
-int trigSliderSelected = 0;      // Startup: not selected
-int timeSliderSelected = 0;      // Startup: not selected
 /*********************************************************************************
                         Touch configuration
 *********************************************************************************/
+void initTouch(void){
+    SYSCTL_RCGCGPIO_R = 0x0008;             // Enable clock Port D
+    init_ports_display(); // Init Port L for Display Control and Port M for Display Data
+    while ((SYSCTL_PRGPIO_R & 0x08) == 0);  // GPIO Clock ready?
+    GPIO_PORTD_AHB_DEN_R = 0x1F;            // PortD digital enable
+    GPIO_PORTD_AHB_DIR_R = 0x0D;            // PortD Input/Output
+    GPIO_PORTD_AHB_DATA_R &= 0xF7;          // Clk=0
+}
+/********************************************************************************/
 void touch_write(unsigned char value)
 {
     unsigned char i = 0x08; // 8 bit command
@@ -52,10 +57,8 @@ unsigned int touch_read(void)
     return value;
 }
 
-
-
 void processTouch(void){
-    TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
+    TimerIntClear(TIMER3_BASE, TIMER_TIMA_TIMEOUT);
     //read Touch values
     touch_write(0xD0);                  //Touch Command XPos read
     int x;
@@ -109,7 +112,7 @@ void processTouch(void){
     }
 }
 
-void setupTouchHandler(void){
+void setupProcessTouch_routine(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER3);
     while (!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER3)){}
     TimerConfigure(TIMER3_BASE, TIMER_CFG_A_PERIODIC);
