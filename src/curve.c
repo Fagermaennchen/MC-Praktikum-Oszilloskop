@@ -143,8 +143,6 @@ void setupDrawVoltageCurveHandler(void){
     TimerIntRegister(TIMER2_BASE, TIMER_A, drawVoltageCurve);
     IntPrioritySet(INT_TIMER2A, 0x40); // Adjust priority as needed
 
-    // Start Timer2
-    TimerEnable(TIMER2_BASE, TIMER_A);
 }
 
 

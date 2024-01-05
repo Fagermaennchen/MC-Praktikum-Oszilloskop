@@ -49,8 +49,7 @@ void setupAll(void){
     setupTouchHandler();
     setupDrawVoltageCurveHandler();
     setupCursor();
-    // Enable Interrupts
-    IntMasterEnable();
+
 }
 int main(void){
 
@@ -58,18 +57,16 @@ int main(void){
     setupAll();
     // Start all underlying Modules
     startADC();
+    // Start Timer
     startCursorValueUpdates();
-    // Start endless loop
-    int j;
-    for(j = 0; j<arrayLen;j++){
-        oldVoltageCH1[j]=0;
-        oldVoltageCH2[j]=0;
-    }
-    j=0;
+    TimerEnable(TIMER2_BASE, TIMER_A);
+    TimerEnable(TIMER3_BASE, TIMER_A);
+    // Enable Interrupts
+    IntMasterEnable();
+
      while(1)
      {
-        //processTouch();
-        //drawVoltageCurve();
+      //  processTouch();
      }
 }
 

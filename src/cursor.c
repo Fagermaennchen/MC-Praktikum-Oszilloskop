@@ -225,7 +225,7 @@ void setupCursor(void){
     // Create Timer 1 Interrupt source
     TimerIntEnable(TIMER1_BASE,TIMER_TIMA_TIMEOUT);         // Enable Timer 1A as Int Source
     TimerIntRegister(TIMER1_BASE,TIMER_A,updateCursorValues);   // Register Timer 1A Int to updateCursorValues Routine
-    IntPrioritySet(INT_TIMER1A_TM4C123,0x40);               // Priority to 2
+    IntPrioritySet(INT_TIMER1A_TM4C123,0x20);               // Priority to 2
     printf("prio: %d \n",IntPriorityGet(INT_TIMER1A_TM4C123));
 }
 

@@ -271,7 +271,6 @@ void processTouch(void){
     touch_write(0x90);                  //Touch Command YPos read
     for (x = 0; x < 10; x++);          //Busy wait, 10 works well also, before: 100
     ypos = pixelPosY(touch_read());     //ypos value read ( 0.....480 )
-
     // No touch: xpos=800 -> deselect all touch buttons
     if(xpos==800){
         // Redo selection
@@ -279,7 +278,6 @@ void processTouch(void){
         trigSliderSelected = 0;
         timeSliderSelected = 0;
     }
-
     /****** Cursor 1 *******/
     else if(cursorSelected == 1){    // When selected: Move to new position
         moveCursor1Position(xpos,true);
@@ -319,14 +317,11 @@ void processTouch(void){
 }
 
 void setupTouchHandler(void){
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);
-    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER1)){}
-    TimerConfigure(TIMER1_BASE, TIMER_CFG_A_PERIODIC);
-    TimerLoadSet(TIMER1_BASE, TIMER_A, loadValueTouch);
-    TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
-    TimerIntRegister(TIMER1_BASE, TIMER_A, processTouch);
-    IntPrioritySet(INT_TIMER1A, 0x20); // Adjust priority as needed
-
-    // Start Timer1
-    TimerEnable(TIMER1_BASE, TIMER_A);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER3);
+    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER3)){}
+    TimerConfigure(TIMER3_BASE, TIMER_CFG_A_PERIODIC);
+    TimerLoadSet(TIMER3_BASE, TIMER_A, loadValueTouch);
+    TimerIntEnable(TIMER3_BASE, TIMER_TIMA_TIMEOUT);
+    TimerIntRegister(TIMER3_BASE, TIMER_A, processTouch);
+    IntPrioritySet(INT_TIMER3A, 0x50); // Adjust priority as needed
 }
