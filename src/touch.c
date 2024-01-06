@@ -1,21 +1,29 @@
-
-#include "headers/touch.h"
-#include "headers/cursor.h"
-#include "headers/slider.h"
-#include "headers/ADC.h"
 #include "headers/globalVariables.h"
+#include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
 #include "inc/hw_types.h"
 #include "inc/tm4c1294ncpdt.h"
-#include <driverlib/sysctl.h>
-#include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
+#include "driverlib/interrupt.h"
+#include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
+#include "headers/ADC.h"
+#include "headers/display.h"
+#include "headers/cursor.h"
+#include "headers/slider.h"
+#include "headers/touch.h"
 
 
-int trigSliderSelected = 0;      // Startup: not selected
-int timeSliderSelected = 0;      // Startup: not selected
 /*********************************************************************************
-                        Touch configuration
+                        Touch Configuration
 *********************************************************************************/
+void initTouch(void){
+    SYSCTL_RCGCGPIO_R = 0x0008;             // Enable clock Port D
+    init_ports_display(); // Init Port L for Display Control and Port M for Display Data
+    while ((SYSCTL_PRGPIO_R & 0x08) == 0);  // GPIO Clock ready?
+    GPIO_PORTD_AHB_DEN_R = 0x1F;            // PortD digital enable
+    GPIO_PORTD_AHB_DIR_R = 0x0D;            // PortD Input/Output
+    GPIO_PORTD_AHB_DATA_R &= 0xF7;          // Clk=0
+}
+/********************************************************************************/
 void touch_write(unsigned char value)
 {
     unsigned char i = 0x08; // 8 bit command
@@ -34,27 +42,23 @@ void touch_write(unsigned char value)
     }
 }
 /********************************************************************************/
-unsigned int touch_read(void)
-{
-    unsigned char i = 12; // 12 Bit ADC
-    unsigned int x, value = 0x00;
-    while (i > 0)
-    {
-        value <<= 1;
-        GPIO_PORTD_AHB_DATA_R |= 0x08; //Clk=1
-        for (x = 0; x < 10; x++);
-        GPIO_PORTD_AHB_DATA_R &= 0xf7; //Clk=0
-        for (x = 0; x < 10; x++);
-        value |= ((GPIO_PORTD_AHB_DATA_R >> 1) & 0x01); // read value
-        i--;
-    }
-    GPIO_PORTD_AHB_DATA_R |= 0x04; //CS=1
-    return value;
+void setupProcessTouch_routine(void){
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER3);
+    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER3)){}
+    TimerConfigure(TIMER3_BASE, TIMER_CFG_A_PERIODIC);
+    TimerLoadSet(TIMER3_BASE, TIMER_A, loadValueTouch);
+    TimerIntEnable(TIMER3_BASE, TIMER_TIMA_TIMEOUT);
+    TimerIntRegister(TIMER3_BASE, TIMER_A, processTouch_routine);
+    IntPrioritySet(INT_TIMER3A, TOUCHprio); // Adjust priority as needed
 }
+/********************************************************************************/
 
 
+/*********************************************************************************
+                        Touch Operating Functions
+*********************************************************************************/
+void processTouch_routine(void){
 
-void processTouch(void){
     TimerIntClear(TIMER3_BASE, TIMER_TIMA_TIMEOUT);
     //read Touch values
     touch_write(0xD0);                  //Touch Command XPos read
@@ -108,13 +112,34 @@ void processTouch(void){
         timeSliderSelected = 1;
     }
 }
-
-void setupTouchHandler(void){
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER3);
-    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER3)){}
-    TimerConfigure(TIMER3_BASE, TIMER_CFG_A_PERIODIC);
-    TimerLoadSet(TIMER3_BASE, TIMER_A, loadValueTouch);
-    TimerIntEnable(TIMER3_BASE, TIMER_TIMA_TIMEOUT);
-    TimerIntRegister(TIMER3_BASE, TIMER_A, processTouch);
-    IntPrioritySet(INT_TIMER3A, 0x20); // Adjust priority as needed
+/********************************************************************************/
+unsigned int touch_read(void)
+{
+    unsigned char i = 12; // 12 Bit ADC
+    unsigned int x, value = 0x00;
+    while (i > 0)
+    {
+        value <<= 1;
+        GPIO_PORTD_AHB_DATA_R |= 0x08; //Clk=1
+        for (x = 0; x < 10; x++);
+        GPIO_PORTD_AHB_DATA_R &= 0xf7; //Clk=0
+        for (x = 0; x < 10; x++);
+        value |= ((GPIO_PORTD_AHB_DATA_R >> 1) & 0x01); // read value
+        i--;
+    }
+    GPIO_PORTD_AHB_DATA_R |= 0x04; //CS=1
+    return value;
 }
+/********************************************************************************/
+int pixelPosX(int xpos){
+    // Converts the Pixel position byte into the selected pixel
+    return 800-xpos*800/4095;
+}
+/********************************************************************************/
+int pixelPosY(int ypos){
+    // Converts the Pixel position byte into the selected pixel
+    return ypos*480/4095;
+}
+/********************************************************************************/
+
+

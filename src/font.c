@@ -1,10 +1,12 @@
 
-#include <src/headers/globalVariables.h>
-#include "headers/font.h"
+#include "headers/globalVariables.h"
 #include <stdbool.h>
+#include <stdint.h>
+#include "headers/font.h"
 
-
-
+/********************************************************************************
+                         Definition of letters for font
+*********************************************************************************/
 
 extern uint8_t font_C[] = {
     0x00, 0x00,  //.............
@@ -617,7 +619,9 @@ extern uint8_t font_space[] = {
 };
 
 
-
+/*********************************************************************************
+                           Font Operating Functions
+*********************************************************************************/
 void drawFont(const uint8_t character[],int x, int y,int color,int backdrop){
     // Abort, if another write process is running
     if(displayWriteCommandSemaphore){
@@ -649,6 +653,7 @@ void drawFont(const uint8_t character[],int x, int y,int color,int backdrop){
     // Reset Semaphore to free other write processes
     displayWriteCommandSemaphore = 0;
 }
+/********************************************************************************/
 void drawComma(int x, int y,int color,int backdrop){
     // Abort, if another write process is running
     if(displayWriteCommandSemaphore){
@@ -680,7 +685,7 @@ void drawComma(int x, int y,int color,int backdrop){
     // Reset Semaphore to free other write processes
     displayWriteCommandSemaphore = 0;
 }
-
+/********************************************************************************/
 int* numbtofont(int number){
     // Maps a font array to a one digit number
     switch(number) {
@@ -699,7 +704,7 @@ int* numbtofont(int number){
 
 
 }
-
+/********************************************************************************/
 void drawMilliVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroundColor,bool includeNegatives){
     // Draws Minus if negative and signed
     if(voltage_mv<0){
@@ -733,7 +738,7 @@ void drawMilliVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroun
     drawFont(font_m,x+6*(fontWidth)+0.1*(fontWidth),y,foregroundColor,backgroundColor);
     drawFont(font_V,x+7*fontWidth+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
 }
-
+/********************************************************************************/
 void drawDeltaVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroundColor){
     // Draws an absolute 4 digit voltage in mV or V (XXX,X mV or X,XXX V) at postitions x and y
     int commaPosition;
@@ -776,7 +781,7 @@ void drawDeltaVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroun
     }
 
 }
-
+/********************************************************************************/
 void drawMilliSeconds(int time_us,int x, int y,int foregroundColor,int backgroundColor){
     // Draws a 4 digit time in us or ms (XXX,X mV or X,XXX ms)  at postitions x and y
     int commaPosition = 1;
@@ -833,7 +838,7 @@ void drawMilliSeconds(int time_us,int x, int y,int foregroundColor,int backgroun
 
 
 }
-
+/********************************************************************************/
 void drawLogo(void){
     drawFont(font_H,10, 10,WHITE,BLACK);
     drawFont(font_A,10+fontWidth, 10,WHITE,BLACK);
