@@ -54,11 +54,11 @@ void setupProcessTouch_routine(void){
 /********************************************************************************/
 
 
+
 /*********************************************************************************
                         Touch Operating Functions
 *********************************************************************************/
 void processTouch_routine(void){
-
     TimerIntClear(TIMER3_BASE, TIMER_TIMA_TIMEOUT);
     //read Touch values
     touch_write(0xD0);                  //Touch Command XPos read

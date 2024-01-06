@@ -37,6 +37,8 @@ ADCloadValue = (10120*120/arrayLen);
 *********************************************************************************/
 cursor1ArrPos = 200;        // Cursor one start position in Array
 cursor2ArrPos = 400;        // Cursor two start position in Array
+cursor1ArrPosOld = 200;        // Cursor one previous position in Array
+cursor2ArrPosOld = 400;        // Cursor two previous position in Array
 cursor1DispPos = 221;       // Cursor one start position on Screen
 cursor2DispPos = 421;       // Cursor two start position on Screen
 cursorSelected = 0;         // Remember if cursor is currently selected

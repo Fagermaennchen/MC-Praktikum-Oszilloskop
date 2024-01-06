@@ -1,6 +1,7 @@
-#include <src/headers/globalVariables.h>
+#include "headers/globalVariables.h"
+#include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h>   // Debug only
+//#include <stdio.h>   // Debug only
 #include "inc/tm4c1294ncpdt.h"
 #include "driverlib/timer.h"
 #include "driverlib/interrupt.h"
@@ -8,63 +9,37 @@
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
 #include "headers/curve.h"
 #include "headers/cursor.h"
+#include "headers/display.h"
 #include "headers/font.h"
 
 
 
-void refreshTimebaseButton(void){
-    // Button to refresh the timebase
-    if(((xpos>=205)&&(xpos<=3379)) && ((ypos>=3072)&&(ypos<=3755))){
-        //Upper side Button
-        //printf("Printing new Button\n");
-        //drawLine(100,100,400,400,WHITE);
-        drawRectangle((xpos*0.195),(ypos*0.117),(xpos*0.195+10),(ypos*0.117+10),GREEN);
-        //Lower side Button
+/*********************************************************************************
+                               Cursor Initialization
+*********************************************************************************/
+void setupDrawVoltageCurve_routine(void){
+
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER2);               // Enable Timer 2 periphal
+    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER2)) {}     // Wait for Timer 2 module to be ready
+    TimerConfigure(TIMER2_BASE, TIMER_CFG_A_PERIODIC);          // Configure Timer 2 in periodic mode
+    TimerLoadSet(TIMER2_BASE, TIMER_A, loadValueDrawVoltage);   // Set the load value for Timer 2
+    TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);            // Enable Timer 2A timeout interrupt
+    TimerIntRegister(TIMER2_BASE, TIMER_A, drawVoltageCurve);
+    IntPrioritySet(INT_TIMER2A, CURVEprio); // Adjust priority as needed
+    // Set old voltage to 0 axis for start
+    int i;
+    for(i = 0; i<arrayLen;i++){
+        oldVoltageCH1[i] = 360 - ((triggerZeroValue-535)*0.095);
+        oldVoltageCH2[i] = 360 - ((triggerZeroValue-535)*0.095);
     }
 }
+/********************************************************************************/
 
-void initTimebaseAxis(void){
-    // Inisialises the timebase axis
-    drawRectangle(160,399,759,401,GREY);
-    drawRectangle(450,370,470,430,GREY);
-    drawFont(font_t, 450, 439,WHITE,BLACK);
-}
 
-void drawAxes(void){
-    // Draws the axis of the coordinate system
-    //enum colors color;
-    //color = WHITE;
-    //Write X-Axis  (double lined)
-    drawLine(XaxisXbegin, XaxisYmiddle, XaxisXend, XaxisYmiddle, WHITE);                       // Uppder line of double line
-    drawLine(XaxisXbegin, XaxisYmiddle + 1, XaxisXend, XaxisYmiddle + 1, WHITE);               // Lower line
-    //Write X-Axis Arrow (double lined)
-    drawLine(XaxisXbegin + 2, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);      // Right right arrow line
-    drawLine(XaxisXbegin + 2, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);      // Left right arrow line
-    drawLine(XaxisXbegin - 1, YaxisYbegin + 1, XaxisXbegin - arrowWidth - 1, YaxisYbegin + arrowLength + 1, WHITE);      // Right left arrow line
-    drawLine(XaxisXbegin - 1, YaxisYbegin + 2, XaxisXbegin - arrowWidth - 1, YaxisYbegin + arrowLength + 2, WHITE);      // Left left arrow line
 
-    //Write Y-Axis (double lined)
-    drawLine(XaxisXbegin, YaxisYbegin, XaxisXbegin, YaxisYend, WHITE);
-    drawLine(XaxisXbegin + 1,YaxisYbegin,XaxisXbegin + 1,YaxisYend, WHITE);
-    //Write Y-Axis Arrow (double lined)
-    drawLine(XaxisXend - 1, XaxisYmiddle - 1, XaxisXend - arrowLength - 1, XaxisYmiddle - arrowWidth - 1, WHITE);       // Upper upper arrow line
-    drawLine(XaxisXend - 2, XaxisYmiddle - 1, XaxisXend - arrowLength - 2, XaxisYmiddle - arrowWidth - 1, WHITE);       // Lower upper arrow line
-    drawLine(XaxisXend - 1, XaxisYmiddle + 2, XaxisXend - arrowLength - 1, XaxisYmiddle + arrowWidth + 2, WHITE);       // Upper lower arrow line
-    drawLine(XaxisXend - 2, XaxisYmiddle + 2, XaxisXend - arrowLength - 2, XaxisYmiddle + arrowWidth + 2, WHITE);       // Lower lower arrow line
-    printf("Axes ready\n");
-}
-
-void initTriggerAxis(void){
-    // draws the trigegr axis
-    drawRectangle(58,80,60,359,GREY);       //draw Trigger Axis
-    drawRectangle(29,210,89,230,GREY);
-    drawFont(font_t,30,370,WHITE,BLACK);
-    drawFont(font_r,30+fontWidth,370,WHITE,BLACK);
-    drawFont(font_i,30+2*fontWidth,370,WHITE,BLACK);
-    drawFont(font_g,30+3*fontWidth,375,WHITE,BLACK);
-
-}
-
+/*********************************************************************************
+                            Cursor Operating Functions
+*********************************************************************************/
 void drawVoltageCurve(void){
     int i;                                          // Array iterator
     int VoltageY, nextVoltageY;                 // variable for receiving voltage from ADC array
@@ -76,13 +51,12 @@ void drawVoltageCurve(void){
 
     // calculate pixel from received voltage CH1
     VoltageY = resultsCH1[0];                           // Get voltage from ADC CH1
-    // Calculate pixel position for CH1
-    VoltagePixel = 360 - ((VoltageY-535)*0.095);         //
+    VoltagePixel = 360 - ((VoltageY-535)*0.095);        // Calculate pixel position for CH1
     VoltagePixelIntCH1 = (int) VoltagePixel;            // cast double value to int for pixel position
 
     // calculate pixel from received voltage CH2
     VoltageY = resultsCH2[0];                           // Get voltage from ADC CH2
-    VoltagePixel = 360 - ((VoltageY-535)*0.095);         // Calculate pixel position for CH2
+    VoltagePixel = 360 - ((VoltageY-535)*0.095);        // Calculate pixel position for CH2
     VoltagePixelIntCH2 = (int) VoltagePixel;            // cast double value to int for pixel position
 
 
@@ -91,18 +65,18 @@ void drawVoltageCurve(void){
 
         // calculate next pixel from received voltage CH1 for drawLine purpose
         nextVoltageY = resultsCH1[i+1];                     // Calculate next value
-        VoltagePixel = 360 - ((nextVoltageY-535)*0.095);         // Calculate next pixel position for CH1
+        VoltagePixel = 360 - ((nextVoltageY-535)*0.095);    // Calculate next pixel position for CH1
         nextVoltagePixelIntCH1 = (int) VoltagePixel;        // cast double value to int for next pixel position
 
         // calculate next pixel from received voltage CH1 for drawLine purpose
         nextVoltageY = resultsCH2[i+1];                     // Calculate next value
-        VoltagePixel = 360 - ((nextVoltageY-535)*0.095);         // Calculate next pixel position for CH1
+        VoltagePixel = 360 - ((nextVoltageY-535)*0.095);    // Calculate next pixel position for CH1
         nextVoltagePixelIntCH2 = (int) VoltagePixel;        // cast double value to int for next pixel position
 
         // Draw line if triggered and in bounds and not current value of adc being changed
         if((VoltagePixelIntCH1>=YaxisYbegin) && (VoltagePixelIntCH1<=YaxisYend) && (VoltagePixelIntCH2>=YaxisYbegin) && (VoltagePixelIntCH2<=YaxisYend)){
-            // draw line if not on cursor or x-axis
-            if(!(i==(cursor1ArrPos-2) | i==(cursor2ArrPos-2) | i==(cursor1ArrPos-1) | i==(cursor2ArrPos-1))){
+            // draw line if not on cursor or x-axis or Cursor
+            if(!(i==(cursor1ArrPos-2) | i==(cursor2ArrPos-2) |i==(cursor1ArrPos-1) | i==(cursor2ArrPos-1))){
 
                 //Overwrite Old pixels
                 drawLine(122+i,oldVoltageCH1[i],122+i+1,oldVoltageCH1[i+1],BLACK);                  // Channel 1
@@ -113,7 +87,7 @@ void drawVoltageCurve(void){
                 drawLine(122+i,VoltagePixelIntCH2,122+i+1,nextVoltagePixelIntCH2,BLUE);               // Channel 2
 
                 // Fix middle line
-                drawLine(122+i,XaxisYmiddle,122+i,XaxisYmiddle+1,WHITE);
+                drawLine(122+i,XaxisYmiddle,122+i+1,XaxisYmiddle+1,WHITE);
 
                 // Fix Y-axis arrow
                 if(i>(arrayLen-arrowLength-2)){
@@ -125,39 +99,36 @@ void drawVoltageCurve(void){
                     }
                 }
             }
+
             //Save written pixel to be deletable in next cycle
             oldVoltageCH1[i]=VoltagePixelIntCH1;
             oldVoltageCH2[i]=VoltagePixelIntCH2;
 
-            // Set Next Voltage to be next interrups starting voltage
+            // Set Next Voltage to be next interrupts starting voltage
             VoltagePixelIntCH1 = nextVoltagePixelIntCH1;
             VoltagePixelIntCH2 = nextVoltagePixelIntCH2;
         }
     }
-    //Overwrite Old pixels at alst value
+    //Overwrite Old pixels at last value
     drawLine(122+i,oldVoltageCH1[arrayLen-1],122+i+1,oldVoltageCH1[arrayLen-1],BLACK);                  // Channel 1
     drawLine(122+i,oldVoltageCH2[arrayLen-1],122+i+1,oldVoltageCH2[arrayLen-1],BLACK);                  // Channel 2
     // Remeber old pixels at last value
     oldVoltageCH1[arrayLen-1] = VoltagePixelIntCH1;
     oldVoltageCH2[arrayLen-1] = VoltagePixelIntCH2;
+    // Fix middle line for bug at end of X-Axis
+    drawLine(122+arrayLen-1,XaxisYmiddle,122+arrayLen+2,XaxisYmiddle+1,WHITE);
 
 }
-
-void setupDrawVoltageCurveHandler(void){
-
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER2);               // Enable Timer 2 periphal
-    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER2)) {}     // Wait for Timer 2 module to be ready
-    TimerConfigure(TIMER2_BASE, TIMER_CFG_A_PERIODIC);          // Configure Timer 2 in periodic mode
-    TimerLoadSet(TIMER2_BASE, TIMER_A, loadValueDrawVoltage);   // Set the load value for Timer 2
-    TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);            // Enable Timer 2A timeout interrupt
-    TimerIntRegister(TIMER2_BASE, TIMER_A, drawVoltageCurve);
-    IntPrioritySet(INT_TIMER2A, 0x20); // Adjust priority as needed
-    // Set old voltage to 0 axis for start
-    int i;
-    for(i = 0; i<arrayLen;i++){
-        oldVoltageCH1[i] = 360 - ((triggerZeroValue-535)*0.095);
-        oldVoltageCH2[i] = 360 - ((triggerZeroValue-535)*0.095);
+/********************************************************************************/
+void refreshTimebaseButton(void){
+    // Button to refresh the timebase
+    if(((xpos>=205)&&(xpos<=3379)) && ((ypos>=3072)&&(ypos<=3755))){
+        //Upper side Button
+        //printf("Printing new Button\n");
+        //drawLine(100,100,400,400,WHITE);
+        drawRectangle((xpos*0.195),(ypos*0.117),(xpos*0.195+10),(ypos*0.117+10),GREEN);
+        //Lower side Button
     }
 }
-
+/********************************************************************************/
 

@@ -51,11 +51,6 @@ extern int timeLenXAxis;            // Total Length of X Axis in us
 extern int ADCloadValue;               // Conversion of X Axis time into timer load value
 #define tSample (timeLenXAxis*10/arrayLen) // Sample time in 0,1*us
 
-// Intterrupts
-#define cursorLoadValue 120000000    // Load Value of the cursor service routine trigger timer (100ms)
-#define loadValueTouch 12000     // Load Value of the touch service routine trigger timer (10us)
-#define loadValueDrawVoltage 12000000       // Load Value of the cursor service routine trigger timer (100ms)
-extern int displayWriteCommandSemaphore;            // Semaphore to prevent two display write commands interfering
 
 
 /*********************************************************************************
@@ -73,6 +68,8 @@ extern int displayWriteCommandSemaphore;            // Semaphore to prevent two 
 #define yStartCHsecondLine 40   // y Position of Channel 2 Data (second line) [Pixels]
 extern int cursor1ArrPos;       // Position of cursor 1 in the value arrays
 extern int cursor2ArrPos;       // Position of cursor 2 in the value arrays
+extern int cursor1ArrPosOld;    // Previous Position of cursor 1 in the value arrays
+extern int cursor2ArrPosOld;    // Previous Position of cursor 2 in the value arrays
 // Cursor Line variables
 #define cursorTouchWidth 15     // Wrapper around the cursor, to detect touch hits [Pixels]
 extern int cursor1DispPos;      // Position of cursor 1 on the screen

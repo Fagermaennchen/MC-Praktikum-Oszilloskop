@@ -133,32 +133,17 @@ void moveCursor1Position(int x, bool redraw){
         x=XaxisXend-1;
     }
     // Remove Cursor line at old position
-    window_set(cursor1DispPos,YaxisYbegin,cursor1DispPos,YaxisYend);
-    write_command(0x2C); //write pixel command
-    int i;
-    for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
-        //  Draw Color
-            write_data((BLACK>>16)&0xff); // red
-            write_data((BLACK>>8)&0xff); // green
-            write_data((BLACK)&0xff); // blue
-    }
+    drawLine(cursor1DispPos,YaxisYbegin,cursor1DispPos,YaxisYend,BLACK);
+
+    // Remopve adjacent curve pixels at new cursor
+    drawLine(x-1,YaxisYbegin,x-1,YaxisYend,BLACK);                  // Channel 1
+    drawLine(x-1,YaxisYbegin,x-1,YaxisYend,BLACK);                  // Channel 2
+    drawLine(x+1,YaxisYbegin,x+1,YaxisYend,BLACK);                  // Channel 1
+    drawLine(x+1,YaxisYbegin,x+1,YaxisYend,BLACK);                  // Channel 2
+    // Draw new Cursor: Center line
+    drawLine(x,YaxisYbegin,x,YaxisYend,GREEN);
     // Fix Middle line
-    window_set(cursor1DispPos,XaxisYmiddle,cursor1DispPos,XaxisYmiddle-1);
-    write_command(0x2C); //write pixel command
-    for(i=0;i<2;i++){
-        write_data((WHITE>>16)&0xff); // red
-        write_data((WHITE>>8)&0xff); // green
-        write_data((WHITE)&0xff); // blue
-    }
-    // Draw new line
-    window_set(x,YaxisYbegin,x,YaxisYend);
-    write_command(0x2C); //write pixel command
-    for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
-        //  Draw Color
-            write_data((GREEN>>16)&0xff); // red
-            write_data((GREEN>>8)&0xff); // green
-            write_data((GREEN)&0xff); // blue
-    }
+    drawLine(cursor1DispPos,XaxisYmiddle+1,cursor1DispPos,XaxisYmiddle,WHITE);
     // Fix Y-axis arrow
     drawLine(XaxisXbegin + 2, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);      // Right right arrow line
     drawLine(XaxisXbegin + 2, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);      // Left right arrow line
@@ -184,33 +169,16 @@ void moveCursor2Position(int x, bool redraw){
         x=XaxisXend-1;
     }
     // Remove Cursor line at old position
-    window_set(cursor2DispPos,YaxisYbegin,cursor2DispPos,YaxisYend);
-    write_command(0x2C); //write pixel command
-    int i;
-    for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
-        //  Draw Color
-            write_data((BLACK>>16)&0xff); // red
-            write_data((BLACK>>8)&0xff); // green
-            write_data((BLACK)&0xff); // blue
-    }
+    drawLine(cursor2DispPos,YaxisYbegin,cursor2DispPos,YaxisYend,BLACK);
+    // Remopve adjacent curve pixels at new cursor
+    drawLine(x-1,YaxisYbegin,x-1,YaxisYend,BLACK);                  // Channel 1
+    drawLine(x-1,YaxisYbegin,x-1,YaxisYend,BLACK);                  // Channel 2
+    drawLine(x+1,YaxisYbegin,x+1,YaxisYend,BLACK);                  // Channel 1
+    drawLine(x+1,YaxisYbegin,x+1,YaxisYend,BLACK);                  // Channel 2
+    // Draw new Cursor
+    drawLine(x,YaxisYbegin,x,YaxisYend,RED);
     // Fix Middle line
-    window_set(cursor2DispPos,XaxisYmiddle,cursor2DispPos,XaxisYmiddle-1);
-    write_command(0x2C); //write pixel command
-    for(i=0;i<2;i++){
-        write_data((WHITE>>16)&0xff); // red
-        write_data((WHITE>>8)&0xff); // green
-        write_data((WHITE)&0xff); // blue
-    }
-    // Draw new line
-    window_set(x,YaxisYbegin,x,YaxisYend);
-    write_command(0x2C); //write pixel command
-    for(i=0;i<YaxisYend-YaxisYbegin;i++)  {   // Each Entry in Byte Array
-        //  Draw Color
-        write_data((RED>>16)&0xff); // red
-        write_data((RED>>8)&0xff); // green
-        write_data((RED)&0xff); // blue
-
-    }
+    drawLine(cursor2DispPos,XaxisYmiddle+1,cursor2DispPos,XaxisYmiddle,WHITE);
     // Fix Y-axis arrow
     drawLine(XaxisXbegin + 2, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);      // Right right arrow line
     drawLine(XaxisXbegin + 2, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);      // Left right arrow line
