@@ -3,7 +3,7 @@
 // K.R. Riemschneider v.04  2023
 // Git test 2 ADC Modul
 
-
+#include "headers/globalVariables.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
@@ -17,7 +17,7 @@
 #include "headers/curve.h"
 #include "headers/display.h"
 #include "headers/font.h"
-#include "headers/globalVariables.h"
+#include "headers/slider.h"
 #include "headers/touch.h"
 
 /********************************************************************************

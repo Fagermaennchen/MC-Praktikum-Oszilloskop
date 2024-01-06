@@ -2,7 +2,16 @@
 #include "headers/globalVariables.h"
 
 
-// Value Array
+/*********************************************************************************
+                                    Interrupts
+*********************************************************************************/
+displayWriteCommandSemaphore = 0;            // Semaphore to prevent two display write commands interfering
+
+
+
+/*********************************************************************************
+                                   ADC Module
+*********************************************************************************/
 arrayPosition = 0;      // Current Position in the Arrays
 // Triggering at CH1
 triggerZeroReached = 0;    // Remember, if zero has been reached
@@ -18,29 +27,55 @@ prev8ValueCH1 = 9999;
 prev9ValueCH1 = 9999;
 triggered = 0;             // Remeber if triggered
 noTrigCounter = 0;         // Count iterations not triggered
-// Conversion of units
 timeLenXAxis = 10120;       // initial TotalLength of X Axis in us (460*22)-->middlePixelTimebase*factor
-// Intterrupts
-displayWriteCommandSemaphore = 0;            // Semaphore to prevent two display write commands interfering
-/* some predefined basic colors to use with names */
-colorarray[]={0x00000000,0x00FFFFFF,0x00AAAAAA,0x00FF0000,0x0000FF00,0x000000FF,0x00FFFF00};
-xpos = 0;
-ypos = 0;
-loadValueADC = (10120*120/arrayLen);
-adcResolution = 12;
+ADCloadValue = (10120*120/arrayLen);
 
 
-// Global Variables Cursor
+
+/*********************************************************************************
+                                  Cursor Module
+*********************************************************************************/
 cursor1ArrPos = 200;        // Cursor one start position in Array
 cursor2ArrPos = 400;        // Cursor two start position in Array
 cursor1DispPos = 221;       // Cursor one start position on Screen
 cursor2DispPos = 421;       // Cursor two start position on Screen
 cursorSelected = 0;         // Remember if cursor is currently selected
 
-//Global Variables slider
-trigSliderPos = 220;         // Startup y-position, x-position is fixed
-timeSliderPos = 460;         // Startup x-position, y-position is fixed
 
-// touch
+
+/*********************************************************************************
+                                   Curve Module
+*********************************************************************************/
+
+
+
+
+/*********************************************************************************
+                                  Display Module
+*********************************************************************************/
+colorarray[]={0x00000000,0x00FFFFFF,0x00AAAAAA,0x00FF0000,0x0000FF00,0x000000FF,0x00FFFF00};
+
+
+
+/*********************************************************************************
+                                   Font Module
+*********************************************************************************/
+
+
+
+/*********************************************************************************
+                                  Slider Module
+*********************************************************************************/
+trigSliderPos = 220;        // Startup y-position, x-position is fixed
+timeSliderPos = 460;        // Startup x-position, y-position is fixed
+adcResolution = 12;         // Initially variable value, now fixed value
+
+/*********************************************************************************
+                                  Touch Module
+*********************************************************************************/
+xpos = 0;
+ypos = 0;
 trigSliderSelected = 0;      // Startup: not selected
 timeSliderSelected = 0;      // Startup: not selected
+
+

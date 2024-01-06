@@ -17,10 +17,13 @@
 #include "headers/cursor.h"
 
 
-// Values only for Service Routine
+// Value declaration only for ADC Service Routine
 int resultCH1, resultCH2,k,prevAvg,currentAvg;
 
 
+/*********************************************************************************
+                                ADC Initialization
+*********************************************************************************/
 void setupADC_routine(void){    // Setup the timer triggered ADC
     int wt = 0; // Variable for very short wait times
     // Port and ADC Clock Gating Control
@@ -35,7 +38,7 @@ void setupADC_routine(void){    // Setup the timer triggered ADC
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER0)) {}  // Wait for the Timer0 module to be ready
     TimerConfigure(TIMER0_BASE, (TIMER_CFG_A_PERIODIC ));   // Timer 0 in periodic mode
     //printf("load vlaue %d",loadValue);
-    TimerLoadSet(TIMER0_BASE,TIMER_A,loadValueADC);        // 1 Second Intervall
+    TimerLoadSet(TIMER0_BASE,TIMER_A,ADCloadValue);        // 1 Second Intervall
     TimerControlTrigger(TIMER0_BASE,TIMER_A,true);      // Activate Timer ADC control Trigger
 
     // Start the ADC Clocking
@@ -63,32 +66,36 @@ void setupADC_routine(void){    // Setup the timer triggered ADC
     ADCIntRegister(ADC0_BASE,0,readADCvalue_routine);
     ADCIntEnable(ADC0_BASE,0);
     ADCIntClear(ADC0_BASE, 0);
-    IntPrioritySet(INT_TIMER0A_TM4C123,0x00);   // Priority to 0
+    IntPrioritySet(INT_TIMER0A_TM4C123,ADCprio);   // Priority to 0
     printf("ADC prio: %d \n",IntPriorityGet(INT_TIMER0A_TM4C123));
 
     // Enable ADC interrupts
     ADCIntEnableEx(ADC0_BASE, ADC_INT_SS0);
 
 }
-
-void startADC(){    // Starts the timer triggered ADC
+/********************************************************************************/
+void startADC(){    	        // Starts the timer triggered ADC
     // Start Sample Sequencer 0
     ADC0_ACTSS_R &= 0xF0; // all sequencers off
     printf("Measurement block starts now\n");
     ADCSequenceEnable(ADC0_BASE, 0);
 }
+/********************************************************************************/
 
-// ADC clock changeable with timebase slider
-void changeADCclock(int timeSliderPos)
+
+
+/*********************************************************************************
+                              ADC Operating Functions
+*********************************************************************************/
+void changeADCclock(int timeSliderPos) 	// ADC clock changeable with timebase slider
 {
     int wt = 0;
     adcResolution = timeSliderPos*4/170+1;
     ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, adcResolution);  // Use the external OSC at 120MHz
     wt++;
 }
-
-// Service Routine to get the ADC Values
-void readADCvalue_routine(void)
+/********************************************************************************/
+void readADCvalue_routine(void)     	// Service Routine to get the ADC Values
 {
 
     ADCIntClear(ADC0_BASE, 0); // clear the interrupt
@@ -171,9 +178,10 @@ void readADCvalue_routine(void)
     }
 
 }
-
-int convertADCtoVolt(int adcVal){ // Conversion Values determined by Measurement with Hameg HM 412-5 Oszilloskope
-   int voltage = (adcVal-triggerZeroValue)*7.6;
-   return voltage;
+/********************************************************************************/
+int convertADCtoVolt(int adcVal) 	    // Conversion Values determined by Measurement with Hameg HM 412-5 Oszilloskope
+{
+    int voltage = (adcVal-triggerZeroValue)*7.6;
+    return voltage;
 }
-
+/********************************************************************************/

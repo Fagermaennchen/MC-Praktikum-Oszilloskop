@@ -13,21 +13,48 @@
 #include "inc/tm4c1294ncpdt.h"
 #include "driverlib/timer.h"
 #include "headers/ADC.h"
+#include "headers/cursor.h"
 #include "headers/display.h"
+#include "headers/font.h"
 #include "headers/slider.h"
 
+/********************************************************************************
+                             Slider Initialization
+*********************************************************************************/
+void initTriggerAxis(void){
+    // draws the trigger axis
+    drawRectangle(58,80,60,359,GREY);       // Draw Trigger Axis
+    drawRectangle(59-(sliderWidth/2),220-(sliderHeight/2),59+(sliderWidth/2),220+(sliderHeight/2),GREY);
+    drawFont(font_t,30,370,WHITE,BLACK);
+    drawFont(font_r,30+fontWidth,370,WHITE,BLACK);
+    drawFont(font_i,30+2*fontWidth,370,WHITE,BLACK);
+    drawFont(font_g,30+3*fontWidth,375,WHITE,BLACK);
+}
+/********************************************************************************/
+void initTimebaseAxis(void){
+    // Inizialises the timebase axis
+    drawRectangle(160,399,759,401,GREY);    // Draw Timebase Axis
+    drawRectangle(460-(sliderHeight/2),400-(sliderWidth/2),460+(sliderHeight/2),400+(sliderWidth/2),GREY);
+    drawFont(font_t, 450, 439,WHITE,BLACK);
+}
+/********************************************************************************/
 
+
+
+/********************************************************************************
+                           Slider Operating Functions
+*********************************************************************************/
 void moveTrigSliderPosition(int y){
     // Moves the Trigger Slider
 
     // Y-Range: 90->359 (resolution of 270 positions)
     // Check y for upper bounds
-    if(y<(YaxisYbegin+10)){
-        y=(YaxisYbegin+10);
+    if(y<(YaxisYbegin+(sliderHeight/2))){
+        y=(YaxisYbegin+(sliderHeight/2));
     }
     // Check y for lower bounds
-    else if(y>(YaxisYend-10)){
-        y=(YaxisYend-10);
+    else if(y>(YaxisYend-(sliderHeight/2))){
+        y=(YaxisYend-(sliderHeight/2));
     }
 
     //Remove sliderbutton at old position
@@ -40,17 +67,17 @@ void moveTrigSliderPosition(int y){
     drawRectangle(59-(sliderWidth/2), trigSliderPos-(sliderHeight/2), 59+(sliderWidth/2), trigSliderPos+(sliderHeight/2), GREY);
 
 }
-
+/********************************************************************************/
 void moveTimeSliderPosition(int x){
     // Moves the Timebase Slider
 
     // Check x for left bounds
-    if(x<(160+10)){
-        x=(160+10);
+    if(x<(160+(sliderHeight/2))){
+        x=(160+(sliderHeight/2));
     }
     // Check x for right bounds
-    else if(x>(759-10)){
-        x=(759-10);
+    else if(x>(759-(sliderHeight/2))){
+        x=(759-(sliderHeight/2));
     }
 
 
@@ -60,8 +87,8 @@ void moveTimeSliderPosition(int x){
 
     timeSliderPos = x;
     timeLenXAxis = timeSliderPos * 22;
-    loadValueADC = (timeLenXAxis*120/arrayLen);
-    TimerLoadSet(TIMER0_BASE,TIMER_A,loadValueADC);        // refresh timer
+    ADCloadValue = (timeLenXAxis*120/arrayLen)+150;         // +150 Offset to rise minimum ADC clock, preventing ripple
+    TimerLoadSet(TIMER0_BASE,TIMER_A,ADCloadValue);         // refresh timer of ADC
 
     // adjust resolution of ADC
     changeADCclock(timeSliderPos);
@@ -73,5 +100,5 @@ void moveTimeSliderPosition(int x){
     updateCursorValues();
 
 }
-
+/********************************************************************************/
 
