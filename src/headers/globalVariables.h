@@ -51,6 +51,11 @@ extern int timeLenXAxis;            // Total Length of X Axis in us
 extern int ADCloadValue;               // Conversion of X Axis time into timer load value
 #define tSample (timeLenXAxis*10/arrayLen) // Sample time in 0,1*us
 
+// Intterrupts
+#define cursorLoadValue 120000000    // Load Value of the cursor service routine trigger timer (100ms)
+#define loadValueTouch 12000     // Load Value of the touch service routine trigger timer (10us)
+#define loadValueDrawVoltage 12000000       // Load Value of the cursor service routine trigger timer (100ms)
+extern int displayWriteCommandSemaphore;            // Semaphore to prevent two display write commands interfering
 
 
 /*********************************************************************************
