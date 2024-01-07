@@ -125,21 +125,29 @@ void resetValueDescriptions(void){
 void moveCursor1Position(int x, bool redraw){
     // Moves the cursors position on screen and in the value arrays
     // Check x for left bounds
-    if (x<(XaxisXbegin+2)){             // +2 to not overwrite Y-axis (axis-width=2)
-        x=(XaxisXbegin+2); 
+    if (x<(XaxisXbegin+3)){             // +2 to not overwrite Y-axis (axis-width=2)
+        x=(XaxisXbegin+3);
     }
     // Check x for right bounds
     else if(x>XaxisXend-1){
         x=XaxisXend-1;
     }
     // Remove Cursor line at old position
-    drawLine(cursor1DispPos,YaxisYbegin,cursor1DispPos,YaxisYend,BLACK);
-
-    // Remopve adjacent curve pixels at new cursor
-    drawLine(x-1,YaxisYbegin,x-1,YaxisYend,BLACK);                  // Channel 1
-    drawLine(x-1,YaxisYbegin,x-1,YaxisYend,BLACK);                  // Channel 2
-    drawLine(x+1,YaxisYbegin,x+1,YaxisYend,BLACK);                  // Channel 1
-    drawLine(x+1,YaxisYbegin,x+1,YaxisYend,BLACK);                  // Channel 2
+    if(cursor1DispPos == cursor2DispPos){
+        drawLine(cursor1DispPos,YaxisYbegin,cursor1DispPos,YaxisYend,RED);    // Redraw other cursor if prev on the same spot
+    }
+    else{
+        drawLine(cursor1DispPos,YaxisYbegin,cursor1DispPos,YaxisYend,BLACK);    // Draw Background
+    }
+    // Remopve adjacent curve pixels at new cursor, if not in other cursors range
+    if(x + 1 != cursor2DispPos){
+        drawLine(x+1,YaxisYbegin,x+1,YaxisYend,BLACK);                  // Channel 1
+        drawLine(x+1,YaxisYbegin,x+1,YaxisYend,BLACK);                  // Channel 2
+    }
+    if(x - 1 != cursor2DispPos){
+        drawLine(x-1,YaxisYbegin,x-1,YaxisYend,BLACK);                  // Channel 1
+        drawLine(x-1,YaxisYbegin,x-1,YaxisYend,BLACK);                  // Channel 2
+    }
     // Draw new Cursor: Center line
     drawLine(x,YaxisYbegin,x,YaxisYend,GREEN);
     // Fix Middle line
@@ -147,10 +155,6 @@ void moveCursor1Position(int x, bool redraw){
     // Fix Y-axis arrow
     drawLine(XaxisXbegin + 2, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);      // Right right arrow line
     drawLine(XaxisXbegin + 2, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);      // Left right arrow line
-    // Redraw other cursor if on same prev position
-    if(cursor1DispPos == cursor2DispPos && redraw ){
-        moveCursor2Position(cursor2DispPos,false);
-    }
     // Move position in array
     cursor1ArrPos = x - XaxisXbegin - 1;
     // Remember position
@@ -160,8 +164,8 @@ void moveCursor1Position(int x, bool redraw){
 void moveCursor2Position(int x, bool redraw){
     // Moves the cursors position on screen and in the value arrays
     // Check x for left bounds
-    if (x<(XaxisXbegin+2)){         // +2 to not overwrite Y-axis (axis-width=2)
-        x=(XaxisXbegin+2);
+    if (x<(XaxisXbegin+3)){         // +2 to not overwrite Y-axis (axis-width=2)
+        x=(XaxisXbegin+3);
     
     }
     // Check x for right bounds
@@ -169,23 +173,29 @@ void moveCursor2Position(int x, bool redraw){
         x=XaxisXend-1;
     }
     // Remove Cursor line at old position
-    drawLine(cursor2DispPos,YaxisYbegin,cursor2DispPos,YaxisYend,BLACK);
-    // Remopve adjacent curve pixels at new cursor
-    drawLine(x-1,YaxisYbegin,x-1,YaxisYend,BLACK);                  // Channel 1
-    drawLine(x-1,YaxisYbegin,x-1,YaxisYend,BLACK);                  // Channel 2
-    drawLine(x+1,YaxisYbegin,x+1,YaxisYend,BLACK);                  // Channel 1
-    drawLine(x+1,YaxisYbegin,x+1,YaxisYend,BLACK);                  // Channel 2
+    if(cursor1DispPos == cursor2DispPos){
+        drawLine(cursor2DispPos,YaxisYbegin,cursor2DispPos,YaxisYend,GREEN);    // Redraw other cursor if prev on the same spot
+    }
+    else{
+        drawLine(cursor2DispPos,YaxisYbegin,cursor2DispPos,YaxisYend,BLACK);    // Draw Background
+    }
+    // Remopve adjacent curve pixels at new cursor, if not in other cursors range
+    if(x + 1  != cursor1DispPos){
+        drawLine(x+1,YaxisYbegin,x+1,YaxisYend,BLACK);                  // Channel 1
+        drawLine(x+1,YaxisYbegin,x+1,YaxisYend,BLACK);                  // Channel 2
+    }
+    if(x - 1 != cursor1DispPos){
+        drawLine(x-1,YaxisYbegin,x-1,YaxisYend,BLACK);                  // Channel 1
+        drawLine(x-1,YaxisYbegin,x-1,YaxisYend,BLACK);                  // Channel 2
+    }
+
     // Draw new Cursor
     drawLine(x,YaxisYbegin,x,YaxisYend,RED);
     // Fix Middle line
     drawLine(cursor2DispPos,XaxisYmiddle+1,cursor2DispPos,XaxisYmiddle,WHITE);
     // Fix Y-axis arrow
-    drawLine(XaxisXbegin + 2, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);      // Right right arrow line
-    drawLine(XaxisXbegin + 2, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);      // Left right arrow line
-    // Redraw other cursor if on same prev position
-    if(cursor2DispPos == cursor1DispPos && redraw  ){
-        moveCursor1Position(cursor1DispPos,false);
-    }
+    drawLine(XaxisXbegin + 1, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);      // Right right arrow line
+    drawLine(XaxisXbegin + 1, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);      // Left right arrow line
     // Move position in array
     cursor2ArrPos = x - XaxisXbegin - 1;
     // Remember position
