@@ -4,13 +4,13 @@
 #include <stdio.h>   // Debug only
 #include <stdint.h>
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
+#include <src/headers/ADC.h>
 #include "inc/hw_types.h"
 #include "inc/tm4c1294ncpdt.h"
 #include "driverlib/gpio.h"     // GPIO_PIN_X
 #include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
-#include "headers/ADC.h"
 #include "headers/cursor.h"
 #include "headers/display.h"
 #include "headers/font.h"

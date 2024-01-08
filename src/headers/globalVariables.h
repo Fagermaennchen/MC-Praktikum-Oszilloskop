@@ -29,7 +29,7 @@ extern int arrayPosition;   // Current Position in the Arrays
 #define arrayLen 656        // Fixed lenght of Arrays, old one: 678
 int resultsCH1[arrayLen];   // Array for Channel 1
 int resultsCH2[arrayLen];   // Array for Channel 2
-#define triggerZeroValue 2000     // Value, at which the Sine function is Zero and the derivative is positive
+#define triggerZeroValue 2033     // Value, at which the Sine function is Zero and the derivative is positive
 #define dcSignalToler 2           // Tolerance at which values are seen as the same
 extern int triggerZeroReached;    // Remember, if zero has been reached
 extern int triggerValue;          // Value, at which to start saving the data

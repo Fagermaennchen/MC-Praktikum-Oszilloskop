@@ -9,10 +9,10 @@
 #include <stdbool.h> // type bool for giop.h
 #include <stdint.h>
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
+#include <src/headers/ADC.h>
 #include "inc/hw_types.h"
 #include "inc/tm4c1294ncpdt.h"
 #include "driverlib/timer.h"
-#include "headers/ADC.h"
 #include "headers/cursor.h"
 #include "headers/display.h"
 #include "headers/font.h"
@@ -99,10 +99,6 @@ void moveTimeSliderPosition(int x){
     printf(" time len axis %d \n",timeLenXAxis);
     ADCloadValue = (timeLenXAxis*120/arrayLen)+150;         // +150 Offset to rise minimum ADC clock, preventing ripple
     TimerLoadSet(TIMER0_BASE,TIMER_A,ADCloadValue);         // refresh timer of ADC
-
-    // adjust resolution of ADC
-    changeADCclock(timeSliderPos);
-
 
     //Draw new sliderbutton
     drawRectangle(timeSliderPos-(sliderHeight/2), 400-(sliderWidth/2), timeSliderPos+(sliderHeight/2), 400+(sliderWidth/2), GREY);

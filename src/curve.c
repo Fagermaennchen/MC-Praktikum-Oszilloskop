@@ -51,12 +51,12 @@ void drawVoltageCurve(void){
 
     // calculate pixel from received voltage CH1
     VoltageY = resultsCH1[0];                           // Get voltage from ADC CH1
-    VoltagePixel = 360 - ((VoltageY-535)*0.095);        // Calculate pixel position for CH1
+    VoltagePixel = 360 - ((VoltageY-542)*0.095);        // Calculate pixel position for CH1
     VoltagePixelIntCH1 = (int) VoltagePixel;            // cast double value to int for pixel position
 
     // calculate pixel from received voltage CH2
     VoltageY = resultsCH2[0];                           // Get voltage from ADC CH2
-    VoltagePixel = 360 - ((VoltageY-535)*0.095);        // Calculate pixel position for CH2
+    VoltagePixel = 360 - ((VoltageY-542)*0.095);        // Calculate pixel position for CH2
     VoltagePixelIntCH2 = (int) VoltagePixel;            // cast double value to int for pixel position
 
 
@@ -65,12 +65,12 @@ void drawVoltageCurve(void){
 
         // calculate next pixel from received voltage CH1 for drawLine purpose
         nextVoltageY = resultsCH1[i+1];                     // Calculate next value
-        VoltagePixel = 360 - ((nextVoltageY-535)*0.095);    // Calculate next pixel position for CH1
+        VoltagePixel = 360 - ((nextVoltageY-542)*0.095);    // Calculate next pixel position for CH1
         nextVoltagePixelIntCH1 = (int) VoltagePixel;        // cast double value to int for next pixel position
 
         // calculate next pixel from received voltage CH1 for drawLine purpose
         nextVoltageY = resultsCH2[i+1];                     // Calculate next value
-        VoltagePixel = 360 - ((nextVoltageY-535)*0.095);    // Calculate next pixel position for CH1
+        VoltagePixel = 360 - ((nextVoltageY-542)*0.095);    // Calculate next pixel position for CH1
         nextVoltagePixelIntCH2 = (int) VoltagePixel;        // cast double value to int for next pixel position
 
         // Draw line if triggered and in bounds and not current value of adc being changed

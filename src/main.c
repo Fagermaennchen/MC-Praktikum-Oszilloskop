@@ -7,12 +7,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
+#include <src/headers/ADC.h>
 #include "driverlib/adc.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
-#include "headers/ADC.h"
 #include "headers/cursor.h"
 #include "headers/curve.h"
 #include "headers/display.h"

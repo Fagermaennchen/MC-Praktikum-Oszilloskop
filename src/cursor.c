@@ -1,4 +1,5 @@
 
+#include <src/headers/ADC.h>
 #include "headers/globalVariables.h"
 #include <stdbool.h>
 #include <stdio.h>
@@ -8,7 +9,6 @@
 #include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
-#include "headers/ADC.h"
 #include "headers/cursor.h"
 #include "headers/display.h"
 #include "headers/font.h"
