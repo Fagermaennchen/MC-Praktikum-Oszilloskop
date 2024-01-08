@@ -29,7 +29,7 @@ extern int arrayPosition;   // Current Position in the Arrays
 #define arrayLen 656        // Fixed lenght of Arrays, old one: 678
 int resultsCH1[arrayLen];   // Array for Channel 1
 int resultsCH2[arrayLen];   // Array for Channel 2
-#define triggerZeroValue 2000     // Value, at which the Sine function is Zero and the derivative is positive
+#define triggerZeroValue 2033     // Value, at which the Sine function is Zero and the derivative is positive
 #define dcSignalToler 2           // Tolerance at which values are seen as the same
 extern int triggerZeroReached;    // Remember, if zero has been reached
 extern int triggerValue;          // Value, at which to start saving the data
@@ -140,9 +140,14 @@ extern uint8_t font_s[fontArrayLen];
 extern uint8_t font_r[fontArrayLen];
 extern uint8_t font_i[fontArrayLen];
 extern uint8_t font_g[fontArrayLen];
+extern uint8_t font_a[fontArrayLen];
+extern uint8_t font_b[fontArrayLen];
+extern uint8_t font_e[fontArrayLen];
+extern uint8_t font_r[fontArrayLen];
 extern uint8_t font_V[fontArrayLen];
 extern uint8_t font_U[fontArrayLen];
 extern uint8_t font_A[fontArrayLen];
+extern uint8_t font_T[fontArrayLen];
 extern uint8_t font_W[fontArrayLen];
 extern uint8_t font_0[fontArrayLen];
 extern uint8_t font_1[fontArrayLen];

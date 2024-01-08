@@ -44,7 +44,7 @@ void setupADC_routine(void){    // Setup the timer triggered ADC
     // Start the ADC Clocking
     SYSCTL_PLLFREQ0_R |= SYSCTL_PLLFREQ0_PLLPWR;            // power on the PLL
     while (!(SYSCTL_PLLSTAT_R & SYSCTL_PLLSTAT_LOCK));      // wait till PLL has locked
-    ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 12);  // Use the external OSC at 120MHz
+    ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 4);  // Use the external OSC at 120MHz
     wt++;
 
     // Configure ADC for Ports PE2+PE3  (PE2: Vsin, PE3: Vcos)
@@ -77,7 +77,6 @@ void setupADC_routine(void){    // Setup the timer triggered ADC
 void startADC(){    	        // Starts the timer triggered ADC
     // Start Sample Sequencer 0
     ADC0_ACTSS_R &= 0xF0; // all sequencers off
-    printf("Measurement block starts now\n");
     ADCSequenceEnable(ADC0_BASE, 0);
 }
 /********************************************************************************/
@@ -87,14 +86,7 @@ void startADC(){    	        // Starts the timer triggered ADC
 /*********************************************************************************
                               ADC Operating Functions
 *********************************************************************************/
-void changeADCclock(int timeSliderPos) 	// ADC clock changeable with timebase slider
-{
-    int wt = 0;
-    adcResolution = timeSliderPos*4/170+1;
-    ADCClockConfigSet(ADC0_BASE, ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, adcResolution);  // Use the external OSC at 120MHz
-    wt++;
-}
-/********************************************************************************/
+
 void readADCvalue_routine(void)     	// Service Routine to get the ADC Values
 {
 
@@ -155,10 +147,10 @@ void readADCvalue_routine(void)     	// Service Routine to get the ADC Values
 
         // Detect not Triggerable signal (AC Coupling)
         if(noTrigCounter == 10000){
-            // Set DC Signal to 0
+            // Set DC Signal to near 0 Axis, but not overlapping
             for(k=0;k<arrayLen;k++){
-                resultsCH1[k] = triggerZeroValue;
-                resultsCH2[k] = triggerZeroValue;
+                resultsCH1[k] = triggerZeroValue+40;
+                resultsCH2[k] = triggerZeroValue+20;
             }
         }
 
@@ -181,7 +173,7 @@ void readADCvalue_routine(void)     	// Service Routine to get the ADC Values
 /********************************************************************************/
 int convertADCtoVolt(int adcVal) 	    // Conversion Values determined by Measurement with Hameg HM 412-5 Oszilloskope
 {
-    int voltage = (adcVal-triggerZeroValue)*7.6;
+    int voltage = (adcVal-triggerZeroValue)*8;
     return voltage;
 }
 /********************************************************************************/

@@ -37,8 +37,8 @@ void readADCvalue_routine(void){
     resultCH2 = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO for Channel 2
     printf("Result CH1: %d CH2: %d",resultCH1,resultCH2);
     printf("Counter: %d \n",cnter);
-    resultsCH1[cnter] = convertADCtoVolt(resultCH1);
-    resultsCH2[cnter] = convertADCtoVolt(resultCH2);
+    resultsCH1[cnter] = resultCH1;
+    resultsCH2[cnter] = resultCH2;
     cnter++;
     if(arrayLen - 1 == cnter){
         int index;
@@ -57,8 +57,8 @@ void readADCvalue_routine(void){
                 if(resultsCH2[index] > maxCH2 ) { maxCH2 = resultsCH2[index];}
             }
             // Print result
-            //printf("CH1: %d, CH2 %d \n",resultsCH1[index],resultsCH2[index]);
-           // printf("Min CH1: %d, Min CH %d, Max CH1: %d, Max CH2: %d",minCH1,minCH2,maxCH1,maxCH2);
+            printf("CH1: %d, CH2 %d \n",resultsCH1[index],resultsCH2[index]);
+            printf("Min CH1: %d, Min CH %d, Max CH1: %d, Max CH2: %d",minCH1,minCH2,maxCH1,maxCH2);
         }
 
     }

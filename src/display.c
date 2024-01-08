@@ -4,13 +4,13 @@
 #include <stdio.h>   // Debug only
 #include <stdint.h>
 #include <inc/hw_memmap.h>      // GPIO_PORTX_BASE
+#include <src/headers/ADC.h>
 #include "inc/hw_types.h"
 #include "inc/tm4c1294ncpdt.h"
 #include "driverlib/gpio.h"     // GPIO_PIN_X
 #include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
-#include "headers/ADC.h"
 #include "headers/cursor.h"
 #include "headers/display.h"
 #include "headers/font.h"
@@ -158,7 +158,7 @@ void initDisplay(void){
 /********************************************************************************
                         Drawing functions
 *********************************************************************************/
-void drawRectangle(int x0,int y0,int x1,int y1,enum colors color){
+void drawRectangle(int x0,int y0,int x1,int y1,int color){
     window_set(x0,y0,x1,y1); // set rectangle position see B.4
     write_command(0x2C); //write pixel command
     int x,y;
@@ -171,7 +171,7 @@ void drawRectangle(int x0,int y0,int x1,int y1,enum colors color){
         }
 }
 
-void drawLine(int x0,int y0,int x1,int y1,enum colors color)
+void drawLine(int x0,int y0,int x1,int y1,int color)
 {
 
 
@@ -228,7 +228,6 @@ void drawAxes(void){
     drawLine(XaxisXend - 2, XaxisYmiddle - 1, XaxisXend - arrowLength - 2, XaxisYmiddle - arrowWidth - 1, WHITE);       // Lower upper arrow line
     drawLine(XaxisXend - 1, XaxisYmiddle + 2, XaxisXend - arrowLength - 1, XaxisYmiddle + arrowWidth + 2, WHITE);       // Upper lower arrow line
     drawLine(XaxisXend - 2, XaxisYmiddle + 2, XaxisXend - arrowLength - 2, XaxisYmiddle + arrowWidth + 2, WHITE);       // Lower lower arrow line
-    printf("Axes ready\n");
 }
 
 
