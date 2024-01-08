@@ -31,7 +31,7 @@ inline void write_data(unsigned char data)
     GPIO_PORTL_DATA_R = 0x1F;           // Initial state
 }
 /********************************************************************************/
-inline void window_set(min_x, min_y, max_x, max_y)
+inline void window_set(int min_x,int min_y,int max_x,int max_y)
 {
     write_command(0x2A);           // Set row address x-axis
     write_data(min_x >> 8);        // Set start  address           (high byte)
@@ -44,6 +44,10 @@ inline void window_set(min_x, min_y, max_x, max_y)
     write_data(max_y >> 8);        // Set stop column address      (high byte)
     write_data(max_y);             // as above                     (low byte)
 }
+/********************************************************************************/
+
+
+
 /*********************************************************************************
                         Display configuration
 *********************************************************************************/
@@ -154,6 +158,9 @@ void initDisplay(void){
     printf("Background ready \n"); // for debug only
 
 }
+/********************************************************************************/
+
+
 
 /********************************************************************************
                         Drawing functions
