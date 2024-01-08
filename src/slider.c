@@ -96,7 +96,7 @@ void moveTimeSliderPosition(int x){
 
     timeSliderPos = x;
     timeLenXAxis = timeSliderPos * 22;
-    printf(" time len axis %d \n",timeLenXAxis);
+    //printf(" time len axis %d \n",timeLenXAxis);
     ADCloadValue = (timeLenXAxis*120/arrayLen)+150;         // +150 Offset to rise minimum ADC clock, preventing ripple
     TimerLoadSet(TIMER0_BASE,TIMER_A,ADCloadValue);         // refresh timer of ADC
 
