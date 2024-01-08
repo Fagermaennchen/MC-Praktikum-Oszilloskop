@@ -158,7 +158,7 @@ void initDisplay(void){
 /********************************************************************************
                         Drawing functions
 *********************************************************************************/
-void drawRectangle(int x0,int y0,int x1,int y1,enum colors color){
+void drawRectangle(int x0,int y0,int x1,int y1,int color){
     window_set(x0,y0,x1,y1); // set rectangle position see B.4
     write_command(0x2C); //write pixel command
     int x,y;
@@ -171,7 +171,7 @@ void drawRectangle(int x0,int y0,int x1,int y1,enum colors color){
         }
 }
 
-void drawLine(int x0,int y0,int x1,int y1,enum colors color)
+void drawLine(int x0,int y0,int x1,int y1,int color)
 {
 
 
@@ -228,7 +228,6 @@ void drawAxes(void){
     drawLine(XaxisXend - 2, XaxisYmiddle - 1, XaxisXend - arrowLength - 2, XaxisYmiddle - arrowWidth - 1, WHITE);       // Lower upper arrow line
     drawLine(XaxisXend - 1, XaxisYmiddle + 2, XaxisXend - arrowLength - 1, XaxisYmiddle + arrowWidth + 2, WHITE);       // Upper lower arrow line
     drawLine(XaxisXend - 2, XaxisYmiddle + 2, XaxisXend - arrowLength - 2, XaxisYmiddle + arrowWidth + 2, WHITE);       // Lower lower arrow line
-    printf("Axes ready\n");
 }
 
 

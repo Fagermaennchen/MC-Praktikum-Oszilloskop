@@ -119,16 +119,3 @@ void drawVoltageCurve(void){
     drawLine(122+arrayLen-1,XaxisYmiddle,122+arrayLen+2,XaxisYmiddle+1,WHITE);
 
 }
-/********************************************************************************/
-void refreshTimebaseButton(void){
-    // Button to refresh the timebase
-    if(((xpos>=205)&&(xpos<=3379)) && ((ypos>=3072)&&(ypos<=3755))){
-        //Upper side Button
-        //printf("Printing new Button\n");
-        //drawLine(100,100,400,400,WHITE);
-        drawRectangle((xpos*0.195),(ypos*0.117),(xpos*0.195+10),(ypos*0.117+10),GREEN);
-        //Lower side Button
-    }
-}
-/********************************************************************************/
-

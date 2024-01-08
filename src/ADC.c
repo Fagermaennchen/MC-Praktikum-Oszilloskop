@@ -155,10 +155,10 @@ void readADCvalue_routine(void)     	// Service Routine to get the ADC Values
 
         // Detect not Triggerable signal (AC Coupling)
         if(noTrigCounter == 10000){
-            // Set DC Signal to 0
+            // Set DC Signal to near 0 Axis, but not overlapping
             for(k=0;k<arrayLen;k++){
-                resultsCH1[k] = triggerZeroValue;
-                resultsCH2[k] = triggerZeroValue;
+                resultsCH1[k] = triggerZeroValue+40;
+                resultsCH2[k] = triggerZeroValue+20;
             }
         }
 

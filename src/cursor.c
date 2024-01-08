@@ -152,6 +152,8 @@ void moveCursor1Position(int x, bool redraw){
     drawLine(x,YaxisYbegin,x,YaxisYend,GREEN);
     // Fix Middle line
     drawLine(cursor1DispPos,XaxisYmiddle+1,cursor1DispPos,XaxisYmiddle,WHITE);
+    drawLine(cursor1DispPos-1,XaxisYmiddle+1,cursor1DispPos-1,XaxisYmiddle,WHITE);
+    drawLine(cursor1DispPos+1,XaxisYmiddle+1,cursor1DispPos+1,XaxisYmiddle,WHITE);
     // Fix Y-axis arrow
     drawLine(XaxisXbegin + 2, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);      // Right right arrow line
     drawLine(XaxisXbegin + 2, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);      // Left right arrow line
@@ -193,6 +195,8 @@ void moveCursor2Position(int x, bool redraw){
     drawLine(x,YaxisYbegin,x,YaxisYend,RED);
     // Fix Middle line
     drawLine(cursor2DispPos,XaxisYmiddle+1,cursor2DispPos,XaxisYmiddle,WHITE);
+    drawLine(cursor2DispPos-1,XaxisYmiddle+1,cursor2DispPos-1,XaxisYmiddle,WHITE);
+    drawLine(cursor2DispPos+1,XaxisYmiddle+1,cursor2DispPos+1,XaxisYmiddle,WHITE);
     // Fix Y-axis arrow
     drawLine(XaxisXbegin + 1, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);      // Right right arrow line
     drawLine(XaxisXbegin + 1, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);      // Left right arrow line
