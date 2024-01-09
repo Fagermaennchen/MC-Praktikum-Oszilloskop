@@ -33,8 +33,8 @@ void setupAll(void){
     initDisplay();          // Initialize Display Ports, configure for 800x480 pixel, set Background
     drawAxes();             // Draw X- and Y-Axis
     drawLogo();             // Draw HAW logo with font
-    initTriggerAxis();      // Draw Trigger-Axis for touch
-    initTimebaseAxis();     // Draw Timebase-Axis for touch
+    initTriggerSlider();      // Draw Trigger-Axis for touch
+    initTimebaseSlider();     // Draw Timebase-Axis for touch
     initTouch();            // Initialize Pins on Port D for Touch
 
     // Setups all underlying Modules

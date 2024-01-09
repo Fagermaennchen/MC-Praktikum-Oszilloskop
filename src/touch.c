@@ -17,7 +17,7 @@
 *********************************************************************************/
 void initTouch(void){
     SYSCTL_RCGCGPIO_R = 0x0008;             // Enable clock Port D
-    init_ports_display(); // Init Port L for Display Control and Port M for Display Data
+    initPortsDisplay(); // Init Port L for Display Control and Port M for Display Data
     while ((SYSCTL_PRGPIO_R & 0x08) == 0);  // GPIO Clock ready?
     GPIO_PORTD_AHB_DEN_R = 0x1F;            // PortD digital enable
     GPIO_PORTD_AHB_DIR_R = 0x0D;            // PortD Input/Output

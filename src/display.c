@@ -51,19 +51,19 @@ inline void window_set(int min_x,int min_y,int max_x,int max_y)
 /*********************************************************************************
                         Display configuration
 *********************************************************************************/
-void init_ports_display(void)
+void initPortsDisplay(void)
 {
     // Set Port M Pins 0-7: used as Output of LCD Data
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);            // enable clock-gate Port M
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOM));     // wait until clock ready
     GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, 0xFF);
     // Set Port L Pins 0-4: used as Output of LCD Control signals:
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);  // Clock Port Q
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);  // Clock Port L
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOL));
     GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3| GPIO_PIN_4);
 }
 /********************************************************************************/
-void configure_display_controller_large (void) // 800 x 480 pixel ???
+void configureDisplayController(void) // 800 x 480 pixel
 {
 //////////////////////////////////////////////////////////////////////////////////
     GPIO_PORTL_DATA_R = INITIAL_STATE;      // Initial state
@@ -140,8 +140,8 @@ void configure_display_controller_large (void) // 800 x 480 pixel ???
 void initDisplay(void){
 
    enum colors color;   // see global definition
-   init_ports_display(); // Init Port L for Display Control and Port M for Display Data
-   configure_display_controller_large();  // initalize and  configuration
+   initPortsDisplay(); // Init Port L for Display Control and Port M for Display Data
+   configureDisplayController();  // initalize and  configuration
    printf("Start Background Pixel by Pixel set\n"); // for debug only
    // set pixel by pixel to change the background colors
    color=BLACK;

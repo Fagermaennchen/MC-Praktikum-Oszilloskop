@@ -24,7 +24,7 @@ void setupDrawVoltageCurve_routine(void){
     TimerConfigure(TIMER2_BASE, TIMER_CFG_A_PERIODIC);          // Configure Timer 2 in periodic mode
     TimerLoadSet(TIMER2_BASE, TIMER_A, loadValueDrawVoltage);   // Set the load value for Timer 2
     TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);            // Enable Timer 2A timeout interrupt
-    TimerIntRegister(TIMER2_BASE, TIMER_A, drawVoltageCurve);
+    TimerIntRegister(TIMER2_BASE, TIMER_A, drawVoltageCurve_routine);
     IntPrioritySet(INT_TIMER2A, CURVEprio); // Adjust priority as needed
     // Set old voltage to 0 axis for start
     int i;
@@ -40,7 +40,7 @@ void setupDrawVoltageCurve_routine(void){
 /*********************************************************************************
                             Cursor Operating Functions
 *********************************************************************************/
-void drawVoltageCurve(void){
+void drawVoltageCurve_routine(void){
     int i;                                          // Array iterator
     int VoltageY, nextVoltageY;                 // variable for receiving voltage from ADC array
     double VoltagePixel;                            // calculated pixel (decimal) from voltage

@@ -21,7 +21,7 @@
 /********************************************************************************
                              Slider Initialization
 *********************************************************************************/
-void initTriggerAxis(void){
+void initTriggerSlider(void){
     // draws the trigger axis
     drawRectangle(58,80,60,359,GREY);       // Draw Trigger Axis
     drawRectangle(59-(sliderWidth/2),220-(sliderHeight/2),59+(sliderWidth/2),220+(sliderHeight/2),GREY);
@@ -34,7 +34,7 @@ void initTriggerAxis(void){
     drawFont(font_r,10+6*fontWidth,370,WHITE,BLACK);
 }
 /********************************************************************************/
-void initTimebaseAxis(void){
+void initTimebaseSlider(void){
     // Inizialises the timebase axis
     drawRectangle(160,399,759,401,GREY);    // Draw Timebase Axis
     drawRectangle(460-(sliderHeight/2),400-(sliderWidth/2),460+(sliderHeight/2),400+(sliderWidth/2),GREY);

@@ -777,7 +777,7 @@ void drawComma(int x, int y,int color,int backdrop){
     displayWriteCommandSemaphore = 0;
 }
 /********************************************************************************/
-int* numbtofont(int number){
+int* numbToFont(int number){
     // Maps a font array to a one digit number
     switch(number) {
         case 0: return font_0; break;
@@ -819,12 +819,12 @@ void drawMilliVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroun
     // Draw first 3 digits digit
     int i;
     for(i=0;i<3;i++){
-        drawFont(numbtofont(digit[i]),x+(i+1)*(fontWidth),y,foregroundColor,backgroundColor);
+        drawFont(numbToFont(digit[i]),x+(i+1)*(fontWidth),y,foregroundColor,backgroundColor);
     }
     // Draw Comma
     drawComma(x+fontWidth+3*(fontWidth),y,foregroundColor,backgroundColor);
     // Draw last  digits
-    drawFont(numbtofont(digit[i]),x+4.7*fontWidth,y,foregroundColor,backgroundColor);
+    drawFont(numbToFont(digit[i]),x+4.7*fontWidth,y,foregroundColor,backgroundColor);
     // Draw mV
     drawFont(font_m,x+6*(fontWidth)+0.1*(fontWidth),y,foregroundColor,backgroundColor);
     drawFont(font_V,x+7*fontWidth+fontSpace+0.1*(fontWidth),y,foregroundColor,backgroundColor);
@@ -865,10 +865,10 @@ void drawDeltaVolt(int voltage_mv,int x, int y,int foregroundColor,int backgroun
     // Draw digits depending on comma position
     int i;
     for(i=0;i<commaPosition;i++){       // Draw digits before comma
-        drawFont(numbtofont(digit[i]),x+(i+1)*(fontWidth),y,foregroundColor,backgroundColor);
+        drawFont(numbToFont(digit[i]),x+(i+1)*(fontWidth),y,foregroundColor,backgroundColor);
     }
     for(i=commaPosition;i<4;i++){       // Draw digits after comma
-        drawFont(numbtofont(digit[i]),x+(i+1)*(fontWidth)+0.7*(fontWidth),y,foregroundColor,backgroundColor);
+        drawFont(numbToFont(digit[i]),x+(i+1)*(fontWidth)+0.7*(fontWidth),y,foregroundColor,backgroundColor);
     }
 
 }
@@ -921,10 +921,10 @@ void drawMilliSeconds(int time_us,int x, int y,int foregroundColor,int backgroun
     // Draw digits depending on comma position
     int i;
     for(i=0;i<commaPosition;i++){       // Draw digits before comma
-        drawFont(numbtofont(digit[i]),x+(i+1)*(fontWidth),y,foregroundColor,backgroundColor);
+        drawFont(numbToFont(digit[i]),x+(i+1)*(fontWidth),y,foregroundColor,backgroundColor);
     }
     for(i=commaPosition;i<4;i++){       // Draw digits after comma
-        drawFont(numbtofont(digit[i]),x+(i+1)*(fontWidth)+0.7*(fontWidth),y,foregroundColor,backgroundColor);
+        drawFont(numbToFont(digit[i]),x+(i+1)*(fontWidth)+0.7*(fontWidth),y,foregroundColor,backgroundColor);
     }
 
 
