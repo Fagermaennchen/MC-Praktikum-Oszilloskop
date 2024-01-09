@@ -180,12 +180,15 @@ void drawRectangle(int x0,int y0,int x1,int y1,int color){
 
 void drawLine(int x0,int y0,int x1,int y1,int color)
 {
-
-
-    int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-    int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+    // Calculate differences between start and end point of the line
+    int dx = abs(x1 - x0);
+    int dy = -abs(y1 - y0);
+    // Calculate increments in the direction of the line
+    int sx = x0 < x1 ? 1 : -1;
+    int sy = y0 < y1 ? 1 : -1;
     int err = dx + dy, e2;
 
+    // Calculate as long as end of line is not reached
     while(1){
         // Abort, if another write process is running
         if(displayWriteCommandSemaphore){
@@ -194,22 +197,22 @@ void drawLine(int x0,int y0,int x1,int y1,int color)
         // Set Semaphore to block other write processes
         displayWriteCommandSemaphore = 1;
         // Draw Line
-        window_set(x0,y0,x0,y0);
-        write_command(0x2C); //write pixel command
-        write_data((color>>16)&0xff); // red
-        write_data((color>>8)&0xff); // green
-        write_data((color)&0xff); // blue
+        window_set(x0,y0,x0,y0);        // Set window size to draw pixel in
+        write_command(0x2C);            //write pixel command
+        write_data((color>>16)&0xff);   // red
+        write_data((color>>8)&0xff);    // green
+        write_data((color)&0xff);       // blue
         // Reset Semaphore to free other write processes
         displayWriteCommandSemaphore = 0;
-        if(x0 == x1 && y0 == y1) break;
-        e2 = 2 * err;
-        if(e2 > dy){
-            err += dy;
-            x0 += sx;
+        if(x0 == x1 && y0 == y1) break;     // End calculation if end of line is reached
+        e2 = 2 * err;                       // Calculate double of current error
+        if(e2 > dy){        // If double of current error bigger than vertical difference
+            err += dy;      // Raise error by vertical difference
+            x0 += sx;       // Move X-Position towards X-Endpoint (1)
         }
-        if(e2 < dx){
-            err += dx;
-            y0 += sy;
+        if(e2 < dx){        // If double of current error smaller than horizontal difference
+            err += dx;      // Raise error by horizontal difference
+            y0 += sy;       //Move Y-Position towards Y-Endpoint (1)
         }
     }
 }
