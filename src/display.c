@@ -212,7 +212,7 @@ void drawLine(int x0,int y0,int x1,int y1,int color)
         }
         if(e2 < dx){        // If double of current error smaller than horizontal difference
             err += dx;      // Raise error by horizontal difference
-            y0 += sy;       //Move Y-Position towards Y-Endpoint (1)
+            y0 += sy;       // Move Y-Position towards Y-Endpoint (1)
         }
     }
 }
