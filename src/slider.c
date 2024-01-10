@@ -21,7 +21,7 @@
 /********************************************************************************
                              Slider Initialization
 *********************************************************************************/
-void initTriggerAxis(void){
+void initTriggerSlider(void){
     // draws the trigger axis
     drawRectangle(58,80,60,359,GREY);       // Draw Trigger Axis
     drawRectangle(59-(sliderWidth/2),220-(sliderHeight/2),59+(sliderWidth/2),220+(sliderHeight/2),GREY);
@@ -34,7 +34,7 @@ void initTriggerAxis(void){
     drawFont(font_r,10+6*fontWidth,370,WHITE,BLACK);
 }
 /********************************************************************************/
-void initTimebaseAxis(void){
+void initTimebaseSlider(void){
     // Inizialises the timebase axis
     drawRectangle(160,399,759,401,GREY);    // Draw Timebase Axis
     drawRectangle(460-(sliderHeight/2),400-(sliderWidth/2),460+(sliderHeight/2),400+(sliderWidth/2),GREY);
@@ -96,6 +96,7 @@ void moveTimeSliderPosition(int x){
 
     timeSliderPos = x;
     timeLenXAxis = timeSliderPos * 22;
+    //printf(" time len axis %d \n",timeLenXAxis);
     ADCloadValue = (timeLenXAxis*120/arrayLen)+150;         // +150 Offset to rise minimum ADC clock, preventing ripple
     TimerLoadSet(TIMER0_BASE,TIMER_A,ADCloadValue);         // refresh timer of ADC
 

@@ -31,7 +31,7 @@ inline void write_data(unsigned char data)
     GPIO_PORTL_DATA_R = 0x1F;           // Initial state
 }
 /********************************************************************************/
-inline void window_set(min_x, min_y, max_x, max_y)
+inline void window_set(int min_x,int min_y,int max_x,int max_y)
 {
     write_command(0x2A);           // Set row address x-axis
     write_data(min_x >> 8);        // Set start  address           (high byte)
@@ -44,22 +44,26 @@ inline void window_set(min_x, min_y, max_x, max_y)
     write_data(max_y >> 8);        // Set stop column address      (high byte)
     write_data(max_y);             // as above                     (low byte)
 }
+/********************************************************************************/
+
+
+
 /*********************************************************************************
                         Display configuration
 *********************************************************************************/
-void init_ports_display(void)
+void initPortsDisplay(void)
 {
     // Set Port M Pins 0-7: used as Output of LCD Data
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);            // enable clock-gate Port M
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOM));     // wait until clock ready
     GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, 0xFF);
     // Set Port L Pins 0-4: used as Output of LCD Control signals:
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);  // Clock Port Q
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);  // Clock Port L
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOL));
     GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3| GPIO_PIN_4);
 }
 /********************************************************************************/
-void configure_display_controller_large (void) // 800 x 480 pixel ???
+void configureDisplayController(void) // 800 x 480 pixel
 {
 //////////////////////////////////////////////////////////////////////////////////
     GPIO_PORTL_DATA_R = INITIAL_STATE;      // Initial state
@@ -136,8 +140,8 @@ void configure_display_controller_large (void) // 800 x 480 pixel ???
 void initDisplay(void){
 
    enum colors color;   // see global definition
-   init_ports_display(); // Init Port L for Display Control and Port M for Display Data
-   configure_display_controller_large();  // initalize and  configuration
+   initPortsDisplay(); // Init Port L for Display Control and Port M for Display Data
+   configureDisplayController();  // initalize and  configuration
    printf("Start Background Pixel by Pixel set\n"); // for debug only
    // set pixel by pixel to change the background colors
    color=BLACK;
@@ -154,6 +158,7 @@ void initDisplay(void){
     printf("Background ready \n"); // for debug only
 
 }
+/********************************************************************************/
 
 /********************************************************************************
                         Drawing functions
@@ -170,15 +175,18 @@ void drawRectangle(int x0,int y0,int x1,int y1,int color){
             write_data((color)&0xff); // blue
         }
 }
-
+/********************************************************************************/
 void drawLine(int x0,int y0,int x1,int y1,int color)
 {
-
-
-    int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-    int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+    // Calculate differences between start and end point of the line
+    int dx = abs(x1 - x0);
+    int dy = -abs(y1 - y0);
+    // Calculate increments in the direction of the line
+    int sx = x0 < x1 ? 1 : -1;
+    int sy = y0 < y1 ? 1 : -1;
     int err = dx + dy, e2;
 
+    // Calculate as long as end of line is not reached
     while(1){
         // Abort, if another write process is running
         if(displayWriteCommandSemaphore){
@@ -187,26 +195,26 @@ void drawLine(int x0,int y0,int x1,int y1,int color)
         // Set Semaphore to block other write processes
         displayWriteCommandSemaphore = 1;
         // Draw Line
-        window_set(x0,y0,x0,y0);
-        write_command(0x2C); //write pixel command
-        write_data((color>>16)&0xff); // red
-        write_data((color>>8)&0xff); // green
-        write_data((color)&0xff); // blue
+        window_set(x0,y0,x0,y0);        // Set window size to draw pixel in
+        write_command(0x2C);            //write pixel command
+        write_data((color>>16)&0xff);   // red
+        write_data((color>>8)&0xff);    // green
+        write_data((color)&0xff);       // blue
         // Reset Semaphore to free other write processes
         displayWriteCommandSemaphore = 0;
-        if(x0 == x1 && y0 == y1) break;
-        e2 = 2 * err;
-        if(e2 > dy){
-            err += dy;
-            x0 += sx;
+        if(x0 == x1 && y0 == y1) break;     // End calculation if end of line is reached
+        e2 = 2 * err;                       // Calculate double of current error
+        if(e2 > dy){        // If double of current error bigger than vertical difference
+            err += dy;      // Raise error by vertical difference
+            x0 += sx;       // Move X-Position towards X-Endpoint (1)
         }
-        if(e2 < dx){
-            err += dx;
-            y0 += sy;
+        if(e2 < dx){        // If double of current error smaller than horizontal difference
+            err += dx;      // Raise error by horizontal difference
+            y0 += sy;       // Move Y-Position towards Y-Endpoint (1)
         }
     }
 }
-
+/********************************************************************************/
 void drawAxes(void){
     // Draws the axis of the coordinate system
     //enum colors color;
