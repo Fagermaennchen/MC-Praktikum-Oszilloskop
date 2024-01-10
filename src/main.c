@@ -42,7 +42,6 @@ void setupAll(void){
     setupCursor_routine();              // Setup Cursor module
     setupDrawVoltageCurve_routine();    // Setup drawVoltageCurve module
     setupProcessTouch_routine();        // Setup processTouch module
-
 }
 
 void startAll(void){
@@ -55,10 +54,8 @@ void startAll(void){
 }
 
 int main(void){
-
     setupAll();         // Setup all underlying Modules
     startAll();         // Start all underlying Modules
-
      while(1)
      {
 

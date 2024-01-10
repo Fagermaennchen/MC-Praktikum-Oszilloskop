@@ -94,8 +94,6 @@ void readADCvalue_routine(void)     	// Service Routine to get the ADC Values
     // Get Results
     resultCH1 = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO for Channel 1
     resultCH2 = (unsigned long) ADC0_SSFIFO0_R; // Take result out of FIFO for Channel 2
-    // Print result for debug purpose
-   // printf("CH1: %d, Prev CH1: %d, Zero: %d, Trigger: %d , ZeroReached: %d \n",resultCH1,prevValueCH1,triggerZeroValue,triggerValue,triggerZeroReached);
     // Save Data to Array if Triggered
     if(triggered)
     {
@@ -128,12 +126,13 @@ void readADCvalue_routine(void)     	// Service Routine to get the ADC Values
         // Triggering at Channel 1: Check for Zero Value
         if(triggerValue > triggerZeroValue )            // Cross Zero on positive slop for trigger > 0
         {
-            if( prevAvg < triggerZeroValue  && currentAvg > triggerZeroValue){      // Zero Value has been crossed on positive slope
+            if( prevAvg < triggerZeroValue  && currentAvg > triggerZeroValue){  // Zero Value has been crossed on positive slope
                 triggerZeroReached = true;
             }
         }   // Cross Zero on positive slop for trigger < 0
         else{
-            if( prevAvg > triggerZeroValue && currentAvg < triggerZeroValue && prevValueCH1 < triggerZeroValue && prev2ValueCH1 < triggerZeroValue){      // Zero Value has been crossed on positive slope
+            if( prevAvg > triggerZeroValue && currentAvg < triggerZeroValue     // Zero Value has been crossed on positive slope
+               && prevValueCH1 < triggerZeroValue && prev2ValueCH1 < triggerZeroValue){
                      triggerZeroReached = true;
             }
         }

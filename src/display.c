@@ -160,8 +160,6 @@ void initDisplay(void){
 }
 /********************************************************************************/
 
-
-
 /********************************************************************************
                         Drawing functions
 *********************************************************************************/
@@ -177,7 +175,7 @@ void drawRectangle(int x0,int y0,int x1,int y1,int color){
             write_data((color)&0xff); // blue
         }
 }
-
+/********************************************************************************/
 void drawLine(int x0,int y0,int x1,int y1,int color)
 {
     // Calculate differences between start and end point of the line
@@ -216,7 +214,7 @@ void drawLine(int x0,int y0,int x1,int y1,int color)
         }
     }
 }
-
+/********************************************************************************/
 void drawAxes(void){
     // Draws the axis of the coordinate system
     //enum colors color;

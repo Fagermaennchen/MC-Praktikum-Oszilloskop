@@ -2,38 +2,31 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-
-
 uint32_t sysClock; // Variable for system clock
-
-
 
 /*********************************************************************************
                                     Interrupts
 *********************************************************************************/
-#define cursorLoadValue 120000000    // Load Value of the cursor service routine trigger timer (1s)
-#define loadValueTouch 1     // Load Value of the touch service routine trigger timer (10us)
+#define cursorLoadValue 120000000           // Load Value of the cursor service routine trigger timer (1s)
+#define loadValueTouch 60                   // Load Value of the touch service routine trigger timer (500ns)
 #define loadValueDrawVoltage 12000000       // Load Value of the cursor service routine trigger timer (100ms)
-extern int displayWriteCommandSemaphore;            // Semaphore to prevent two display write commands interfering
+extern int displayWriteCommandSemaphore;    // Semaphore to prevent two display write commands interfering
 #define ADCprio 0x00
 #define CURSORprio 0x20
 #define CURVEprio 0x20
 #define TOUCHprio 0x20
-
-
-
 /*********************************************************************************
                                    ADC Module
 *********************************************************************************/
-extern int arrayPosition;   // Current Position in the Arrays
-#define arrayLen 656        // Fixed lenght of Arrays, old one: 678
-int resultsCH1[arrayLen];   // Array for Channel 1
-int resultsCH2[arrayLen];   // Array for Channel 2
-#define triggerZeroValue 2033     // Value, at which the Sine function is Zero and the derivative is positive
-#define dcSignalToler 2           // Tolerance at which values are seen as the same
-extern int triggerZeroReached;    // Remember, if zero has been reached
-extern int triggerValue;          // Value, at which to start saving the data
-extern int prevValueCH1;          // Last Values, to check if Trigger has been reached
+extern int arrayPosition;           // Current Position in the Arrays
+#define arrayLen 656                // Fixed lenght of Arrays, old one: 678
+int resultsCH1[arrayLen];           // Array for Channel 1
+int resultsCH2[arrayLen];           // Array for Channel 2
+#define triggerZeroValue 2033       // Value, at which the Sine function is Zero and the derivative is positive
+#define dcSignalToler 2             // Tolerance at which values are seen as the same
+extern int triggerZeroReached;      // Remember, if zero has been reached
+extern int triggerValue;            // Value, at which to start saving the data
+extern int prevValueCH1;            // Last Values, to check if Trigger has been reached
 extern int prev2ValueCH1;
 extern int prev3ValueCH1;
 extern int prev4ValueCH1;
@@ -42,17 +35,14 @@ extern int prev6ValueCH1;
 extern int prev7ValueCH1;
 extern int prev8ValueCH1;
 extern int prev9ValueCH1;
-extern int triggered;             // Remember if triggered
-extern int noTrigCounter;         // Count iterations not triggered
+extern int triggered;               // Remember if triggered
+extern int noTrigCounter;           // Count iterations not triggered
 // Conversion of units
 extern int timeLenXAxis;            // Total Length of X Axis in us
 //#define mintimeLenXAxis 3100;       // Min length of X Axis in us
 //#define maxtimeLenXAxis 16000;      // Max length of X Axis in us
 extern int ADCloadValue;               // Conversion of X Axis time into timer load value
 #define tSample (timeLenXAxis*10/arrayLen) // Sample time in 0,1*us
-
-
-
 /*********************************************************************************
                                   Cursor Module
 *********************************************************************************/
@@ -75,9 +65,6 @@ extern int cursor2ArrPosOld;    // Previous Position of cursor 2 in the value ar
 extern int cursor1DispPos;      // Position of cursor 1 on the screen
 extern int cursor2DispPos;      // Position of cursor 1 on the screen
 extern int cursorSelected;      // Remeber if cursor is currently seclted: 0 = no Cursor, 1 = Cursor , 2 = Cursor 2
-
-
-
 /*********************************************************************************
                                    Curve Module
 *********************************************************************************/
@@ -85,9 +72,6 @@ int oldVoltageCH1[arrayLen];
 int oldVoltageCH2[arrayLen];
 int nextOldVoltageCH1[arrayLen];
 int nextOldVoltageCH2[arrayLen];
-
-
-
 /*********************************************************************************
                                   Display Module
 *********************************************************************************/
@@ -119,9 +103,6 @@ int nextOldVoltageCH2[arrayLen];
 extern int colorarray[];            // same values as array for indexed colors
 enum colors{BLACK=0x00000000,WHITE=0x00FFFFFF,GREY=0x00AAAAAA,RED=0x00FF0000,
             GREEN=0x0000FF00,BLUE=0x000000FF,YELLOW=0x00FFFF00};
-
-
-
 /*********************************************************************************
                                    Font Module
 *********************************************************************************/
@@ -164,9 +145,6 @@ extern uint8_t font_comma[fontArrayLen];
 extern uint8_t font_delta[fontArrayLen];
 extern uint8_t font_minus[fontArrayLen];
 extern uint8_t font_space[fontArrayLen];
-
-
-
 /*********************************************************************************
                                   Slider Module
 *********************************************************************************/
@@ -175,9 +153,6 @@ extern uint8_t font_space[fontArrayLen];
 extern int trigSliderPos;         // Startup y-position, x-position is fixed
 extern int timeSliderPos;         // Startup x-position, y-position is fixed
 extern int adcResolution;            // to make ADC resolution adjustable for timebase slider
-
-
-
 /*********************************************************************************
                                   Touch Module
 *********************************************************************************/

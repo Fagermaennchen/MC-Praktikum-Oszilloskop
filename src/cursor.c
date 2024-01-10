@@ -83,18 +83,18 @@ void updateCursorValues(void){            // Moves the cursors position on scree
     //printf("CH1: %d, CH2 : %d \n",resultsCH1[cursor1ArrPos],resultsCH2[cursor1ArrPos]);
     // Channel 1
     // Draw Delta Voltage
-    drawDeltaVolt((convertADCtoVolt(resultsCH1[cursor1ArrPos])-convertADCtoVolt(resultsCH1[cursor2ArrPos])),xStartDeltaVolVal,yStartCHfirstLine,YELLOW,BLACK);
+    drawDeltaVolt((convertADCtoVolt(resultsCH1[cursor1ArrPos])-convertADCtoVolt(resultsCH1[cursor2ArrPos])),
+                  xStartDeltaVolVal,yStartCHfirstLine,YELLOW,BLACK);
     // Draw Cursor 1 Values
     drawMilliVolt(convertADCtoVolt(resultsCH1[cursor1ArrPos]),xStartVol1,yStartCHfirstLine,GREEN,BLACK,true);
     // Draw Cursor 2 Values
     drawMilliVolt(convertADCtoVolt(resultsCH1[cursor2ArrPos]),xStartVol2,yStartCHfirstLine,RED,BLACK,true);
     // Draw Time Description
-    // Draw Time
     drawMilliSeconds((cursor1ArrPos-cursor2ArrPos)*tSample,xStartValTime,yStartCHfirstLine, WHITE, BLACK);
-
     //Channel 2
     // Draw Delta Voltage
-    drawDeltaVolt((convertADCtoVolt(resultsCH2[cursor1ArrPos])-convertADCtoVolt(resultsCH2[cursor2ArrPos])),xStartDeltaVolVal,yStartCHsecondLine,BLUE,BLACK);
+    drawDeltaVolt((convertADCtoVolt(resultsCH2[cursor1ArrPos])-convertADCtoVolt(resultsCH2[cursor2ArrPos])),
+                  xStartDeltaVolVal,yStartCHsecondLine,BLUE,BLACK);
     // Draw Cursor 1 Values
     drawMilliVolt(convertADCtoVolt(resultsCH2[cursor1ArrPos]),xStartVol1,yStartCHsecondLine,GREEN,BLACK,true);
     // Draw Cursor 2 Values
@@ -155,8 +155,10 @@ void moveCursor1Position(int x, bool redraw){
     drawLine(cursor1DispPos-1,XaxisYmiddle+1,cursor1DispPos-1,XaxisYmiddle,WHITE);
     drawLine(cursor1DispPos+1,XaxisYmiddle+1,cursor1DispPos+1,XaxisYmiddle,WHITE);
     // Fix Y-axis arrow
-    drawLine(XaxisXbegin + 2, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);      // Right right arrow line
-    drawLine(XaxisXbegin + 2, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);      // Left right arrow line
+        // Right right arrow line
+    drawLine(XaxisXbegin + 2, YaxisYbegin + 1, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 1, WHITE);
+        // Left right arrow line
+    drawLine(XaxisXbegin + 2, YaxisYbegin + 2, XaxisXbegin + arrowWidth + 2, YaxisYbegin + arrowLength + 2, WHITE);
     // Move position in array
     cursor1ArrPos = x - XaxisXbegin - 1;
     // Remember position

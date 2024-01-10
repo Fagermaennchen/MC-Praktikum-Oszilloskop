@@ -15,7 +15,7 @@
 
 
 /*********************************************************************************
-                               Cursor Initialization
+                               Curve Initialization
 *********************************************************************************/
 void setupDrawVoltageCurve_routine(void){
 
@@ -38,7 +38,7 @@ void setupDrawVoltageCurve_routine(void){
 
 
 /*********************************************************************************
-                            Cursor Operating Functions
+                            Curve Operating Functions
 *********************************************************************************/
 void drawVoltageCurve_routine(void){
     int i;                                          // Array iterator
@@ -46,52 +46,42 @@ void drawVoltageCurve_routine(void){
     double VoltagePixel;                            // calculated pixel (decimal) from voltage
     int VoltagePixelIntCH1,VoltagePixelIntCH2;      // precise INT pixel from decimal pixel
     int nextVoltagePixelIntCH1, nextVoltagePixelIntCH2;
-
-    // Voltage reference: 0-3,5V
-
+    // Voltage reference: 0-3,1V
     // calculate pixel from received voltage CH1
     VoltageY = resultsCH1[0];                           // Get voltage from ADC CH1
     VoltagePixel = 360 - ((VoltageY-542)*0.095);        // Calculate pixel position for CH1
     VoltagePixelIntCH1 = (int) VoltagePixel;            // cast double value to int for pixel position
-
     // calculate pixel from received voltage CH2
     VoltageY = resultsCH2[0];                           // Get voltage from ADC CH2
     VoltagePixel = 360 - ((VoltageY-542)*0.095);        // Calculate pixel position for CH2
     VoltagePixelIntCH2 = (int) VoltagePixel;            // cast double value to int for pixel position
-
-
-
-    for(i = 0; i < arrayLen-1; i++){                    // Array iteration to show all pixel in the current timebase, arrayLen-2 to not run out of bounds du to drawLine(i+1)
-
+    for(i = 0; i < arrayLen-1; i++){                    // Array iteration to show all pixel in the current timebase, arrayLen-2 to
+                                                        // not run out of bounds du to drawLine(i+1)
         // calculate next pixel from received voltage CH1 for drawLine purpose
         nextVoltageY = resultsCH1[i+1];                     // Calculate next value
         VoltagePixel = 360 - ((nextVoltageY-542)*0.095);    // Calculate next pixel position for CH1
         nextVoltagePixelIntCH1 = (int) VoltagePixel;        // cast double value to int for next pixel position
-
         // calculate next pixel from received voltage CH1 for drawLine purpose
         nextVoltageY = resultsCH2[i+1];                     // Calculate next value
         VoltagePixel = 360 - ((nextVoltageY-542)*0.095);    // Calculate next pixel position for CH1
         nextVoltagePixelIntCH2 = (int) VoltagePixel;        // cast double value to int for next pixel position
-
         // Draw line if triggered and in bounds and not current value of adc being changed
-        if((VoltagePixelIntCH1>=YaxisYbegin) && (VoltagePixelIntCH1<=YaxisYend) && (VoltagePixelIntCH2>=YaxisYbegin) && (VoltagePixelIntCH2<=YaxisYend)){
+        if((VoltagePixelIntCH1>=YaxisYbegin) && (VoltagePixelIntCH1<=YaxisYend) && (VoltagePixelIntCH2>=YaxisYbegin)
+            && (VoltagePixelIntCH2<=YaxisYend)){
             // draw line if not on cursor or x-axis or Cursor
             if(!(i==(cursor1ArrPos-2) | i==(cursor2ArrPos-2) |i==(cursor1ArrPos-1) | i==(cursor2ArrPos-1))){
-
                 //Overwrite Old pixels
                 drawLine(122+i,oldVoltageCH1[i],122+i+1,oldVoltageCH1[i+1],BLACK);                  // Channel 1
                 drawLine(122+i,oldVoltageCH2[i],122+i+1,oldVoltageCH2[i+1],BLACK);                  // Channel 2
-
                 //Write current pixels
                 drawLine(122+i,VoltagePixelIntCH1,122+i+1,nextVoltagePixelIntCH1,YELLOW);         // Channel 1
                 drawLine(122+i,VoltagePixelIntCH2,122+i+1,nextVoltagePixelIntCH2,BLUE);               // Channel 2
-
                 // Fix middle line
                 drawLine(122+i,XaxisYmiddle,122+i+1,XaxisYmiddle+1,WHITE);
-
                 // Fix Y-axis arrow
                 if(i>(arrayLen-arrowLength-2)){
-                    if(((VoltagePixelIntCH1>(XaxisYmiddle - arrowWidth - 1))&&(VoltagePixelIntCH1<(XaxisYmiddle + arrowWidth + 2)))||(VoltagePixelIntCH2>(XaxisYmiddle - arrowWidth - 1))&&(VoltagePixelIntCH2<(XaxisYmiddle + arrowWidth + 2))){
+                    if(((VoltagePixelIntCH1>(XaxisYmiddle - arrowWidth - 1))&&(VoltagePixelIntCH1<(XaxisYmiddle + arrowWidth + 2)))
+                        ||(VoltagePixelIntCH2>(XaxisYmiddle - arrowWidth - 1))&&(VoltagePixelIntCH2<(XaxisYmiddle + arrowWidth + 2))){
                         drawLine(XaxisXend - 1, XaxisYmiddle - 1, XaxisXend - arrowLength - 1, XaxisYmiddle - arrowWidth - 1, WHITE);       // Upper upper arrow line
                         drawLine(XaxisXend - 2, XaxisYmiddle - 1, XaxisXend - arrowLength - 2, XaxisYmiddle - arrowWidth - 1, WHITE);       // Lower upper arrow line
                         drawLine(XaxisXend - 1, XaxisYmiddle + 2, XaxisXend - arrowLength - 1, XaxisYmiddle + arrowWidth + 2, WHITE);       // Upper lower arrow line
@@ -99,11 +89,9 @@ void drawVoltageCurve_routine(void){
                     }
                 }
             }
-
             //Save written pixel to be deletable in next cycle
             oldVoltageCH1[i]=VoltagePixelIntCH1;
             oldVoltageCH2[i]=VoltagePixelIntCH2;
-
             // Set Next Voltage to be next interrupts starting voltage
             VoltagePixelIntCH1 = nextVoltagePixelIntCH1;
             VoltagePixelIntCH2 = nextVoltagePixelIntCH2;

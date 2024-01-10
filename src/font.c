@@ -28,7 +28,6 @@ extern uint8_t font_C[] = {
     0x1f, 0xf0,  //...%%%%%%%%%.
     0x07, 0xf0,  //.....%%%%%%%.
     0x00, 0x00  //.............
-
 };
 extern uint8_t font_H[] = {
      0x00, 0x00,  //............
@@ -926,8 +925,6 @@ void drawMilliSeconds(int time_us,int x, int y,int foregroundColor,int backgroun
     for(i=commaPosition;i<4;i++){       // Draw digits after comma
         drawFont(numbToFont(digit[i]),x+(i+1)*(fontWidth)+0.7*(fontWidth),y,foregroundColor,backgroundColor);
     }
-
-
 }
 /********************************************************************************/
 void drawLogo(void){
